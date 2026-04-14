@@ -43,7 +43,7 @@
 
 ## T6 RenderEngine (XSLT)
 
-- [ ] T6.1 Integrate Saxon
+- [x] T6.1 Integrate Saxon
 - [ ] T6.2 Execute transformation
 - [ ] T6.3 Handle runtime errors
 
