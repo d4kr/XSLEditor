@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'org.openjfx.javafxplugin' version '0.1.0'       // D-01
+    id 'com.github.johnrengelman.shadow' version '8.1.1' // D-02
 }
 
 group = 'ch.ti.gagi'
@@ -11,15 +13,44 @@ java {
     }
 }
 
+javafx {
+    version = '21'
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web']
+    // javafx.web provides WebView for PDF preview (WebKit-based)
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    // Existing backend dependencies
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.2'
     implementation 'net.sf.saxon:Saxon-HE:12.4'
     implementation 'org.apache.xmlgraphics:fop:2.9'
+
+    // D-03: Editor and preview libraries
+    implementation 'org.fxmisc.richtext:richtextfx:0.11.5'
+    // PDFViewerFX (org.jpro.web:pdfviewerfx) is NOT on Maven Central.
+    // PDF preview uses JavaFX WebView loading a file:// URI — see MainController.
+    // No additional dependency needed; WebView is bundled in javafx.web module above.
+
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'ch.ti.gagi.xlseditor.XLSEditorApp'
+    }
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    manifest {
+        attributes 'Main-Class': 'ch.ti.gagi.xlseditor.XLSEditorApp'
+    }
+    // Merge service files to avoid Saxon/FOP conflicts
+    mergeServiceFiles()
 }
 
 test {
