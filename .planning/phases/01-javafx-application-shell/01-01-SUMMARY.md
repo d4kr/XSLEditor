@@ -141,6 +141,10 @@ None — no external service configuration required.
 - WebView declared in FXML — Phase 7 can wire PDF loading without FXML changes
 - No blockers for Phase 2
 
+## Self-Check: PASSED
+
+All files present, all commits verified.
+
 ---
 *Phase: 01-javafx-application-shell*
 *Completed: 2026-04-14*
