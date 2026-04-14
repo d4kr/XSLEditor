@@ -17,7 +17,7 @@
 
 ## T3 DependencyResolver
 
-- [ ] T3.1 Parse xsl:include
+- [x] T3.1 Parse xsl:include
 - [ ] T3.2 Parse xsl:import
 - [ ] T3.3 Build dependency graph
 - [ ] T3.4 Detect circular dependencies
