@@ -53,7 +53,7 @@
 
 - [x] T7.1 Full render pipeline
 - [x] T7.2 Structured result
-- [ ] T7.3 Handle rendering errors
+- [x] T7.3 Handle rendering errors
 
 ---
 
