@@ -13,7 +13,14 @@ public final class DependencyResolver {
     private static final String XSL_NS = "http://www.w3.org/1999/XSL/Transform";
 
     public static List<Path> parseIncludes(Path xsltFile) throws Exception {
+        return parseHrefs(xsltFile, "include");
+    }
 
+    public static List<Path> parseImports(Path xsltFile) throws Exception {
+        return parseHrefs(xsltFile, "import");
+    }
+
+    private static List<Path> parseHrefs(Path xsltFile, String localName) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
 
@@ -21,19 +28,15 @@ public final class DependencyResolver {
                 .newDocumentBuilder()
                 .parse(xsltFile.toFile());
 
-        NodeList nodes = doc.getElementsByTagNameNS(XSL_NS, "include");
+        NodeList nodes = doc.getElementsByTagNameNS(XSL_NS, localName);
 
-        List<Path> includes = new ArrayList<>();
-
+        List<Path> paths = new ArrayList<>();
         for (int i = 0; i < nodes.getLength(); i++) {
-            var node = nodes.item(i);
-            var attr = node.getAttributes().getNamedItem("href");
-
+            var attr = nodes.item(i).getAttributes().getNamedItem("href");
             if (attr != null) {
-                includes.add(Path.of(attr.getNodeValue()));
+                paths.add(Path.of(attr.getNodeValue()));
             }
         }
-
-        return includes;
+        return paths;
     }
 }
