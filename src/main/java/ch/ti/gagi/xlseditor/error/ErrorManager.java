@@ -5,6 +5,7 @@ import ch.ti.gagi.xlseditor.validation.ValidationError;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.apache.fop.apps.FOPException;
 
+import javax.xml.transform.SourceLocator;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +29,26 @@ public final class ErrorManager {
         String message = (e.getMessage() == null || e.getMessage().isBlank())
                 ? e.getClass().getSimpleName()
                 : e.getMessage();
-        return new RenderError(message, type);
+        return new RenderError(message, type, extractLocation(e));
+    }
+
+    private static String extractLocation(Exception e) {
+        String systemId = null;
+        int line = -1;
+
+        if (e instanceof SaxonApiException sae) {
+            systemId = sae.getSystemId();
+            line = sae.getLineNumber();
+        } else if (e instanceof TransformerException te) {
+            SourceLocator locator = te.getLocator();
+            if (locator != null) {
+                systemId = locator.getSystemId();
+                line = locator.getLineNumber();
+            }
+        }
+
+        if (systemId == null || systemId.isBlank()) return null;
+        return line > 0 ? systemId + ":" + line : systemId;
     }
 
     public static List<RenderError> fromValidation(List<ValidationError> errors) {

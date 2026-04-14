@@ -68,7 +68,7 @@
 ## T9 ErrorManager
 
 - [x] T9.1 Normalize errors
-- [ ] T9.2 Map file positions
+- [x] T9.2 Map file positions
 - [ ] T9.3 Expose to UI
 
 ---
