@@ -1,0 +1,169 @@
+# Roadmap: XLSEditor v1.0
+
+**Milestone:** v1.0 — MVP desktop tool (JavaFX UI + full pipeline integration + tests)
+**Created:** 2026-04-14
+
+---
+
+## Phase 1: JavaFX Application Shell
+
+**Goal:** Runnable JavaFX application with main window, split-pane layout skeleton, and Gradle dependencies wired up.
+
+**Requirements:** APP-01, APP-02, APP-03, APP-04
+
+**Deliverables:**
+- JavaFX added to `build.gradle` (javafx-controls, javafx-fxml)
+- RichTextFX dependency added
+- PDFViewerFX dependency added
+- Main `Application` class with `start()` and primary `Stage`
+- Main FXML layout: MenuBar, SplitPane (left=editor area, right=preview area), bottom=log panel placeholder
+- App title updates to "XLSEditor — [ProjectName]" when project loaded, "XLSEditor" otherwise
+- Close confirmation dialog when unsaved changes exist
+
+---
+
+## Phase 2: Project Management
+
+**Goal:** User can open a project directory, select entrypoint and XML input, and have choices persisted in `.xslfo-tool.json`.
+
+**Requirements:** PROJ-01, PROJ-02, PROJ-03, PROJ-04, PROJ-05, PROJ-06
+
+**Deliverables:**
+- "Open Project" menu action using `DirectoryChooser`
+- Loads `.xslfo-tool.json` and restores entrypoint + XML input
+- Toolbar/menu actions: "Set Entrypoint", "Set XML Input" (from currently selected file in tree)
+- Saves changes to `.xslfo-tool.json` via existing `ProjectConfig` model
+- "New File" dialog: prompts for filename, creates empty file in project root
+- Project state managed in a `AppController` or `ProjectContext` class
+
+---
+
+## Phase 3: File Tree View
+
+**Goal:** Left panel shows all project files in a flat tree with visual distinction for entrypoint and XML input.
+
+**Requirements:** TREE-01, TREE-02, TREE-03, TREE-04
+
+**Deliverables:**
+- `TreeView<FileItem>` in left panel showing all files in project root
+- Entrypoint file shown with distinct icon/color
+- XML input file shown with distinct icon/color
+- Double-click on file opens it in the editor (calls editor open tab)
+- Tree refreshes when new file is created
+
+---
+
+## Phase 4: Multi-Tab Editor (Core)
+
+**Goal:** Multi-tab code editor with RichTextFX, file open/save, and dirty state tracking.
+
+**Requirements:** EDIT-01, EDIT-02, EDIT-03, EDIT-09
+
+**Deliverables:**
+- `TabPane` with one `CodeArea` (RichTextFX) per open file
+- Tab title: filename, with `*` prefix when dirty
+- Ctrl+S saves current file and clears dirty state
+- Close-tab confirmation dialog when file is dirty
+- Opening a file that's already open in a tab switches to that tab (no duplicates)
+
+---
+
+## Phase 5: Editor Features (Syntax & Navigation)
+
+**Goal:** XML/XSLT syntax highlighting, static autocomplete, variable highlighting, and go-to-definition.
+
+**Requirements:** EDIT-04, EDIT-05, EDIT-06, EDIT-07, EDIT-08
+
+**Deliverables:**
+- XML/XSLT syntax highlighting via RichTextFX `StyleSpans` (CSS classes for elements, attributes, comments, CDATA, processing instructions)
+- Static autocomplete popup for common XSL/XSL-FO keywords (triggered by Ctrl+Space or typing `<xsl:`)
+- Variable/template reference highlighting: regex-based highlight of all occurrences of selected `$var` or `name="template"` in current file
+- Go-to-definition: Ctrl+Click or menu action on `xsl:include`/`xsl:import` href opens the referenced file
+- Multi-file search dialog: search string across all project files, results list with filename:line, click navigates editor
+
+---
+
+## Phase 6: Render Pipeline Integration
+
+**Goal:** Render button triggers the full backend pipeline and reports success/failure to the UI.
+
+**Requirements:** REND-01, REND-02, REND-03, REND-04, REND-05, REND-06
+
+**Deliverables:**
+- Render button in toolbar, disabled when preconditions not met (no project / no entrypoint / no XML input)
+- Render executes on a background thread (`Task<Preview>`) to keep UI responsive
+- Progress spinner/indicator shown during render
+- On success: passes PDF bytes to preview panel
+- On failure: marks preview as outdated, passes errors to log panel
+- Render duration logged as info entry
+
+---
+
+## Phase 7: PDF Preview Panel
+
+**Goal:** Right panel displays PDF output with scroll/zoom, and shows an outdated indicator on failure.
+
+**Requirements:** PREV-01, PREV-02, PREV-03, PREV-04
+
+**Deliverables:**
+- PDFViewerFX component embedded in right SplitPane pane
+- Renders PDF from `byte[]` returned by pipeline
+- Scroll and zoom controls working
+- "Outdated" overlay/banner shown when `Preview.isOutdated()` is true
+- No PDF shown (blank/placeholder) before first successful render
+
+---
+
+## Phase 8: Error & Log Panel
+
+**Goal:** Bottom panel displays all render log entries with severity filtering and click-to-navigate for errors with locations.
+
+**Requirements:** ERR-01, ERR-02, ERR-03, ERR-04, ERR-05
+
+**Deliverables:**
+- Log panel as `TableView` or styled `ListView` at bottom of main window
+- Columns: timestamp, severity badge (color-coded), type, message
+- Severity filter buttons (All / Error / Warning / Info)
+- On render start: log panel cleared
+- Clicking an entry with file+line info opens the file in editor and jumps to that line
+- Error entries shown in red, warnings in yellow, info in default color
+
+---
+
+## Phase 9: Testing
+
+**Goal:** Unit tests for all backend modules and integration tests for the full pipeline. Zero regressions.
+
+**Requirements:** TEST-01, TEST-02, TEST-03, TEST-04, TEST-05, TEST-06, TEST-07, TEST-08
+
+**Deliverables:**
+- `src/test/java/` directory structure mirrors `src/main/java/`
+- Unit tests: LibraryPreprocessor, DependencyResolver, ValidationEngine, RenderEngine, ErrorManager, LogManager
+- Test fixtures: minimal XSLT + XML files in `src/test/resources/fixtures/`
+- Integration test: full pipeline with real Saxon + FOP producing a valid PDF
+- Integration test: pipeline failure scenario (invalid XSLT) → correct PreviewError type and location
+- All tests pass via `./gradlew test`
+- Test coverage report available via JaCoCo (optional, added to build.gradle)
+
+---
+
+## Summary
+
+| Phase | Name | Requirements | Status |
+|-------|------|--------------|--------|
+| 1 | JavaFX Application Shell | APP-01..04 | Pending |
+| 2 | Project Management | PROJ-01..06 | Pending |
+| 3 | File Tree View | TREE-01..04 | Pending |
+| 4 | Multi-Tab Editor (Core) | EDIT-01..03, EDIT-09 | Pending |
+| 5 | Editor Features | EDIT-04..08 | Pending |
+| 6 | Render Pipeline Integration | REND-01..06 | Pending |
+| 7 | PDF Preview Panel | PREV-01..04 | Pending |
+| 8 | Error & Log Panel | ERR-01..05 | Pending |
+| 9 | Testing | TEST-01..08 | Pending |
+
+**Total phases:** 9
+**Total v1 requirements:** 46
+**Coverage:** 46/46 ✓
+
+---
+*Roadmap created: 2026-04-14*
