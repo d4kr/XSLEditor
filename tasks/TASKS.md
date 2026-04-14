@@ -29,7 +29,7 @@
 - [x] T4.1 Detect LIBRARY directive
 - [x] T4.2 Resolve file path
 - [x] T4.3 Merge file content
-- [ ] T4.4 Handle missing library error
+- [x] T4.4 Handle missing library error
 
 ---
 
