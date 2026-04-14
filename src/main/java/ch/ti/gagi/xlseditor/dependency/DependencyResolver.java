@@ -6,7 +6,9 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class DependencyResolver {
 
@@ -18,6 +20,41 @@ public final class DependencyResolver {
 
     public static List<Path> parseImports(Path xsltFile) throws Exception {
         return parseHrefs(xsltFile, "import");
+    }
+
+    /**
+     * Builds a dependency graph starting from entryPoint, resolved against rootPath.
+     * Keys and values are paths relative to rootPath.
+     */
+    public static DependencyGraph buildGraph(Path rootPath, Path entryPoint) throws Exception {
+        Map<Path, List<Path>> edges = new LinkedHashMap<>();
+        collect(rootPath, entryPoint, edges);
+        return new DependencyGraph(edges);
+    }
+
+    private static void collect(Path rootPath, Path relPath, Map<Path, List<Path>> edges) throws Exception {
+        if (edges.containsKey(relPath)) {
+            return;
+        }
+
+        Path absFile = rootPath.resolve(relPath);
+        Path fileDir = relPath.getParent();
+
+        List<Path> hrefs = new ArrayList<>();
+        hrefs.addAll(parseIncludes(absFile));
+        hrefs.addAll(parseImports(absFile));
+
+        List<Path> deps = new ArrayList<>();
+        for (Path href : hrefs) {
+            Path resolved = fileDir != null ? fileDir.resolve(href).normalize() : href.normalize();
+            deps.add(resolved);
+        }
+
+        edges.put(relPath, deps);
+
+        for (Path dep : deps) {
+            collect(rootPath, dep, edges);
+        }
     }
 
     private static List<Path> parseHrefs(Path xsltFile, String localName) throws Exception {
