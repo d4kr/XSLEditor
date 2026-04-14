@@ -151,7 +151,7 @@
 
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
-| 1 | JavaFX Application Shell | APP-01..04 | Pending |
+| 1 | 1/1 | Complete   | 2026-04-14 |
 | 2 | Project Management | PROJ-01..06 | Pending |
 | 3 | File Tree View | TREE-01..04 | Pending |
 | 4 | Multi-Tab Editor (Core) | EDIT-01..03, EDIT-09 | Pending |

@@ -9,10 +9,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Application Shell
 
-- [ ] **APP-01**: Application launches and displays a main window with split-pane layout
-- [ ] **APP-02**: Application title reflects project name when a project is loaded
-- [ ] **APP-03**: Closing with unsaved changes prompts a confirmation dialog
-- [ ] **APP-04**: Application state (last opened project) is NOT persisted between sessions (no session restore)
+- [x] **APP-01**: Application launches and displays a main window with split-pane layout
+- [x] **APP-02**: Application title reflects project name when a project is loaded
+- [x] **APP-03**: Closing with unsaved changes prompts a confirmation dialog
+- [x] **APP-04**: Application state (last opened project) is NOT persisted between sessions (no session restore)
 
 ### Project Management
 

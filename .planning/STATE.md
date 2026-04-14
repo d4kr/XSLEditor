@@ -4,13 +4,13 @@ milestone: v1.0
 milestone_name: milestone
 status: paused
 paused_at: —
-last_updated: "2026-04-14T21:16:40.482Z"
+last_updated: "2026-04-14T21:32:41.201Z"
 progress:
   total_phases: 9
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 1
-  completed_plans: 0
-  percent: 0
+  completed_plans: 1
+  percent: 100
 ---
 
 # Project State: XLSEditor
@@ -20,21 +20,23 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-14)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** Phase 1 — JavaFX Application Shell
+**Current focus:** Phase 01 — javafx-application-shell
 
 ---
 
 ## Current Position
 
+Phase: 01 (javafx-application-shell) — COMPLETE
+Plan: 1 of 1 (all plans complete)
 **Milestone:** v1.0
 **Phase:** 1 of 9 — JavaFX Application Shell
-**Status:** Not started
+**Status:** Phase complete — all plans executed, ready for verification
 
 ---
 
 ## Completed Phases
 
-_(none yet)_
+- **Phase 01** — JavaFX Application Shell (2026-04-14): fat JAR shell with three-zone layout, WebView PDF scaffold, close-confirmation dirty-state pattern
 
 ---
 
@@ -45,6 +47,8 @@ _(none yet)_
 | JavaFX for UI | Standard modern Java desktop framework | 2026-04-14 |
 | RichTextFX for editor | Native JavaFX, CSS-based syntax highlighting | 2026-04-14 |
 | PDFViewerFX for PDF preview | Open-source, JavaFX-native, PDFBox-based | 2026-04-14 |
+| Shadow plugin migrated to com.gradleup.shadow 9.0.0-beta12 | com.github.johnrengelman.shadow 8.1.1 incompatible with Gradle 9 (MissingPropertyException: mode) | 2026-04-14 |
+| WebView for PDF preview (Phase 1 scaffold) | PDFViewerFX not on Maven Central; JavaFX WebView loads file:// URIs natively via WebKit | 2026-04-14 |
 | Fine granularity phasing | 9 phases for focused, reviewable increments | 2026-04-14 |
 | Interactive workflow mode | Confirmation at key decision points | 2026-04-14 |
 | Backend pipeline complete (T1–T10) | Saxon + FOP pipeline ready before UI work begins | 2026-04-14 |
@@ -65,8 +69,8 @@ _(none yet)_
 
 ## Session Continuity
 
-**Last session:** 2026-04-14T21:16:40.478Z
-**Paused at:** —
+**Last session:** 2026-04-14T21:31:42Z
+**Paused at:** Completed 01-01-PLAN.md (JavaFX Application Shell)
 
 ---
 
