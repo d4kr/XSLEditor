@@ -44,4 +44,37 @@ public final class RenderOrchestrator {
         // 7. Render FO to PDF
         return renderEngine.renderFoToPdf(foContent);
     }
+
+    public RenderResult renderSafe(Project project, Path rootPath) {
+        try {
+            // 1. Build dependency graph
+            DependencyGraph graph = DependencyResolver.buildGraph(rootPath, project.entryPoint());
+
+            // 2. Validate
+            List<ValidationError> errors = ValidationEngine.validateProject(rootPath, project, graph);
+            if (!errors.isEmpty()) {
+                return RenderResult.failure(errors);
+            }
+
+            // 3–7. Execute pipeline without redoing graph/validation
+            Path entryPath = rootPath.resolve(project.entryPoint()).normalize();
+            String xsltContent = Files.readString(entryPath, StandardCharsets.UTF_8);
+
+            String processed = LibraryPreprocessor.mergeLibraries(rootPath, xsltContent);
+
+            XsltExecutable executable = renderEngine.compileXslt(processed);
+
+            Path xmlPath = rootPath.resolve(project.xmlInput()).normalize();
+            String foContent = renderEngine.transformToString(xmlPath, executable);
+
+            byte[] pdf = renderEngine.renderFoToPdf(foContent);
+
+            return RenderResult.success(pdf);
+
+        } catch (Exception e) {
+            return RenderResult.failure(List.of(
+                new ValidationError(e.getMessage(), null, null, null)
+            ));
+        }
+    }
 }

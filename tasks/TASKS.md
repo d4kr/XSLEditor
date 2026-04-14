@@ -45,14 +45,14 @@
 
 - [x] T6.1 Integrate Saxon
 - [x] T6.2 Execute transformation
-- [x] T6.3 Handle runtime errors
+- [x] T6.3 Render FO to PDF
 
 ---
 
-## T7 RenderEngine (FO)
+## T7 Render Orchestrator
 
-- [x] T7.1 Integrate FOP
-- [ ] T7.2 Generate PDF
+- [x] T7.1 Full render pipeline
+- [x] T7.2 Structured result
 - [ ] T7.3 Handle rendering errors
 
 ---
