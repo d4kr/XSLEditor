@@ -45,7 +45,7 @@
 
 - [x] T6.1 Integrate Saxon
 - [x] T6.2 Execute transformation
-- [ ] T6.3 Handle runtime errors
+- [x] T6.3 Handle runtime errors
 
 ---
 
