@@ -11,7 +11,7 @@
 
 - [x] T2.1 Create File class
 - [x] T2.2 Implement dirty flag
-- [ ] T2.3 Implement load/save
+- [x] T2.3 Implement load/save
 
 ---
 
