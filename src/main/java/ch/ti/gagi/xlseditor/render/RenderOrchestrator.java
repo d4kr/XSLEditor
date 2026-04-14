@@ -2,20 +2,16 @@ package ch.ti.gagi.xlseditor.render;
 
 import ch.ti.gagi.xlseditor.dependency.DependencyGraph;
 import ch.ti.gagi.xlseditor.dependency.DependencyResolver;
+import ch.ti.gagi.xlseditor.error.ErrorManager;
 import ch.ti.gagi.xlseditor.library.LibraryPreprocessor;
 import ch.ti.gagi.xlseditor.model.Project;
 import ch.ti.gagi.xlseditor.validation.ValidationEngine;
 import ch.ti.gagi.xlseditor.validation.ValidationError;
-import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XsltExecutable;
-import org.apache.fop.apps.FOPException;
 
-import javax.xml.transform.TransformerException;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 public final class RenderOrchestrator {
@@ -58,7 +54,7 @@ public final class RenderOrchestrator {
             // 2. Validate
             List<ValidationError> validationErrors = ValidationEngine.validateProject(rootPath, project, graph);
             if (!validationErrors.isEmpty()) {
-                return RenderResult.failure(toRenderErrors(validationErrors));
+                return RenderResult.failure(ErrorManager.fromValidation(validationErrors));
             }
 
             // 3. Load entry XSLT as string
@@ -81,33 +77,7 @@ public final class RenderOrchestrator {
             return RenderResult.success(pdf);
 
         } catch (Exception e) {
-            return RenderResult.failure(List.of(mapException(e)));
+            return RenderResult.failure(List.of(ErrorManager.fromException(e)));
         }
-    }
-
-    private static RenderError mapException(Exception e) {
-        String type;
-        if (e instanceof SaxonApiException || e instanceof TransformerException) {
-            type = "XSLT";
-        } else if (e instanceof FOPException) {
-            type = "FOP";
-        } else if (e instanceof IOException) {
-            type = "IO";
-        } else {
-            type = "UNKNOWN";
-        }
-        String message = (e.getMessage() == null || e.getMessage().isBlank())
-                ? e.getClass().getSimpleName()
-                : e.getMessage();
-        return new RenderError(message, type);
-    }
-
-    private static List<RenderError> toRenderErrors(List<ValidationError> errors) {
-        List<RenderError> result = new ArrayList<>(errors.size());
-        for (ValidationError e : errors) {
-            String location = e.file() != null ? e.file() + (e.line() != null ? ":" + e.line() : "") : null;
-            result.add(new RenderError(e.message(), "XSLT", location));
-        }
-        return result;
     }
 }

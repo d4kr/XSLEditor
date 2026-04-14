@@ -61,13 +61,13 @@
 
 - [x] T8.1 Store current PDF
 - [x] T8.2 Replace on success
-- [ ] T8.3 Mark outdated on failure
+- [x] T8.3 Mark outdated on failure
 
 ---
 
 ## T9 ErrorManager
 
-- [ ] T9.1 Normalize errors
+- [x] T9.1 Normalize errors
 - [ ] T9.2 Map file positions
 - [ ] T9.3 Expose to UI
 
