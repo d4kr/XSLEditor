@@ -1,11 +1,15 @@
 package ch.ti.gagi.xlseditor.validation;
 
+import ch.ti.gagi.xlseditor.dependency.DependencyGraph;
+import ch.ti.gagi.xlseditor.model.Project;
 import org.xml.sax.SAXParseException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public final class ValidationEngine {
 
@@ -32,6 +36,18 @@ public final class ValidationEngine {
                     null
             ));
         }
+    }
+
+    public static List<ValidationError> validateProject(Path rootPath, Project project, DependencyGraph graph) {
+        Set<Path> files = new LinkedHashSet<>();
+
+        for (Path path : graph.edges().keySet()) {
+            files.add(rootPath.resolve(path).normalize());
+        }
+
+        files.add(rootPath.resolve(project.xmlInput()).normalize());
+
+        return validateAll(new ArrayList<>(files));
     }
 
     public static List<ValidationError> validateAll(List<Path> files) {
