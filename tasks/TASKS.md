@@ -35,7 +35,7 @@
 
 ## T5 ValidationEngine
 
-- [ ] T5.1 Validate XML well-formedness
+- [x] T5.1 Validate XML well-formedness
 - [ ] T5.2 Validate XSLT files
 - [ ] T5.3 Aggregate errors
 
