@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
+
+<BorderPane
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="ch.ti.gagi.xlseditor.ui.MainController"
+    stylesheets="@main.css"
+    minWidth="900"
+    minHeight="600">
+
+    <!-- TOP: Menu bar -->
+    <top>
+        <MenuBar fx:id="menuBar">
+            <Menu text="File">
+                <!-- Phase 2 wires Open Project here -->
+                <MenuItem text="Exit" onAction="#handleExit"/>
+            </Menu>
+            <Menu text="Edit"/>
+            <Menu text="View"/>
+            <Menu text="Run"/>
+        </MenuBar>
+    </top>
+
+    <!-- CENTER: Outer horizontal SplitPane -->
+    <!-- Left: file tree placeholder | Right: editor+preview SplitPane -->
+    <center>
+        <SplitPane fx:id="outerSplitPane" dividerPositions="0.20" orientation="HORIZONTAL">
+
+            <!-- LEFT ZONE: file tree placeholder (Phase 3 fills this) -->
+            <StackPane fx:id="fileTreePane" styleClass="placeholder-pane">
+                <Label text="File Tree" styleClass="placeholder-label"/>
+            </StackPane>
+
+            <!-- RIGHT ZONE: inner horizontal SplitPane -->
+            <!-- Left: editor | Right: PDF preview -->
+            <SplitPane fx:id="innerSplitPane" dividerPositions="0.55" orientation="HORIZONTAL">
+
+                <!-- EDITOR ZONE: placeholder (Phases 4-5 fill this) -->
+                <StackPane fx:id="editorPane" styleClass="placeholder-pane">
+                    <Label text="Editor" styleClass="placeholder-label"/>
+                </StackPane>
+
+                <!-- PREVIEW ZONE: WebView for PDF (Phase 7 wires this) -->
+                <StackPane fx:id="previewPane" styleClass="placeholder-pane">
+                    <WebView fx:id="previewWebView"/>
+                    <Label fx:id="previewPlaceholderLabel"
+                           text="No preview — trigger a render first"
+                           styleClass="placeholder-label"/>
+                </StackPane>
+
+            </SplitPane>
+        </SplitPane>
+    </center>
+
+    <!-- BOTTOM: Collapsible log panel (Phase 8 wires log entries) -->
+    <bottom>
+        <TitledPane fx:id="logPane" text="Log" expanded="false" styleClass="log-titled-pane">
+            <ListView fx:id="logListView" prefHeight="150"/>
+        </TitledPane>
+    </bottom>
+
+</BorderPane>

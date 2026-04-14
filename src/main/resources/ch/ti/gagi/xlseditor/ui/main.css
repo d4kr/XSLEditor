@@ -1,0 +1,31 @@
+/* XLSEditor — base stylesheet (Phase 1) */
+
+/* Placeholder panes: visible gray background so empty zones are clear */
+.placeholder-pane {
+    -fx-background-color: #2b2b2b;
+    -fx-border-color: #444444;
+    -fx-border-width: 1;
+}
+
+.placeholder-label {
+    -fx-text-fill: #888888;
+    -fx-font-size: 13px;
+    -fx-font-family: "Monospaced";
+}
+
+/* Log panel title bar */
+.log-titled-pane > .title {
+    -fx-background-color: #1e1e1e;
+    -fx-text-fill: #cccccc;
+    -fx-font-size: 12px;
+}
+
+.log-titled-pane > .content {
+    -fx-background-color: #1e1e1e;
+}
+
+/* SplitPane dividers: slightly visible */
+.split-pane > .split-pane-divider {
+    -fx-background-color: #555555;
+    -fx-padding: 0 1 0 1;
+}
