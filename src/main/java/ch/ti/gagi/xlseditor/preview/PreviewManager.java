@@ -14,7 +14,13 @@ public final class PreviewManager {
         this.orchestrator = orchestrator;
     }
 
-    public RenderResult generatePreview(Project project, Path rootPath) {
-        return orchestrator.renderSafe(project, rootPath);
+    public Preview generatePreview(Project project, Path rootPath) {
+        return toPreview(orchestrator.renderSafe(project, rootPath));
+    }
+
+    private static Preview toPreview(RenderResult result) {
+        return result.success()
+                ? Preview.success(result.pdf())
+                : Preview.failure(result.errors());
     }
 }

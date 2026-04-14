@@ -60,7 +60,7 @@
 ## T8 PreviewManager
 
 - [x] T8.1 Store current PDF
-- [ ] T8.2 Replace on success
+- [x] T8.2 Replace on success
 - [ ] T8.3 Mark outdated on failure
 
 ---
