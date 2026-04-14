@@ -1,0 +1,4 @@
+- Compatible with Saxon
+- Avoid deprecated XSLT patterns
+- Ensure FO correctness
+- Prefer modular templates

@@ -1,0 +1,3 @@
+- Separate transformation and rendering
+- Handle errors explicitly
+- Ensure deterministic pipeline

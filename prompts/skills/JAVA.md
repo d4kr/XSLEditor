@@ -1,0 +1,4 @@
+- Use clean architecture
+- Prefer composition over inheritance
+- Keep classes small
+- Avoid unnecessary abstractions
