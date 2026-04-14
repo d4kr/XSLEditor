@@ -69,7 +69,7 @@
 
 - [x] T9.1 Normalize errors
 - [x] T9.2 Map file positions
-- [ ] T9.3 Expose to UI
+- [x] T9.3 Expose to UI
 
 ---
 
