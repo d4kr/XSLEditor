@@ -11,6 +11,14 @@ public final class LogManager {
         entries.add(entry);
     }
 
+    public void info(String message) { add(message, "INFO"); }
+    public void warn(String message) { add(message, "WARN"); }
+    public void error(String message) { add(message, "ERROR"); }
+
+    private void add(String message, String level) {
+        entries.add(new LogEntry(message, level, System.currentTimeMillis()));
+    }
+
     public List<LogEntry> getAll() {
         return List.copyOf(entries);
     }

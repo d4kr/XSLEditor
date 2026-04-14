@@ -76,5 +76,5 @@
 ## T10 LogManager
 
 - [x] T10.1 Create log structure
-- [ ] T10.2 Add entries
+- [x] T10.2 Add entries
 - [ ] T10.3 Filter logs
