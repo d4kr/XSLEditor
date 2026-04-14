@@ -10,6 +10,7 @@ import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -32,6 +33,11 @@ public final class RenderEngine {
     public XsltExecutable compileXslt(Path xsltFile) throws SaxonApiException {
         Objects.requireNonNull(xsltFile);
         return compiler.compile(new StreamSource(xsltFile.toFile()));
+    }
+
+    public XsltExecutable compileXslt(String content) throws SaxonApiException {
+        Objects.requireNonNull(content);
+        return compiler.compile(new StreamSource(new StringReader(content)));
     }
 
     public String transformToString(Path xmlFile, XsltExecutable executable) throws SaxonApiException {

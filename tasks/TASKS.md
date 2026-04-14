@@ -51,7 +51,7 @@
 
 ## T7 RenderEngine (FO)
 
-- [ ] T7.1 Integrate FOP
+- [x] T7.1 Integrate FOP
 - [ ] T7.2 Generate PDF
 - [ ] T7.3 Handle rendering errors
 
