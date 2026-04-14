@@ -7,8 +7,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public final class DependencyResolver {
 
@@ -28,11 +30,13 @@ public final class DependencyResolver {
      */
     public static DependencyGraph buildGraph(Path rootPath, Path entryPoint) throws Exception {
         Map<Path, List<Path>> edges = new LinkedHashMap<>();
-        collect(rootPath, entryPoint, edges);
+        collect(rootPath, entryPoint, edges, new LinkedHashSet<>());
         return new DependencyGraph(edges);
     }
 
-    private static void collect(Path rootPath, Path relPath, Map<Path, List<Path>> edges) throws Exception {
+    private static void collect(Path rootPath, Path relPath, Map<Path, List<Path>> edges, Set<Path> stack) throws Exception {
+        if (stack.contains(relPath)) {
+            throw new IllegalStateException("Circular dependency detected: " + stack + " -> " + relPath);        }
         if (edges.containsKey(relPath)) {
             return;
         }
@@ -50,11 +54,14 @@ public final class DependencyResolver {
             deps.add(resolved);
         }
 
+        stack.add(relPath);
         edges.put(relPath, deps);
 
         for (Path dep : deps) {
-            collect(rootPath, dep, edges);
+            collect(rootPath, dep, edges, stack);
         }
+
+        stack.remove(relPath);
     }
 
     private static List<Path> parseHrefs(Path xsltFile, String localName) throws Exception {

@@ -20,7 +20,7 @@
 - [x] T3.1 Parse xsl:include
 - [x] T3.2 Parse xsl:import
 - [x] T3.3 Build dependency graph
-- [ ] T3.4 Detect circular dependencies
+- [x] T3.4 Detect circular dependencies
 
 ---
 
