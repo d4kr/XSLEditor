@@ -77,4 +77,4 @@
 
 - [x] T10.1 Create log structure
 - [x] T10.2 Add entries
-- [ ] T10.3 Filter logs
+- [x] T10.3 Filter logs

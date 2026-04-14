@@ -22,4 +22,14 @@ public final class LogManager {
     public List<LogEntry> getAll() {
         return List.copyOf(entries);
     }
+
+    public List<LogEntry> getByLevel(String level) {
+        List<LogEntry> result = new ArrayList<>();
+        for (LogEntry entry : entries) {
+            if (entry.level().equals(level)) {
+                result.add(entry);
+            }
+        }
+        return List.copyOf(result);
+    }
 }
