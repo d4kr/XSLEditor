@@ -35,8 +35,12 @@ public final class ProjectFile {
         return dirty;
     }
 
-    public void setDirty(boolean dirty) {
-        this.dirty = dirty;
+    public void markClean() {
+        this.dirty = false;
+    }
+
+    public void markDirty() {
+        this.dirty = true;
     }
 
     public boolean isOpen() {

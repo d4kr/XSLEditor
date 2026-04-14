@@ -10,7 +10,7 @@
 ## T2 File Model
 
 - [x] T2.1 Create File class
-- [ ] T2.2 Implement dirty flag
+- [x] T2.2 Implement dirty flag
 - [ ] T2.3 Implement load/save
 
 ---
