@@ -19,6 +19,8 @@ public final class RenderOrchestrator {
     private final RenderEngine renderEngine = new RenderEngine();
 
     public byte[] render(Project project, Path rootPath) throws Exception {
+        // Phase 2 D-03: project.entryPoint() may be null for partial projects.
+        // Callers must ensure entryPoint is set before invoking render. // Phase 2 D-03
         // 1. Build dependency graph
         DependencyGraph graph = DependencyResolver.buildGraph(rootPath, project.entryPoint());
 
