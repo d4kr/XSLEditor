@@ -553,7 +553,7 @@ The only input from users is a filename string in `TextInputDialog`. Validation 
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Where is the status label placed in the layout?**
    - What we know: UI spec calls for a transient "Project opened: {name}" text label; Phase 1 FXML has no dedicated status row.
