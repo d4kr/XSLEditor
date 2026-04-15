@@ -29,3 +29,15 @@
     -fx-background-color: #555555;
     -fx-padding: 0 1 0 1;
 }
+
+/* Phase 2: status feedback label — transient project-open confirmation */
+.status-label-success {
+    -fx-text-fill: #66bb6a;
+    -fx-font-size: 13px;
+}
+
+/* Phase 2: disabled menu item text on dark background */
+.menu-item:disabled .label {
+    -fx-text-fill: #666666;
+    -fx-opacity: 1.0;
+}

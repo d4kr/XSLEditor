@@ -16,7 +16,13 @@
     <top>
         <MenuBar fx:id="menuBar">
             <Menu text="File">
-                <!-- Phase 2 wires Open Project here -->
+                <MenuItem fx:id="menuItemOpenProject" text="Open Project..." onAction="#handleOpenProject"/>
+                <SeparatorMenuItem/>
+                <MenuItem fx:id="menuItemSetEntrypoint" text="Set Entrypoint"/>
+                <MenuItem fx:id="menuItemSetXmlInput" text="Set XML Input"/>
+                <SeparatorMenuItem/>
+                <MenuItem fx:id="menuItemNewFile" text="New File..." onAction="#handleNewFile"/>
+                <SeparatorMenuItem/>
                 <MenuItem text="Exit" onAction="#handleExit"/>
             </Menu>
             <Menu text="Edit"/>
@@ -32,7 +38,12 @@
 
             <!-- LEFT ZONE: file tree placeholder (Phase 3 fills this) -->
             <StackPane fx:id="fileTreePane" styleClass="placeholder-pane">
-                <Label text="File Tree" styleClass="placeholder-label"/>
+                <Label text="No project open. Use File &#8594; Open Project... to get started."
+                       styleClass="placeholder-label"/>
+                <Label fx:id="statusLabel"
+                       styleClass="placeholder-label"
+                       StackPane.alignment="BOTTOM_CENTER"
+                       style="-fx-padding: 8;"/>
             </StackPane>
 
             <!-- RIGHT ZONE: inner horizontal SplitPane -->
