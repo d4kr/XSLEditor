@@ -31,6 +31,9 @@ public final class RenderOrchestrator {
         }
 
         // 3. Load entry XSLT as string
+        if (project.entryPoint() == null) {
+            throw new IllegalStateException("No XSLT entrypoint configured for this project");
+        }
         Path entryPath = rootPath.resolve(project.entryPoint()).normalize();
         String xsltContent = Files.readString(entryPath, StandardCharsets.UTF_8);
 
@@ -41,6 +44,9 @@ public final class RenderOrchestrator {
         XsltExecutable executable = renderEngine.compileXslt(processed);
 
         // 6. Transform XML to FO
+        if (project.xmlInput() == null) {
+            throw new IllegalStateException("No XML input configured for this project");
+        }
         Path xmlPath = rootPath.resolve(project.xmlInput()).normalize();
         String foContent = renderEngine.transformToString(xmlPath, executable);
 
@@ -60,6 +66,10 @@ public final class RenderOrchestrator {
             }
 
             // 3. Load entry XSLT as string
+            if (project.entryPoint() == null) {
+                return RenderResult.failure(List.of(
+                    ErrorManager.fromException(new IllegalStateException("No XSLT entrypoint configured for this project"))));
+            }
             Path entryPath = rootPath.resolve(project.entryPoint()).normalize();
             String xsltContent = Files.readString(entryPath, StandardCharsets.UTF_8);
 
@@ -70,6 +80,10 @@ public final class RenderOrchestrator {
             XsltExecutable executable = renderEngine.compileXslt(processed);
 
             // 6. Transform XML to FO
+            if (project.xmlInput() == null) {
+                return RenderResult.failure(List.of(
+                    ErrorManager.fromException(new IllegalStateException("No XML input configured for this project"))));
+            }
             Path xmlPath = rootPath.resolve(project.xmlInput()).normalize();
             String foContent = renderEngine.transformToString(xmlPath, executable);
 
