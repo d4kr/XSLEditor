@@ -13,8 +13,25 @@ public final class ProjectManager {
             return new Project(rootPath, null, null);
         }
         ProjectConfig config = ProjectConfig.read(configPath);
-        Path ep = config.entryPoint() != null ? Path.of(config.entryPoint()) : null;
-        Path xi = config.xmlInput()   != null ? Path.of(config.xmlInput())   : null;
-        return new Project(rootPath, ep, xi);
+        Path root = rootPath.toAbsolutePath().normalize();
+
+        Path ep = config.entryPoint() != null
+            ? root.resolve(config.entryPoint()).normalize()
+            : null;
+        if (ep != null && !ep.startsWith(root)) {
+            throw new IOException("entryPoint escapes project root: " + config.entryPoint());
+        }
+
+        Path xi = config.xmlInput() != null
+            ? root.resolve(config.xmlInput()).normalize()
+            : null;
+        if (xi != null && !xi.startsWith(root)) {
+            throw new IOException("xmlInput escapes project root: " + config.xmlInput());
+        }
+
+        // Store relative paths in Project (relative to rootPath)
+        Path epRelative = ep != null ? root.relativize(ep) : null;
+        Path xiRelative = xi != null ? root.relativize(xi) : null;
+        return new Project(rootPath, epRelative, xiRelative);
     }
 }
