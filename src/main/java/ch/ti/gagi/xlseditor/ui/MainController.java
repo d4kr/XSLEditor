@@ -58,6 +58,7 @@ public class MainController {
     private Stage primaryStage;
     private boolean dirty = false;
     private final ProjectContext projectContext = new ProjectContext();
+    private PauseTransition statusPause;
 
     // --- Lifecycle ---
 
@@ -241,16 +242,20 @@ public class MainController {
      * Uses PauseTransition on the JavaFX animation timer — no thread management needed.
      */
     private void showTransientStatus(String message) {
+        // Stop any previous transition still running to prevent double-clear races
+        if (statusPause != null) {
+            statusPause.stop();
+        }
         statusLabel.setText(message);
         // Ensure the success style is applied exactly once (avoid duplicates across calls)
         statusLabel.getStyleClass().removeAll("status-label-success");
         statusLabel.getStyleClass().add("status-label-success");
 
-        PauseTransition pause = new PauseTransition(Duration.seconds(3));
-        pause.setOnFinished(e -> {
+        statusPause = new PauseTransition(Duration.seconds(3));
+        statusPause.setOnFinished(e -> {
             statusLabel.setText("");
             statusLabel.getStyleClass().removeAll("status-label-success");
         });
-        pause.play();
+        statusPause.play();
     }
 }
