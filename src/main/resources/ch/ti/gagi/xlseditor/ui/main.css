@@ -41,3 +41,49 @@
     -fx-text-fill: #666666;
     -fx-opacity: 1.0;
 }
+
+/* Phase 3: File tree panel header */
+.file-tree-header {
+    -fx-background-color: #1e1e1e;
+    -fx-text-fill: #888888;
+    -fx-font-size: 12px;
+    -fx-padding: 4 8 4 8;
+}
+
+/* Phase 3: TreeView base */
+.file-tree-view {
+    -fx-background-color: #2b2b2b;
+    -fx-border-color: transparent;
+}
+
+/* Phase 3: TreeCell default */
+.file-tree-view .tree-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #cccccc;
+    -fx-font-size: 13px;
+    -fx-font-family: "Monospaced";
+    -fx-padding: 4 8 4 16;
+    -fx-cell-size: 24px;
+}
+
+/* Phase 3: TreeCell hover */
+.file-tree-view .tree-cell:hover {
+    -fx-background-color: #333333;
+}
+
+/* Phase 3: TreeCell selected */
+.file-tree-view .tree-cell:selected {
+    -fx-background-color: #1e1e1e;
+    -fx-border-color: #555555;
+    -fx-border-width: 0 0 0 2;
+}
+
+/* Phase 3: Entrypoint file cell */
+.file-tree-view .tree-cell.entrypoint {
+    -fx-text-fill: #66bb6a;
+}
+
+/* Phase 3: XML input file cell */
+.file-tree-view .tree-cell.xml-input {
+    -fx-text-fill: #64b5f6;
+}
