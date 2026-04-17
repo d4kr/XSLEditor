@@ -59,6 +59,7 @@ public class MainController {
     private boolean dirty = false;
     private final ProjectContext projectContext = new ProjectContext();
     private PauseTransition statusPause;
+    private final FileTreeController fileTreeController = new FileTreeController();
 
     // --- Lifecycle ---
 
@@ -66,10 +67,16 @@ public class MainController {
     public void initialize() {
         // D-10: New File enabled only when a project is loaded
         menuItemNewFile.disableProperty().bind(projectContext.projectLoadedProperty().not());
-        // D-04: Set Entrypoint / Set XML Input remain disabled unconditionally in Phase 2.
-        // Phase 3 will replace these with tree-selection-driven bindings.
-        menuItemSetEntrypoint.setDisable(true);
-        menuItemSetXmlInput.setDisable(true);
+        // D-04 (Phase 3): compound selection-and-loaded binding delegated to FileTreeController.
+        // Also wires tree population, cell factory, and Set Entrypoint / Set XML Input handlers.
+        fileTreeController.initialize(
+            fileTreePane,
+            projectContext,
+            menuItemSetEntrypoint,
+            menuItemSetXmlInput,
+            this::showTransientStatus,
+            () -> primaryStage
+        );
         // statusLabel starts empty — handleOpenProject populates it transiently.
         statusLabel.setText("");
     }
