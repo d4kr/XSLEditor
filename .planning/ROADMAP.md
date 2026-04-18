@@ -81,12 +81,21 @@
 
 **Requirements:** EDIT-04, EDIT-05, EDIT-06, EDIT-07, EDIT-08
 
+**Plans:** 5 plans
+
 **Deliverables:**
 - XML/XSLT syntax highlighting via RichTextFX `StyleSpans` (CSS classes for elements, attributes, comments, CDATA, processing instructions)
 - Static autocomplete popup for common XSL/XSL-FO keywords (triggered by Ctrl+Space or typing `<xsl:`)
 - Variable/template reference highlighting: regex-based highlight of all occurrences of selected `$var` or `name="template"` in current file
 - Go-to-definition: Ctrl+Click or menu action on `xsl:include`/`xsl:import` href opens the referenced file
 - Multi-file search dialog: search string across all project files, results list with filename:line, click navigates editor
+
+**Plans:**
+- [ ] 05-01-PLAN.md — Wave 0: test stubs for all 5 logic classes (XmlSyntaxHighlighter, AutocompleteProvider, OccurrenceHighlighter, HrefExtractor, SearchTask)
+- [ ] 05-02-PLAN.md — Wave 1: XmlSyntaxHighlighter + AutocompleteProvider implementation
+- [ ] 05-03-PLAN.md — Wave 1: OccurrenceHighlighter + HrefExtractor implementation (parallel with 05-02)
+- [ ] 05-04-PLAN.md — Wave 2: Wire highlighting, autocomplete, occurrence, go-to-def in EditorController + CSS classes
+- [ ] 05-05-PLAN.md — Wave 2: SearchDialog + Find in Files menu wiring + human verification checkpoint
 
 ---
 
