@@ -59,12 +59,19 @@
 
 **Requirements:** EDIT-01, EDIT-02, EDIT-03, EDIT-09
 
+**Plans:** 3 plans
+
 **Deliverables:**
 - `TabPane` with one `CodeArea` (RichTextFX) per open file
 - Tab title: filename, with `*` prefix when dirty
 - Ctrl+S saves current file and clears dirty state
 - Close-tab confirmation dialog when file is dirty
 - Opening a file that's already open in a tab switches to that tab (no duplicates)
+
+**Plans:**
+- [ ] 04-01-PLAN.md — EditorTab model + dirty-state unit tests (Wave 0 gap closed)
+- [ ] 04-02-PLAN.md — EditorController sub-controller: TabPane, open/save/close, Ctrl+S, confirmation dialog
+- [ ] 04-03-PLAN.md — Wire EditorController into MainController + FileTree open-seam + human verification
 
 ---
 
