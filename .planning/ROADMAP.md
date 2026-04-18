@@ -70,7 +70,7 @@
 
 **Plans:**
 - [x] 04-01-PLAN.md — EditorTab model + dirty-state unit tests (Wave 0 gap closed)
-- [ ] 04-02-PLAN.md — EditorController sub-controller: TabPane, open/save/close, Ctrl+S, confirmation dialog
+- [x] 04-02-PLAN.md — EditorController sub-controller: TabPane, open/save/close, Ctrl+S, confirmation dialog
 - [ ] 04-03-PLAN.md — Wire EditorController into MainController + FileTree open-seam + human verification
 
 ---
@@ -161,7 +161,7 @@
 | 1 | 1/1 | Complete   | 2026-04-14 |
 | 2 | Project Management | PROJ-01..06 | Pending |
 | 3 | File Tree View | TREE-01..04 | Pending |
-| 4 | Multi-Tab Editor (Core) | EDIT-01..03, EDIT-09 | In Progress (Plan 01 done) |
+| 4 | Multi-Tab Editor (Core) | EDIT-01..03, EDIT-09 | In Progress (Plan 02 done) |
 | 5 | Editor Features | EDIT-04..08 | Pending |
 | 6 | Render Pipeline Integration | REND-01..06 | Pending |
 | 7 | PDF Preview Panel | PREV-01..04 | Pending |

@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-paused_at: Phase 04 Plan 01 complete — EditorTab model + dirty-state tests
-last_updated: "2026-04-18T00:00:00Z"
+paused_at: Phase 04 Plan 02 complete — EditorController sub-controller with open/save/close semantics
+last_updated: "2026-04-18T15:54:00Z"
 progress:
   total_phases: 9
   completed_phases: 3
@@ -27,10 +27,10 @@ See: .planning/PROJECT.md (updated 2026-04-14)
 ## Current Position
 
 Phase: 04 (multi-tab-editor-core) — IN PROGRESS
-Plan: 01 complete, 02 next
+Plan: 02 complete, 03 next
 **Milestone:** v1.0
 **Phase:** 4 of 9 (multi tab editor (core))
-**Status:** Plan 01 done — EditorTab model + EDIT-02 tests green
+**Status:** Plan 02 done — EditorController with openOrFocusTab, Ctrl+S, dirty-title, close confirmation (EDIT-01..03, EDIT-09)
 
 ---
 
@@ -56,6 +56,8 @@ Plan: 01 complete, 02 next
 | Backend pipeline complete (T1–T10) | Saxon + FOP pipeline ready before UI work begins | 2026-04-14 |
 | EditorTab uses public final fields (data carrier) | No setters needed; Plan 02 EditorController owns tab lifecycle | 2026-04-18 |
 | Dirty state via Bindings.not(atMarkedPositionProperty()) | UndoManager-based binding handles undo-back-to-clean correctly | 2026-04-18 |
+| EditorController uses Consumer&lt;Boolean&gt; dirtyCallback | Decouples sub-controller from MainController; no upward import | 2026-04-18 |
+| Per-CodeArea Ctrl+S via WellBehavedFX Nodes.addInputMap | Scene-level handler causes focus bugs; per-node InputMap is the correct pattern | 2026-04-18 |
 
 ---
 
@@ -73,8 +75,8 @@ _(none yet)_
 
 ## Session Continuity
 
-**Last session:** 2026-04-18T00:00:00Z
-**Paused at:** Phase 04 Plan 01 complete — EditorTab model + dirty-state tests (EDIT-02)
+**Last session:** 2026-04-18T15:54:00Z
+**Paused at:** Phase 04 Plan 02 complete — EditorController (EDIT-01, EDIT-02, EDIT-03, EDIT-09)
 
 ---
 
