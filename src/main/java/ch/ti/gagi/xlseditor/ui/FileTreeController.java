@@ -1,6 +1,8 @@
 package ch.ti.gagi.xlseditor.ui;
 
 import ch.ti.gagi.xlseditor.model.Project;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Pos;
@@ -60,6 +62,12 @@ public final class FileTreeController {
     private TreeView<FileItem> fileTree;              // created lazily on first project load
     private VBox treeContainer;                       // VBox(headerLabel, fileTree)
     private List<Node> originalPaneChildren;          // snapshot for restore on unload
+
+    // Tracks whether the tree has a selected item. Updated via a ChangeListener so
+    // it fires reliably on deselection (clicking empty area, Escape key). Used in the
+    // compound disable binding instead of selectedItemProperty().isNull() which can
+    // miss null-to-null transitions in JavaFX's MultipleSelectionModel.
+    private final BooleanProperty treeHasSelection = new SimpleBooleanProperty(false);
 
     // D-05: Phase 4 replaces this no-op with the actual tab-open handler via setOnFileOpenRequest
     private Consumer<Path> onFileOpenRequest = path -> { /* no-op default (null-safe) */ };
@@ -132,6 +140,13 @@ public final class FileTreeController {
             }
         });
 
+        // Track selection via a ChangeListener so treeHasSelection fires reliably
+        // on deselection (clicking empty space, Escape key). The direct binding
+        // selectedItemProperty().isNull() can miss null -> null transitions in
+        // JavaFX's MultipleSelectionModel when the tree root is replaced.
+        fileTree.getSelectionModel().selectedItemProperty().addListener(
+            (obs, oldItem, newItem) -> treeHasSelection.set(newItem != null));
+
         // Header label (D-11, UI-SPEC § Panel Header)
         Label headerLabel = new Label();
         headerLabel.getStyleClass().add("file-tree-header");
@@ -156,13 +171,16 @@ public final class FileTreeController {
     // --- Menu wiring ---
 
     private void wireMenuActions() {
-        // D-04 compound disable: no project loaded OR no tree selection -> disabled
+        // D-04 compound disable: no project loaded OR no tree selection -> disabled.
+        // Uses treeHasSelection (a BooleanProperty updated by a ChangeListener) rather
+        // than selectedItemProperty().isNull() directly, because the direct binding
+        // misses deselection events when the user clicks empty space or presses Escape.
         menuItemSetEntrypoint.disableProperty().bind(
             projectContext.projectLoadedProperty().not()
-                .or(fileTree.getSelectionModel().selectedItemProperty().isNull()));
+                .or(treeHasSelection.not()));
         menuItemSetXmlInput.disableProperty().bind(
             projectContext.projectLoadedProperty().not()
-                .or(fileTree.getSelectionModel().selectedItemProperty().isNull()));
+                .or(treeHasSelection.not()));
 
         menuItemSetEntrypoint.setOnAction(e -> handleSetEntrypoint());
         menuItemSetXmlInput.setOnAction(e -> handleSetXmlInput());
