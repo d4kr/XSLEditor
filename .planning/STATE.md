@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: paused
-paused_at: Phase 01 verified — ready for Phase 02 (Project Management) after human visual checks
-last_updated: "2026-04-18T06:33:05.698Z"
+status: in_progress
+paused_at: Phase 04 Plan 01 complete — EditorTab model + dirty-state tests
+last_updated: "2026-04-18T00:00:00Z"
 progress:
   total_phases: 9
   completed_phases: 3
-  total_plans: 6
-  completed_plans: 6
+  total_plans: 7
+  completed_plans: 7
   percent: 100
 ---
 
@@ -20,17 +20,17 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-14)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** Phase 03 — file-tree-view
+**Current focus:** Phase 04 — multi-tab-editor-core
 
 ---
 
 ## Current Position
 
-Phase: 03 (file-tree-view) — EXECUTING
-Plan: Not started
+Phase: 04 (multi-tab-editor-core) — IN PROGRESS
+Plan: 01 complete, 02 next
 **Milestone:** v1.0
 **Phase:** 4 of 9 (multi tab editor (core))
-**Status:** Ready to plan
+**Status:** Plan 01 done — EditorTab model + EDIT-02 tests green
 
 ---
 
@@ -54,6 +54,8 @@ Plan: Not started
 | Fine granularity phasing | 9 phases for focused, reviewable increments | 2026-04-14 |
 | Interactive workflow mode | Confirmation at key decision points | 2026-04-14 |
 | Backend pipeline complete (T1–T10) | Saxon + FOP pipeline ready before UI work begins | 2026-04-14 |
+| EditorTab uses public final fields (data carrier) | No setters needed; Plan 02 EditorController owns tab lifecycle | 2026-04-18 |
+| Dirty state via Bindings.not(atMarkedPositionProperty()) | UndoManager-based binding handles undo-back-to-clean correctly | 2026-04-18 |
 
 ---
 
@@ -71,8 +73,8 @@ _(none yet)_
 
 ## Session Continuity
 
-**Last session:** 2026-04-16T20:19:25.336Z
-**Paused at:** Phase 01 verified — ready for Phase 02 (Project Management) after human visual checks
+**Last session:** 2026-04-18T00:00:00Z
+**Paused at:** Phase 04 Plan 01 complete — EditorTab model + dirty-state tests (EDIT-02)
 
 ---
 
