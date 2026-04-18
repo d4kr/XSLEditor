@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-paused_at: Phase 04 Plan 02 complete — EditorController sub-controller with open/save/close semantics
-last_updated: "2026-04-18T15:54:00Z"
+paused_at: Phase 04 Plan 03 Task 1 complete — EditorController wired into MainController; Task 2 pending human verification
+last_updated: "2026-04-18T15:57:13Z"
 progress:
   total_phases: 9
   completed_phases: 3
@@ -27,10 +27,10 @@ See: .planning/PROJECT.md (updated 2026-04-14)
 ## Current Position
 
 Phase: 04 (multi-tab-editor-core) — IN PROGRESS
-Plan: 02 complete, 03 next
+Plan: 03 Task 1 complete, Task 2 pending human verification
 **Milestone:** v1.0
 **Phase:** 4 of 9 (multi tab editor (core))
-**Status:** Plan 02 done — EditorController with openOrFocusTab, Ctrl+S, dirty-title, close confirmation (EDIT-01..03, EDIT-09)
+**Status:** Plan 03 Task 1 done — EditorController wired into MainController, FileTree open-seam active; awaiting human-verify checkpoint for Task 2
 
 ---
 
@@ -75,8 +75,8 @@ _(none yet)_
 
 ## Session Continuity
 
-**Last session:** 2026-04-18T15:54:00Z
-**Paused at:** Phase 04 Plan 02 complete — EditorController (EDIT-01, EDIT-02, EDIT-03, EDIT-09)
+**Last session:** 2026-04-18T15:57:13Z
+**Paused at:** Phase 04 Plan 03 Task 1 complete — awaiting human-verify for Task 2 (EDIT-01, EDIT-02, EDIT-03, EDIT-09 end-to-end UI check)
 
 ---
 
