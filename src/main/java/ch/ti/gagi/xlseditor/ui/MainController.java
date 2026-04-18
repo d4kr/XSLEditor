@@ -60,6 +60,7 @@ public class MainController {
     private final ProjectContext projectContext = new ProjectContext();
     private PauseTransition statusPause;
     private final FileTreeController fileTreeController = new FileTreeController();
+    private final EditorController editorController = new EditorController();  // Phase 4
 
     // --- Lifecycle ---
 
@@ -77,6 +78,14 @@ public class MainController {
             this::showTransientStatus,
             () -> primaryStage
         );
+        // Phase 4 — EditorController setup (EDIT-01..03, EDIT-09)
+        editorController.initialize(
+            editorPane,
+            () -> primaryStage,
+            this::setDirty
+        );
+        // Wire Phase 3 integration seam (FileTreeController.java line 117, D-05)
+        fileTreeController.setOnFileOpenRequest(editorController::openOrFocusTab);
         // statusLabel starts empty — handleOpenProject populates it transiently.
         statusLabel.setText("");
     }
