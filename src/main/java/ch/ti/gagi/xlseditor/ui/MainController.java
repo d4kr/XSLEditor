@@ -107,7 +107,13 @@ public class MainController {
      * @param projectName the loaded project name, or null to reset to "XLSEditor"
      */
     public void updateTitle(String projectName) {
-        if (primaryStage == null) return;
+        if (primaryStage == null) {
+            // Safe guard: setPrimaryStage() is always called before any user-triggered
+            // code path reaches updateTitle(). If this guard is ever hit it means
+            // a call-ordering bug was introduced — consider throwing IllegalStateException
+            // here during development to make such violations visible immediately.
+            return;
+        }
         if (projectName == null || projectName.isBlank()) {
             primaryStage.setTitle(XLSEditorApp.APP_NAME);
         } else {
