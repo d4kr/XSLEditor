@@ -1,5 +1,6 @@
 package ch.ti.gagi.xlseditor.ui;
 
+import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -123,12 +124,8 @@ public final class EditorController {
         try {
             String content = Files.readString(key, StandardCharsets.UTF_8);
             EditorTab editorTab = new EditorTab(key, content);
-            Tab tab = buildTab(editorTab);
+            Tab tab = buildTab(key, editorTab);
             registry.put(key, tab);
-            tab.setOnClosed(e -> {
-                registry.remove(key);
-                updateAppDirtyState();
-            });
             tabPane.getTabs().add(tab);
             tabPane.getSelectionModel().select(tab);
         } catch (IOException ex) {
@@ -137,17 +134,19 @@ public final class EditorController {
         }
     }
 
-    private Tab buildTab(EditorTab editorTab) {
+    private Tab buildTab(Path key, EditorTab editorTab) {
         VirtualizedScrollPane<CodeArea> scrollPane = new VirtualizedScrollPane<>(editorTab.codeArea);
         String baseName = editorTab.path.getFileName().toString();
         Tab tab = new Tab(baseName, scrollPane);
         tab.setUserData(editorTab);   // consumed by updateAppDirtyState()
 
-        // EDIT-02 — dirty prefix on tab title
-        editorTab.dirty.addListener((obs, wasDirty, isDirty) -> {
+        // EDIT-02 — dirty prefix on tab title.
+        // Listener is captured so it can be removed on tab close (WR-01: prevent memory leak).
+        ChangeListener<Boolean> dirtyListener = (obs, wasDirty, isDirty) -> {
             tab.setText(isDirty ? "*" + baseName : baseName);
             updateAppDirtyState();
-        });
+        };
+        editorTab.dirty.addListener(dirtyListener);
 
         // EDIT-03 — Ctrl+S per focused CodeArea (NOT scene-level; RESEARCH.md Anti-Pattern)
         Nodes.addInputMap(editorTab.codeArea,
@@ -167,6 +166,14 @@ public final class EditorController {
             if (result.isEmpty() || result.get() != ButtonType.YES) {
                 event.consume();  // cancel the close
             }
+        });
+
+        // EDIT-09 / WR-01 — remove dirty listener on close to release EditorTab, CodeArea,
+        // and UndoManager from the BooleanBinding's strong reference chain.
+        tab.setOnClosed(e -> {
+            editorTab.dirty.removeListener(dirtyListener);
+            registry.remove(key);
+            updateAppDirtyState();
         });
 
         return tab;
