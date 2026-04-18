@@ -41,20 +41,20 @@ patterns-established:
 requirements-completed: [EDIT-01, EDIT-02, EDIT-03, EDIT-09]
 
 # Metrics
-duration: 5min
+duration: 10min
 completed: 2026-04-18
 ---
 
 # Phase 04 Plan 03: Wire EditorController into MainController Summary
 
-**EditorController wired into MainController with FileTree open-seam activated — double-click on a file now opens it as a multi-tab editor tab.**
+**EditorController wired into MainController with FileTree open-seam activated — double-click on a file now opens it as a multi-tab editor tab. Human verification passed (all 6 scenarios approved).**
 
 ## Performance
 
-- **Duration:** ~5 min
+- **Duration:** ~10 min (Task 1: ~5 min, Task 2: human verification)
 - **Started:** 2026-04-18T15:52:00Z
-- **Completed:** 2026-04-18T15:57:13Z
-- **Tasks:** 1 of 2 complete (Task 2 pending human verification)
+- **Completed:** 2026-04-18
+- **Tasks:** 2 of 2 complete
 - **Files modified:** 1
 
 ## Accomplishments
@@ -63,13 +63,12 @@ completed: 2026-04-18
 - Wired `editorController.initialize(editorPane, () -> primaryStage, this::setDirty)` in `MainController.initialize()`, after `fileTreeController.initialize()`
 - Activated Phase 3 D-05 seam: `fileTreeController.setOnFileOpenRequest(editorController::openOrFocusTab)`
 - All three build targets green: `./gradlew build`, `./gradlew test`, `./gradlew shadowJar`
+- Human verification: all 6 runtime scenarios passed — approved
 
 ## Task Commits
 
 1. **Task 1: Wire EditorController into MainController and connect the FileTree open-seam** - `c9d095d` (feat)
-2. **Task 2: Human verification** - PENDING (checkpoint:human-verify — not yet executed)
-
-**Plan metadata:** pending (docs commit after human verification completes)
+2. **Task 2: Human verification** - APPROVED (all 6 scenarios passed)
 
 ## Files Created/Modified
 
@@ -108,29 +107,31 @@ None - plan executed exactly as written.
 | `./gradlew test` exits 0 | PASS |
 | `./gradlew shadowJar` exits 0 | PASS |
 
-## Pending: Task 2 Human Verification
+## Human Verification Results
 
-**Task 2 is a `checkpoint:human-verify` gate** — the orchestrator handles this separately.
+**Status: APPROVED**
 
-The human verifier should launch `./gradlew run` and execute the six scenarios described in the plan:
+All 6 runtime scenarios verified by human tester:
 
-1. EDIT-01 multi-tab + dedup: double-click files, verify dedup on second open of same file
-2. EDIT-02 dirty indicator: type a char, verify `*filename` prefix; undo, verify `*` disappears
-3. EDIT-03 Ctrl+S save: edit, save with Ctrl+S, verify `*` clears and file persists on disk
-4. EDIT-09 close-tab confirmation: close dirty tab, verify YES/CANCEL dialog; CANCEL keeps tab
-5. Reopen-after-close regression (Pitfall 3): close tab, reopen, verify new tab opens
-6. Error surfacing (bonus): delete file on disk, press Ctrl+S, verify "Save Failed" alert
-
-Resume signal: type "approved" if all six scenarios pass.
+| Scenario | Requirement | Result |
+|----------|-------------|--------|
+| Multi-tab + dedup: double-click files, verify dedup on second open | EDIT-01 | PASS |
+| Dirty indicator: type char → `*filename`; undo → `*` disappears | EDIT-02 | PASS |
+| Ctrl+S save: edit, save, verify `*` clears and file persists on disk | EDIT-03 | PASS |
+| Close-tab confirmation: close dirty tab → YES/CANCEL dialog; CANCEL keeps tab | EDIT-09 | PASS |
+| Reopen-after-close regression (Pitfall 3): close tab, reopen, new tab opens | Pitfall 3 | PASS |
+| Error surfacing: delete file on disk, press Ctrl+S → "Save Failed" alert | Bonus | PASS |
 
 ## Phase 4 Requirement Coverage
 
-| Requirement | Provided By | MainController.java Line |
-|-------------|-------------|--------------------------|
-| EDIT-01 (multi-tab + dedup) | EditorController.openOrFocusTab | seam wired at initialize() |
-| EDIT-02 (dirty indicator) | EditorController dirty listener | seam wired at initialize() |
-| EDIT-03 (Ctrl+S save) | EditorController per-CodeArea InputMap | seam wired at initialize() |
-| EDIT-09 (close-tab confirmation) | EditorController tab.setOnCloseRequest | seam wired at initialize() |
+| Requirement | Description | Provided By | Status |
+|-------------|-------------|-------------|--------|
+| EDIT-01 | Multi-tab + dedup | EditorController.openOrFocusTab, wired via seam | COMPLETE |
+| EDIT-02 | Dirty indicator (`*` prefix) | EditorController dirty listener | COMPLETE |
+| EDIT-03 | Ctrl+S save | EditorController per-CodeArea InputMap | COMPLETE |
+| EDIT-09 | Close-tab confirmation dialog | EditorController tab.setOnCloseRequest | COMPLETE |
+
+All four Phase 4 requirements satisfied and human-verified.
 
 ## Handoff Note for Phase 5
 
@@ -140,7 +141,13 @@ EditorController is in place. Phase 5 extends CodeArea with syntax highlighting 
 
 None.
 
+## Self-Check: PASSED
+
+- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — modified file exists
+- Commit `c9d095d` — confirmed in git log
+- Human verification — approved (all 6 scenarios)
+
 ---
 
 *Phase: 04-multi-tab-editor-core*
-*Completed (partial — Task 2 pending): 2026-04-18*
+*Completed: 2026-04-18*
