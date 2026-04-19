@@ -1,13 +1,11 @@
 package ch.ti.gagi.xlseditor.ui;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled("Wave 0 stub — enable after AutocompleteProvider is implemented in Wave 1")
 class AutocompleteProviderTest {
 
     @Test
