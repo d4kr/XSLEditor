@@ -80,9 +80,104 @@ public final class RenderController {
 
     /**
      * Called from MainController.handleRender() (wired via onAction="#handleRender" in FXML).
-     * Wave 0: skeleton body — Wave 1 replaces with full implementation.
+     * Full implementation: REND-01..06 — Task<Preview> lifecycle with button state management,
+     * progress feedback, success/failure routing, and PDF/outdated seams for Phase 7.
      */
     public void handleRender() {
-        // Wave 0 stub — implementation in Wave 1 (06-02-PLAN.md)
+        // REND-02: runtime guard — check entryPoint and xmlInput beyond the binding
+        ch.ti.gagi.xlseditor.model.Project project = projectContext.getCurrentProject();
+        if (project == null || project.entryPoint() == null || project.xmlInput() == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("Cannot Render");
+            alert.setContentText("Set both an entrypoint XSLT and an XML input file before rendering.");
+            alert.showAndWait();
+            return;
+        }
+
+        // D-17: clear log before new render
+        logListView.getItems().clear();
+
+        // D-08/D-09: save all dirty tabs; abort on disk error
+        try {
+            editorController.saveAll();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Save Failed");
+            alert.setContentText("Could not save all files before render: " + e.getMessage());
+            alert.showAndWait();
+            return;
+        }
+
+        // D-05: unbind first (bound property cannot be set), then disable button and update label
+        renderButton.disableProperty().unbind();
+        renderButton.setDisable(true);
+        renderButton.setText("Rendering...");
+        // D-11: persistent status during render (no PauseTransition — stays until success/failure)
+        statusSet.accept("Rendering...");
+
+        long startTime = System.currentTimeMillis();
+        Path rootPath = project.rootPath();
+
+        Task<Preview> task = new Task<>() {
+            @Override
+            protected Preview call() {
+                // Runs on background thread — NEVER update UI nodes here (Pitfall 1)
+                return previewManager.generatePreview(project, rootPath);
+            }
+        };
+
+        task.setOnSucceeded(e -> {
+            // On FX thread — safe for all UI updates; Platform.runLater NOT needed (Pattern 2)
+            Preview result = task.getValue();
+            long duration = System.currentTimeMillis() - startTime;
+            renderButton.setDisable(false);
+            renderButton.setText("Render");
+            // Re-bind disable to project loaded state now that task is done
+            renderButton.disableProperty().bind(projectContext.projectLoadedProperty().not());
+
+            if (result.success()) {
+                // D-14: log render duration as INFO entry
+                logListView.getItems().add(
+                    "[INFO] Render complete in " + String.format("%.1f", duration / 1000.0) + "s");
+                // D-12: transient success status (auto-clears after 3s via showTransientStatus)
+                statusTransient.accept(
+                    "Render complete (" + String.format("%.1f", duration / 1000.0) + "s)");
+                // D-15: pass PDF bytes to preview seam (Phase 7 fills this; Phase 6: no-op)
+                pdfCallback.accept(result.pdf());
+                // REND-05: notify that preview is NOT outdated (success -> outdated = false)
+                outdatedCallback.accept(false);
+            } else {
+                // D-16: route errors to log panel as formatted strings
+                for (PreviewError err : result.errors()) {
+                    String entry = "[ERROR] " + err.type() + ": " + err.message();
+                    if (err.file() != null) {
+                        entry += " @ " + err.file();
+                        if (err.line() != null) entry += ":" + err.line();
+                    }
+                    logListView.getItems().add(entry);
+                }
+                // D-13: transient failure status
+                statusTransient.accept("Render failed");
+                // REND-05: notify that preview IS outdated (failure -> outdated = true)
+                outdatedCallback.accept(true);
+            }
+        });
+
+        task.setOnFailed(e -> {
+            // renderSafe() never throws — this branch covers unexpected runtime exceptions only
+            renderButton.setDisable(false);
+            renderButton.setText("Render");
+            // Re-bind disable to project loaded state now that task is done
+            renderButton.disableProperty().bind(projectContext.projectLoadedProperty().not());
+            Throwable ex = task.getException();
+            logListView.getItems().add(
+                "[ERROR] Unexpected render error: " + (ex != null ? ex.getMessage() : "unknown"));
+            statusTransient.accept("Render failed");
+        });
+
+        // CRITICAL: daemon thread prevents JVM hang on window close (anti-pattern in RESEARCH.md)
+        Thread t = new Thread(task, "render-thread");
+        t.setDaemon(true);
+        t.start();
     }
 }
