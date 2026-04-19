@@ -1,6 +1,5 @@
 package ch.ti.gagi.xlseditor.ui;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -12,7 +11,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled("Wave 0 stub — enable after SearchDialog/SearchTask logic is implemented in Wave 2")
 class SearchTaskTest {
 
     @Test
