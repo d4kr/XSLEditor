@@ -28,6 +28,9 @@
             <Menu text="Edit"/>
             <Menu text="View"/>
             <Menu text="Run"/>
+            <Menu text="Search">
+                <MenuItem fx:id="findInFilesMenuItem" text="Find in Files" accelerator="Ctrl+Shift+F" onAction="#handleFindInFiles"/>
+            </Menu>
         </MenuBar>
     </top>
 

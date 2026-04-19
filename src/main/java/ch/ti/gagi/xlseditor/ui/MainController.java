@@ -53,6 +53,9 @@ public class MainController {
     @FXML private MenuItem menuItemNewFile;
     @FXML private Label statusLabel;
 
+    // Phase 5 additions
+    @FXML private MenuItem findInFilesMenuItem;
+
     // --- State ---
 
     private Stage primaryStage;
@@ -86,6 +89,8 @@ public class MainController {
         );
         // Wire Phase 3 integration seam (FileTreeController.java line 117, D-05)
         fileTreeController.setOnFileOpenRequest(editorController::openOrFocusTab);
+        // Phase 5 — Find in Files (EDIT-08)
+        findInFilesMenuItem.setOnAction(e -> handleFindInFiles());
         // statusLabel starts empty — handleOpenProject populates it transiently.
         statusLabel.setText("");
     }
@@ -228,6 +233,24 @@ public class MainController {
                 err.showAndWait();
             }
         });
+    }
+
+    // --- Phase 5 action handlers ---
+
+    @FXML
+    private void handleFindInFiles() {
+        if (!projectContext.projectLoadedProperty().get()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No Project");
+            alert.setHeaderText("No project open");
+            alert.setContentText("Open a project first to use Find in Files.");
+            if (primaryStage != null) alert.initOwner(primaryStage);
+            alert.showAndWait();
+            return;
+        }
+        java.nio.file.Path root = projectContext.getCurrentProject().rootPath();
+        SearchDialog dialog = new SearchDialog(primaryStage, root, editorController);
+        dialog.show(); // non-blocking — user can keep editing
     }
 
     // --- Private helpers ---
