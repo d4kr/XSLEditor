@@ -56,6 +56,10 @@ public class MainController {
     // Phase 5 additions
     @FXML private MenuItem findInFilesMenuItem;
 
+    // Phase 6 additions
+    @FXML private Button renderButton;
+    @FXML private MenuItem menuItemRender;
+
     // --- State ---
 
     private Stage primaryStage;
@@ -64,6 +68,7 @@ public class MainController {
     private PauseTransition statusPause;
     private final FileTreeController fileTreeController = new FileTreeController();
     private final EditorController editorController = new EditorController();  // Phase 4
+    private final RenderController renderController = new RenderController();  // Phase 6
 
     // --- Lifecycle ---
 
@@ -93,6 +98,17 @@ public class MainController {
         findInFilesMenuItem.setOnAction(e -> handleFindInFiles());
         // statusLabel starts empty — handleOpenProject populates it transiently.
         statusLabel.setText("");
+        // Phase 6 — RenderController setup (REND-01..06)
+        renderController.initialize(
+            renderButton,
+            logListView,
+            s -> statusLabel.setText(s),   // D-11: persistent setter (no PauseTransition)
+            this::showTransientStatus,     // D-12/D-13: 3s auto-clear
+            bytes -> { },                  // D-15: Phase 6 no-op PDF seam; Phase 7 fills this
+            b -> { },                      // REND-05: Phase 6 no-op outdated seam; Phase 7 fills this
+            projectContext,
+            editorController
+        );
     }
 
     /**
@@ -233,6 +249,13 @@ public class MainController {
                 err.showAndWait();
             }
         });
+    }
+
+    // --- Phase 6 action handler ---
+
+    @FXML
+    private void handleRender() {
+        renderController.handleRender();
     }
 
     // --- Phase 5 action handlers ---
