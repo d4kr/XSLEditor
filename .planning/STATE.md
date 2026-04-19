@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in-progress
-paused_at: Phase 05 plan 01 complete — Wave 0 test stubs done. Ready for Wave 1 (plans 02-03).
+paused_at: Phase 05 plan 04 complete — EditorController wiring done. Wave 2 complete. Ready for plan 05 (SearchDialog).
 last_updated: "2026-04-19"
 progress:
   total_phases: 9
   completed_phases: 4
   total_plans: 15
-  completed_plans: 11
-  percent: 47
+  completed_plans: 12
+  percent: 52
 ---
 
 # Project State: XLSEditor
@@ -30,7 +30,7 @@ Phase: 05 (editor-features-syntax-navigation) — IN PROGRESS
 Plan: 1 of 5 executed (Wave 0 complete → Wave 1 next)
 **Milestone:** v1.0
 **Phase:** 4 of 9 complete — Phase 05 in progress, 1/5 plans done
-**Status:** Plan 01 complete 2026-04-19. Wave 0 test stubs created for all 5 logic classes. Ready for Wave 1 (plans 02-03).
+**Status:** Plan 04 complete 2026-04-19. EditorController wired with all 4 Phase 05 features; main.css extended with 8 CSS classes. Wave 2 complete. Ready for plan 05 (SearchDialog — EDIT-08).
 
 ---
 
@@ -60,6 +60,8 @@ Plan: 1 of 5 executed (Wave 0 complete → Wave 1 next)
 | Per-CodeArea Ctrl+S via WellBehavedFX Nodes.addInputMap | Scene-level handler causes focus bugs; per-node InputMap is the correct pattern | 2026-04-18 |
 | Skeleton production classes in Wave 0 | Java @Disabled tests still compile; skeletons with correct signatures allow test stubs to compile and remain green until Wave 1 replaces bodies | 2026-04-19 |
 | SearchDialog.search() as static method | Extracted from Task.call() lambda for testability; follows RenderOrchestrator pattern | 2026-04-19 |
+| Initial highlight threshold 500 chars | Files < 500 chars highlighted sync on FX thread (safe); >= 500 submitted off-thread via hlExecutor to avoid stutter | 2026-04-19 |
+| highlightSub.unsubscribe() before hlExecutor.shutdownNow() | Unsubscribe first releases CodeArea strong reference; then executor shutdown releases thread — ordering required for correct GC | 2026-04-19 |
 
 ---
 
@@ -78,7 +80,7 @@ _(none yet)_
 ## Session Continuity
 
 **Last session:** 2026-04-19
-**Paused at:** Completed 05-01-PLAN.md — Wave 0 test stubs for all 5 Phase 05 logic classes.
+**Paused at:** Completed 05-04-PLAN.md — EditorController wiring and main.css Phase 5 CSS classes.
 
 ---
 
