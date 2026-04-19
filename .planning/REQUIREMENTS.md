@@ -39,7 +39,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **EDIT-05**: Static autocomplete for common XSL/XSL-FO tags (via keyword list)
 - [x] **EDIT-06**: Variable/template name highlighting (regex-based, same file scope)
 - [x] **EDIT-07**: Go-to-definition for `xsl:include`/`xsl:import` hrefs (opens referenced file in new tab)
-- [ ] **EDIT-08**: Multi-file text search (search across all project files, results list navigable)
+- [x] **EDIT-08**: Multi-file text search (search across all project files, results list navigable)
 - [ ] **EDIT-09**: Closing a tab with unsaved changes prompts confirmation
 
 ### Render Pipeline

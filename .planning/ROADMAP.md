@@ -95,7 +95,7 @@
 - [x] 05-02-PLAN.md — Wave 1: XmlSyntaxHighlighter + AutocompleteProvider implementation
 - [x] 05-03-PLAN.md — Wave 1: OccurrenceHighlighter + HrefExtractor implementation (parallel with 05-02)
 - [x] 05-04-PLAN.md — Wave 2: Wire highlighting, autocomplete, occurrence, go-to-def in EditorController + CSS classes
-- [ ] 05-05-PLAN.md — Wave 2: SearchDialog + Find in Files menu wiring + human verification checkpoint
+- [x] 05-05-PLAN.md — Wave 2: SearchDialog + Find in Files menu wiring + human verification checkpoint
 
 ---
 
@@ -171,7 +171,7 @@
 | 2 | Project Management | PROJ-01..06 | Pending |
 | 3 | File Tree View | TREE-01..04 | Pending |
 | 4 | Multi-Tab Editor (Core) | EDIT-01..03, EDIT-09 | Complete (2026-04-18) |
-| 5 | Editor Features | EDIT-04..08 | Pending |
+| 5 | Editor Features | EDIT-04..08 | Complete (2026-04-19) |
 | 6 | Render Pipeline Integration | REND-01..06 | Pending |
 | 7 | PDF Preview Panel | PREV-01..04 | Pending |
 | 8 | Error & Log Panel | ERR-01..05 | Pending |
