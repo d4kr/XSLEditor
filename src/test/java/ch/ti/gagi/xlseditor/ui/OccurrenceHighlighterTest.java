@@ -7,7 +7,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled("Wave 0 stub — enable after OccurrenceHighlighter is implemented in Wave 1")
 class OccurrenceHighlighterTest {
 
     @Test
@@ -19,7 +18,8 @@ class OccurrenceHighlighterTest {
     @Test
     void findOccurrencesReturnsEmptyForSingleCharToken() {
         // Guard: tokens shorter than 2 chars are too noisy; skip highlighting
-        List<int[]> result = OccurrenceHighlighter.findOccurrences("$x is here", "$x");
+        // "$" has length 1, which is < 2, so the guard filters it out
+        List<int[]> result = OccurrenceHighlighter.findOccurrences("$x is here and $x more", "$");
         assertTrue(result.isEmpty(), "Single-char token must return empty (length < 2 guard)");
     }
 
