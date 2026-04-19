@@ -307,4 +307,19 @@ public final class EditorController {
                     + ". Check file permissions.");
         }
     }
+
+    /**
+     * Saves all dirty tabs silently. Called by RenderController before spawning the render Task (D-08/D-09).
+     * Throws IOException on the first disk error so the caller can abort and alert the user.
+     * Unlike saveTab(), this method does NOT show an error dialog — the caller decides how to handle the error.
+     */
+    public void saveAll() throws IOException {
+        for (Tab tab : registry.values()) {
+            if (tab.getUserData() instanceof EditorTab et && et.dirty.get()) {
+                Files.writeString(et.path, et.codeArea.getText(), StandardCharsets.UTF_8);
+                et.codeArea.getUndoManager().mark();
+            }
+        }
+        updateAppDirtyState();
+    }
 }
