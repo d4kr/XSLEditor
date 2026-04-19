@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: paused
-paused_at: Phase 04 complete — EDIT-01..03 EDIT-09 verified. Next: Phase 05 Editor Features.
-last_updated: "2026-04-18"
+status: in-progress
+paused_at: Phase 05 plan 01 complete — Wave 0 test stubs done. Ready for Wave 1 (plans 02-03).
+last_updated: "2026-04-19"
 progress:
   total_phases: 9
   completed_phases: 4
-  total_plans: 10
-  completed_plans: 10
-  percent: 44
+  total_plans: 15
+  completed_plans: 11
+  percent: 47
 ---
 
 # Project State: XLSEditor
@@ -20,17 +20,17 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-14)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** Phase 04 — multi-tab-editor-core
+**Current focus:** Phase 05 — editor-features-syntax-navigation
 
 ---
 
 ## Current Position
 
-Phase: 04 (multi-tab-editor-core) — COMPLETE
-Plan: 03 complete (human verification approved)
+Phase: 05 (editor-features-syntax-navigation) — IN PROGRESS
+Plan: 1 of 5 executed (Wave 0 complete → Wave 1 next)
 **Milestone:** v1.0
-**Phase:** 4 of 9 complete — advancing to Phase 05 (Editor Features: Syntax & Navigation)
-**Status:** All three Phase 04 plans done. EDIT-01, EDIT-02, EDIT-03, EDIT-09 human-verified. Next: Phase 05.
+**Phase:** 4 of 9 complete — Phase 05 in progress, 1/5 plans done
+**Status:** Plan 01 complete 2026-04-19. Wave 0 test stubs created for all 5 logic classes. Ready for Wave 1 (plans 02-03).
 
 ---
 
@@ -58,6 +58,8 @@ Plan: 03 complete (human verification approved)
 | Dirty state via Bindings.not(atMarkedPositionProperty()) | UndoManager-based binding handles undo-back-to-clean correctly | 2026-04-18 |
 | EditorController uses Consumer&lt;Boolean&gt; dirtyCallback | Decouples sub-controller from MainController; no upward import | 2026-04-18 |
 | Per-CodeArea Ctrl+S via WellBehavedFX Nodes.addInputMap | Scene-level handler causes focus bugs; per-node InputMap is the correct pattern | 2026-04-18 |
+| Skeleton production classes in Wave 0 | Java @Disabled tests still compile; skeletons with correct signatures allow test stubs to compile and remain green until Wave 1 replaces bodies | 2026-04-19 |
+| SearchDialog.search() as static method | Extracted from Task.call() lambda for testability; follows RenderOrchestrator pattern | 2026-04-19 |
 
 ---
 
@@ -75,8 +77,8 @@ _(none yet)_
 
 ## Session Continuity
 
-**Last session:** 2026-04-18
-**Paused at:** Phase 04 complete — all plans done, human verification approved. Ready for Phase 05.
+**Last session:** 2026-04-19
+**Paused at:** Completed 05-01-PLAN.md — Wave 0 test stubs for all 5 Phase 05 logic classes.
 
 ---
 

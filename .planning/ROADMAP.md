@@ -91,7 +91,7 @@
 - Multi-file search dialog: search string across all project files, results list with filename:line, click navigates editor
 
 **Plans:**
-- [ ] 05-01-PLAN.md — Wave 0: test stubs for all 5 logic classes (XmlSyntaxHighlighter, AutocompleteProvider, OccurrenceHighlighter, HrefExtractor, SearchTask)
+- [x] 05-01-PLAN.md — Wave 0: test stubs for all 5 logic classes (XmlSyntaxHighlighter, AutocompleteProvider, OccurrenceHighlighter, HrefExtractor, SearchTask)
 - [ ] 05-02-PLAN.md — Wave 1: XmlSyntaxHighlighter + AutocompleteProvider implementation
 - [ ] 05-03-PLAN.md — Wave 1: OccurrenceHighlighter + HrefExtractor implementation (parallel with 05-02)
 - [ ] 05-04-PLAN.md — Wave 2: Wire highlighting, autocomplete, occurrence, go-to-def in EditorController + CSS classes
