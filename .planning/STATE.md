@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in-progress
-paused_at: Phase 05 plan 05 complete — SearchDialog + Find in Files done. All 5 EDIT requirements implemented. Phase 05 complete.
+status: ready_to_plan
+paused_at: Phase 06 planned — 2 plans (06-01 Wave 0, 06-02 Wave 1), verified and committed. Ready to execute.
 last_updated: "2026-04-19"
 progress:
   total_phases: 9
-  completed_phases: 4
-  total_plans: 15
+  completed_phases: 5
+  total_plans: 17
   completed_plans: 13
-  percent: 57
+  percent: 56
 ---
 
 # Project State: XLSEditor
@@ -20,17 +20,17 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-14)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** Phase 05 — editor-features-syntax-navigation
+**Current focus:** Phase 06 — render-pipeline-integration
 
 ---
 
 ## Current Position
 
 Phase: 05 (editor-features-syntax-navigation) — COMPLETE
-Plan: 5 of 5 executed (all waves done)
+Plan: Not started
 **Milestone:** v1.0
-**Phase:** 4 of 9 complete — Phase 05 complete (5/5 plans done)
-**Status:** Plan 05 complete 2026-04-19. SearchDialog + Find in Files wired. All 5 EDIT requirements (EDIT-04..08) implemented. EDIT-06 has known partial issue with complex selections. EDIT-07 not explicitly verified by human. Phase 05 complete — ready for Phase 06 (Render Pipeline Integration).
+**Phase:** 7 of 9 (pdf preview panel)
+**Status:** Ready to plan
 
 ---
 
