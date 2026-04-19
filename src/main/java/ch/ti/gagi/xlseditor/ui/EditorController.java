@@ -247,8 +247,12 @@ public final class EditorController {
                 e -> AutocompleteProvider.triggerAt(editorTab.codeArea)));
 
         // EDIT-06: occurrence highlighting on text selection
-        editorTab.codeArea.selectedTextProperty().addListener((obs, oldSel, newSel) ->
-            OccurrenceHighlighter.applyTo(editorTab.codeArea, newSel));
+        // Strip outer XML punctuation (<, >, /, whitespace) so selecting a full tag
+        // like "<xsl:template>" matches the same name in closing tags and other occurrences.
+        editorTab.codeArea.selectedTextProperty().addListener((obs, oldSel, newSel) -> {
+            String token = (newSel == null) ? "" : newSel.strip().replaceAll("^[<>/\"'=]+|[<>/\"'=]+$", "");
+            OccurrenceHighlighter.applyTo(editorTab.codeArea, token);
+        });
 
         // EDIT-07: go-to-definition via Ctrl+Click on xsl:include/import href
         // Pitfall 3: use event.getX()/getY() (CodeArea-local coords, not screen coords)

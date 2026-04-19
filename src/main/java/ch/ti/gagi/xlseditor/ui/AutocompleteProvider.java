@@ -118,7 +118,7 @@ public final class AutocompleteProvider {
         int start = caretPos;
         while (start > 0) {
             char c = text.charAt(start - 1);
-            if (Character.isWhitespace(c) || c == '>') break;
+            if (Character.isWhitespace(c) || c == '>' || c == '<') break;
             start--;
         }
         return text.substring(start, caretPos);
