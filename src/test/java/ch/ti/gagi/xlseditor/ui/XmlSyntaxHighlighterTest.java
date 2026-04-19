@@ -1,14 +1,12 @@
 package ch.ti.gagi.xlseditor.ui;
 
 import org.fxmisc.richtext.model.StyleSpans;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled("Wave 0 stub — enable after XmlSyntaxHighlighter is implemented in Wave 1")
 class XmlSyntaxHighlighterTest {
 
     @Test
