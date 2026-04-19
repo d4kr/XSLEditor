@@ -1,29 +1,40 @@
 package ch.ti.gagi.xlseditor.ui;
 
 import javafx.beans.value.ChangeListener;
+import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.fxmisc.richtext.CharacterHit;
 import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.wellbehaved.event.Nodes;
+import org.reactfx.Subscription;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static javafx.scene.input.KeyCode.S;
+import static javafx.scene.input.KeyCode.SPACE;
 import static javafx.scene.input.KeyCombination.CONTROL_DOWN;
 import static org.fxmisc.wellbehaved.event.EventPattern.keyPressed;
 import static org.fxmisc.wellbehaved.event.InputMap.consume;
@@ -134,6 +145,24 @@ public final class EditorController {
         }
     }
 
+    /**
+     * Opens or focuses the tab for the given path, then moves the caret to the
+     * specified line and column. Called by SearchDialog and log panel click handlers.
+     *
+     * @param path absolute path to open
+     * @param line 0-based line index
+     * @param col  0-based column index
+     */
+    public void navigateTo(Path path, int line, int col) {
+        Path key = Objects.requireNonNull(path, "path").toAbsolutePath().normalize();
+        openOrFocusTab(key);
+        Tab tab = registry.get(key);
+        if (tab != null && tab.getUserData() instanceof EditorTab et) {
+            et.codeArea.moveTo(line, col);
+            et.codeArea.requestFollowCaret();
+        }
+    }
+
     private Tab buildTab(Path key, EditorTab editorTab) {
         VirtualizedScrollPane<CodeArea> scrollPane = new VirtualizedScrollPane<>(editorTab.codeArea);
         String baseName = editorTab.path.getFileName().toString();
@@ -151,6 +180,88 @@ public final class EditorController {
         // EDIT-03 — Ctrl+S per focused CodeArea (NOT scene-level; RESEARCH.md Anti-Pattern)
         Nodes.addInputMap(editorTab.codeArea,
             consume(keyPressed(S, CONTROL_DOWN), e -> saveTab(editorTab)));
+
+        // EDIT-04: async syntax highlighting via ReactFX successionEnds + ExecutorService
+        // File size guard: skip for files > 5MB to avoid catastrophic backtracking
+        final boolean tooLargeForHighlighting = editorTab.codeArea.getLength() > 5 * 1024 * 1024;
+        final ExecutorService hlExecutor;
+        final Subscription highlightSub;
+
+        if (!tooLargeForHighlighting) {
+            hlExecutor = Executors.newSingleThreadExecutor(r -> {
+                Thread t = new Thread(r, "highlight-thread-" + key.getFileName());
+                t.setDaemon(true);
+                return t;
+            });
+            highlightSub = editorTab.codeArea
+                .multiPlainChanges()
+                .successionEnds(Duration.ofMillis(300))
+                .subscribe(change -> {
+                    String snapshot = editorTab.codeArea.getText();
+                    Task<StyleSpans<Collection<String>>> hlTask = new Task<>() {
+                        @Override protected StyleSpans<Collection<String>> call() {
+                            return XmlSyntaxHighlighter.computeHighlighting(snapshot);
+                        }
+                    };
+                    hlTask.setOnSucceeded(e -> {
+                        StyleSpans<Collection<String>> spans = hlTask.getValue();
+                        // Pitfall 5: guard against race where text changed after snapshot
+                        if (editorTab.codeArea.getLength() > 0
+                                && spans.length() == editorTab.codeArea.getLength()) {
+                            editorTab.codeArea.setStyleSpans(0, spans);
+                        }
+                    });
+                    hlExecutor.submit(hlTask);
+                });
+            // Pitfall 6: apply initial highlighting for the file already loaded
+            // WARNING FIX: files > 100 lines cause FX thread stutter if highlighted sync.
+            // Use threshold of 500 chars: small files (< 500) are safe sync; larger go off-thread.
+            String initialText = editorTab.codeArea.getText();
+            if (initialText.length() > 0 && initialText.length() < 500) {
+                // Small file: safe to highlight synchronously on FX thread
+                editorTab.codeArea.setStyleSpans(0, XmlSyntaxHighlighter.computeHighlighting(initialText));
+            } else if (initialText.length() >= 500) {
+                // Large file: off-thread via hlExecutor to avoid FX thread stutter
+                Task<StyleSpans<Collection<String>>> initTask = new Task<>() {
+                    @Override protected StyleSpans<Collection<String>> call() {
+                        return XmlSyntaxHighlighter.computeHighlighting(initialText);
+                    }
+                };
+                initTask.setOnSucceeded(e -> {
+                    StyleSpans<Collection<String>> spans = initTask.getValue();
+                    if (editorTab.codeArea.getLength() > 0
+                            && spans.length() == editorTab.codeArea.getLength()) {
+                        editorTab.codeArea.setStyleSpans(0, spans);
+                    }
+                });
+                if (hlExecutor != null) hlExecutor.submit(initTask);
+            }
+        } else {
+            hlExecutor = null;
+            highlightSub = null;
+        }
+
+        // EDIT-05: Ctrl+Space autocomplete — per-CodeArea InputMap (never scene-level)
+        Nodes.addInputMap(editorTab.codeArea,
+            consume(keyPressed(SPACE, CONTROL_DOWN),
+                e -> AutocompleteProvider.triggerAt(editorTab.codeArea)));
+
+        // EDIT-06: occurrence highlighting on text selection
+        editorTab.codeArea.selectedTextProperty().addListener((obs, oldSel, newSel) ->
+            OccurrenceHighlighter.applyTo(editorTab.codeArea, newSel));
+
+        // EDIT-07: go-to-definition via Ctrl+Click on xsl:include/import href
+        // Pitfall 3: use event.getX()/getY() (CodeArea-local coords, not screen coords)
+        editorTab.codeArea.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            if (!event.isControlDown() || event.getButton() != MouseButton.PRIMARY) return;
+            event.consume(); // prevent caret repositioning
+            CharacterHit hit = editorTab.codeArea.hit(event.getX(), event.getY());
+            HrefExtractor.extractHref(
+                editorTab.codeArea.getText(),
+                hit.getInsertionIndex(),
+                key
+            ).ifPresent(EditorController.this::openOrFocusTab);
+        });
 
         // EDIT-09 — close-tab confirmation when dirty
         tab.setOnCloseRequest((Event event) -> {
@@ -171,9 +282,11 @@ public final class EditorController {
         // EDIT-09 / WR-01 — remove dirty listener on close to release EditorTab, CodeArea,
         // and UndoManager from the BooleanBinding's strong reference chain.
         tab.setOnClosed(e -> {
-            editorTab.dirty.removeListener(dirtyListener);
-            registry.remove(key);
-            updateAppDirtyState();
+            if (highlightSub != null) highlightSub.unsubscribe(); // Pitfall 2: release CodeArea ref
+            if (hlExecutor != null)   hlExecutor.shutdownNow();   // Pitfall 2: release thread
+            editorTab.dirty.removeListener(dirtyListener);         // existing — keep
+            registry.remove(key);                                  // existing — keep
+            updateAppDirtyState();                                 // existing — keep
         });
 
         return tab;
