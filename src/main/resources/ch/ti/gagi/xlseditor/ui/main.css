@@ -87,3 +87,17 @@
 .file-tree-view .tree-cell.xml-input {
     -fx-text-fill: #64b5f6;
 }
+
+/* Phase 5: Syntax highlighting CSS classes for RichTextFX CodeArea */
+/* Colors follow VS Code dark-theme palette for familiarity */
+
+.xml-comment   { -fx-fill: #6a9955; }   /* green — standard comment color */
+.xml-cdata     { -fx-fill: #ce9178; }   /* orange — string/value color */
+.xml-pi        { -fx-fill: #c586c0; }   /* purple — keyword/directive */
+.xml-tagmark   { -fx-fill: #808080; }   /* gray — angle brackets and slashes */
+.xml-element   { -fx-fill: #4ec9b0; }   /* teal — element/type name */
+.xml-attribute { -fx-fill: #9cdcfe; }   /* light blue — attribute name */
+.xml-avalue    { -fx-fill: #ce9178; }   /* orange — attribute value string */
+
+/* Phase 5: Occurrence highlight overlay (variable / template name selection) */
+.occurrence    { -fx-background-color: rgba(255, 215, 0, 0.3); }
