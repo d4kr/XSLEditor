@@ -530,7 +530,7 @@ renderController.initialize(
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **`RenderController` receives `statusLabel` as two callbacks or one?**
    - What we know: D-10 says `Consumer<String>` callback; D-11 says persistent (no PauseTransition during render); D-12/D-13 say auto-clear with PauseTransition on completion.
