@@ -30,7 +30,7 @@ Phase: 05 (editor-features-syntax-navigation) — COMPLETE
 Plan: Not started
 **Milestone:** v1.0
 **Phase:** 7 of 9 (pdf preview panel)
-**Status:** Ready to plan
+**Status:** Ready to execute — 2 plans created (wave 0: test stubs, wave 1: implement + wire)
 
 ---
 
