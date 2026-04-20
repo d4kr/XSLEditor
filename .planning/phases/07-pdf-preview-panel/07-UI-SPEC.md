@@ -45,10 +45,9 @@ Declared values (multiples of 4px, mapped to JavaFX `-fx-padding`):
 | 3xl | 64px | Page-level spacing (not used in this phase) |
 
 Exceptions:
-- Outdated banner vertical padding: 6px top/bottom (between xs and sm). Declared in CONTEXT.md D-05 as `-fx-padding: 6 12`. This 6px value is intentional for the banner — it keeps the banner compact without touching the 4-grid boundary of the content below it.
-- Outdated banner horizontal padding: 12px left/right (between sm and md). Same source.
+- Outdated banner horizontal padding: 12px left/right (between sm and md). Source: CONTEXT.md D-05. Note: CONTEXT.md D-05 informally referenced `-fx-padding: 6 12` — the CSS contract below supersedes that reference. Vertical padding is 8px (sm token) to stay on the 4-point grid; the 6px figure from CONTEXT.md is not used.
 
-Source: 8-point scale is default; banner exception pre-populated from CONTEXT.md D-05.
+Source: 8-point scale is default; banner horizontal exception pre-populated from CONTEXT.md D-05, vertical corrected to nearest grid value (sm = 8px).
 
 ---
 
@@ -144,19 +143,21 @@ Source: CONTEXT.md D-10, D-11, D-12, D-13.
 
 Single new rule to add to `main.css`. No other new CSS rules needed for Phase 7.
 
+> Note: CONTEXT.md D-05 informally referenced `-fx-padding: 6 12`. This CSS contract supersedes that reference. Vertical padding is corrected to `8px` (sm token) to maintain the 4-point spacing grid.
+
 ```css
 /* Phase 7: Outdated preview banner */
 .preview-outdated-banner {
     -fx-background-color: #f97316;
     -fx-text-fill: white;
-    -fx-padding: 6 12 6 12;
+    -fx-padding: 8 12 8 12;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-alignment: CENTER;
 }
 ```
 
-Source: CONTEXT.md D-05 (color, padding). Font-size and alignment are design defaults.
+Source: CONTEXT.md D-05 (color, padding reference). Vertical padding corrected to 8px (sm) for grid compliance. Font-size and alignment are design defaults.
 
 ---
 
