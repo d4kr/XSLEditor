@@ -55,8 +55,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [ ] **PREV-01**: Split view shows editor on left, PDF preview on right
 - [ ] **PREV-02**: PDF preview supports scroll and zoom
-- [ ] **PREV-03**: When preview is outdated (last render failed), a visual indicator is shown
-- [ ] **PREV-04**: No PDF is shown before the first successful render
+- [x] **PREV-03
+**: When preview is outdated (last render failed), a visual indicator is shown
+- [x] **PREV-04
+**: No PDF is shown before the first successful render
 
 ### Error & Log Panel
 
