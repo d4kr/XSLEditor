@@ -121,12 +121,18 @@
 
 **Requirements:** PREV-01, PREV-02, PREV-03, PREV-04
 
+**Plans:** 2 plans
+
 **Deliverables:**
-- PDFViewerFX component embedded in right SplitPane pane
-- Renders PDF from `byte[]` returned by pipeline
-- Scroll and zoom controls working
-- "Outdated" overlay/banner shown when `Preview.isOutdated()` is true
-- No PDF shown (blank/placeholder) before first successful render
+- WebView component (javafx.web) embedded in right SplitPane pane, loading PDF from temp file
+- Renders PDF from `byte[]` returned by pipeline via Files.write() + WebEngine.load(file://)
+- Scroll and zoom via native WebView PDF plugin (no custom controls)
+- "Outdated" banner (orange #f97316) shown at top of preview pane when last render failed
+- No PDF shown (WebView hidden, placeholder visible) before first successful render
+
+**Plans:**
+- [ ] 07-01-PLAN.md — Wave 0: PreviewControllerTest stubs (PREV-03, PREV-04)
+- [ ] 07-02-PLAN.md — Wave 1: PreviewController + MainController wiring + FXML/CSS + enable tests + human verify
 
 ---
 
