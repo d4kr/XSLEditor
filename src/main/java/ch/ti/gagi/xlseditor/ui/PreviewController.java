@@ -3,10 +3,16 @@ package ch.ti.gagi.xlseditor.ui;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebView;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Base64;
 import java.util.Objects;
 
 /**
@@ -54,11 +60,15 @@ public final class PreviewController {
             System.err.println("[PreviewController] Failed to write PDF to temp file: " + e.getMessage());
             return;
         }
-        // load("") forces WebKit to treat the next load(uri) as a fresh fetch,
-        // avoiding the same-URI cache no-op on macOS WebKit (RESEARCH.md Pitfall 1).
-        previewWebView.getEngine().load("");
-        previewWebView.getEngine().load(tempFile.toUri().toString());
-
+        // macOS JavaFX WebView does not render PDFs inline via file:// URIs (WebKit limitation).
+        // PDFBox renders each page as a PNG image embedded in an HTML page loaded into WebView.
+        String html = renderPdfToHtml(tempFile);
+        if (html != null) {
+            previewWebView.getEngine().loadContent(html);
+        } else {
+            previewWebView.getEngine().load("");
+            previewWebView.getEngine().load(tempFile.toUri().toString());
+        }
         if (!hasPdf) {
             hasPdf = true;
             previewPlaceholderLabel.setManaged(false);
@@ -67,6 +77,27 @@ public final class PreviewController {
             previewWebView.setVisible(true);
         }
         setOutdated(false);
+    }
+
+    private String renderPdfToHtml(Path pdfFile) {
+        try (PDDocument doc = PDDocument.load(pdfFile.toFile())) {
+            PDFRenderer renderer = new PDFRenderer(doc);
+            StringBuilder html = new StringBuilder(
+                "<html><body style='margin:0;padding:0;background:#2b2b2b;'>");
+            for (int i = 0; i < doc.getNumberOfPages(); i++) {
+                BufferedImage img = renderer.renderImageWithDPI(i, 150);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(img, "png", baos);
+                String b64 = Base64.getEncoder().encodeToString(baos.toByteArray());
+                html.append("<img src='data:image/png;base64,").append(b64)
+                    .append("' style='width:100%;display:block;margin-bottom:4px;'/>");
+            }
+            html.append("</body></html>");
+            return html.toString();
+        } catch (IOException e) {
+            System.err.println("[PreviewController] PDFBox render failed: " + e.getMessage());
+            return null;
+        }
     }
 
     public void setOutdated(boolean outdated) {

@@ -36,9 +36,9 @@ dependencies {
 
     // D-03: Editor and preview libraries
     implementation 'org.fxmisc.richtext:richtextfx:0.11.5'
-    // PDFViewerFX (org.jpro.web:pdfviewerfx) is NOT on Maven Central.
-    // PDF preview uses JavaFX WebView loading a file:// URI — see MainController.
-    // No additional dependency needed; WebView is bundled in javafx.web module above.
+    // macOS JavaFX WebView does not render PDFs inline from file:// URIs (WebKit limitation).
+    // PDFBox renders each page as a BufferedImage; PreviewController converts to base64 HTML.
+    implementation 'org.apache.pdfbox:pdfbox:2.0.31'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.0'
