@@ -43,6 +43,7 @@ public class MainController {
     @FXML private StackPane previewPane;
     @FXML private WebView previewWebView;
     @FXML private Label previewPlaceholderLabel;
+    @FXML private Label outdatedBannerLabel;         // Phase 7
     @FXML private TitledPane logPane;
     @FXML private ListView<String> logListView;
 
@@ -69,6 +70,7 @@ public class MainController {
     private final FileTreeController fileTreeController = new FileTreeController();
     private final EditorController editorController = new EditorController();  // Phase 4
     private final RenderController renderController = new RenderController();  // Phase 6
+    private final PreviewController previewController = new PreviewController();  // Phase 7
 
     // --- Lifecycle ---
 
@@ -98,14 +100,21 @@ public class MainController {
         findInFilesMenuItem.setOnAction(e -> handleFindInFiles());
         // statusLabel starts empty — handleOpenProject populates it transiently.
         statusLabel.setText("");
+        // Phase 7 — PreviewController setup (PREV-01..PREV-04)
+        previewController.initialize(
+            previewPane,
+            previewWebView,
+            previewPlaceholderLabel,
+            outdatedBannerLabel
+        );
         // Phase 6 — RenderController setup (REND-01..06)
         renderController.initialize(
             renderButton,
             logListView,
             s -> statusLabel.setText(s),   // D-11: persistent setter (no PauseTransition)
             this::showTransientStatus,     // D-12/D-13: 3s auto-clear
-            bytes -> { },                  // D-15: Phase 6 no-op PDF seam; Phase 7 fills this
-            b -> { },                      // REND-05: Phase 6 no-op outdated seam; Phase 7 fills this
+            previewController::displayPdf,
+            previewController::setOutdated,
             projectContext,
             editorController
         );

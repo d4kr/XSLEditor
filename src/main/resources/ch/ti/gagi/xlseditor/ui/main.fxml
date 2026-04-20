@@ -71,10 +71,19 @@
 
                 <!-- PREVIEW ZONE: WebView for PDF (Phase 7 wires this) -->
                 <StackPane fx:id="previewPane" styleClass="placeholder-pane">
-                    <WebView fx:id="previewWebView"/>
+                    <WebView fx:id="previewWebView"
+                             managed="false"
+                             visible="false"/>
                     <Label fx:id="previewPlaceholderLabel"
                            text="No preview — trigger a render first"
                            styleClass="placeholder-label"/>
+                    <Label fx:id="outdatedBannerLabel"
+                           text="Preview outdated — last render failed"
+                           styleClass="preview-outdated-banner"
+                           managed="false"
+                           visible="false"
+                           maxWidth="Infinity"
+                           StackPane.alignment="TOP_CENTER"/>
                 </StackPane>
 
             </SplitPane>
