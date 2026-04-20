@@ -131,8 +131,8 @@
 - No PDF shown (WebView hidden, placeholder visible) before first successful render
 
 **Plans:**
-- [ ] 07-01-PLAN.md — Wave 0: PreviewControllerTest stubs (PREV-03, PREV-04)
-- [ ] 07-02-PLAN.md — Wave 1: PreviewController + MainController wiring + FXML/CSS + enable tests + human verify
+- [x] 07-01-PLAN.md — Wave 0: PreviewControllerTest stubs (PREV-03, PREV-04)
+- [x] 07-02-PLAN.md — Wave 1: PreviewController + MainController wiring + FXML/CSS + enable tests + human verify
 
 ---
 
@@ -179,7 +179,7 @@
 | 4 | Multi-Tab Editor (Core) | EDIT-01..03, EDIT-09 | Complete (2026-04-18) |
 | 5 | Editor Features | EDIT-04..08 | Complete (2026-04-19) |
 | 6 | Render Pipeline Integration | REND-01..06 | Pending |
-| 7 | PDF Preview Panel | PREV-01..04 | Pending |
+| 7 | PDF Preview Panel | PREV-01..04 | Complete (2026-04-20) |
 | 8 | Error & Log Panel | ERR-01..05 | Pending |
 | 9 | Testing | TEST-01..08 | Pending |
 

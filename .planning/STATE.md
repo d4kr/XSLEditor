@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: paused
-paused_at: Completed 05-05-PLAN.md — SearchDialog, Find in Files wiring, EDIT-05 bug fix. Phase 05 fully complete.
-last_updated: "2026-04-20T13:11:38.656Z"
+paused_at: Completed 07-02-PLAN.md — PreviewController wired, PDFBox rendering fix, PREV-01..04 human-verified. Phase 07 fully complete.
+last_updated: "2026-04-20T14:00:00Z"
 progress:
   total_phases: 9
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 14
-  completed_plans: 16
+  completed_plans: 17
   percent: 100
 ---
 
@@ -20,17 +20,17 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-14)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** Phase 06 — render-pipeline-integration
+**Current focus:** Phase 08 — error-log-panel
 
 ---
 
 ## Current Position
 
-Phase: 05 (editor-features-syntax-navigation) — COMPLETE
+Phase: 07 (pdf-preview-panel) — COMPLETE
 Plan: Not started
 **Milestone:** v1.0
-**Phase:** 7 of 9 (pdf preview panel)
-**Status:** Ready to execute — 2 plans created (wave 0: test stubs, wave 1: implement + wire)
+**Phase:** 8 of 9 (error-log-panel)
+**Status:** Ready to plan
 
 ---
 
@@ -64,6 +64,8 @@ Plan: Not started
 | SearchExecutor shutdownNow() dual guard | Called at new search start (cancel prior Task) AND in setOnCloseRequest (T-05-10 mitigation) | 2026-04-19 |
 | Initial highlight threshold 500 chars | Files < 500 chars highlighted sync on FX thread (safe); >= 500 submitted off-thread via hlExecutor to avoid stutter | 2026-04-19 |
 | highlightSub.unsubscribe() before hlExecutor.shutdownNow() | Unsubscribe first releases CodeArea strong reference; then executor shutdown releases thread — ordering required for correct GC | 2026-04-19 |
+| PDFBox for WebView PDF rendering | macOS JavaFX WebView does not render PDFs via file:// URIs; PDFBox 2.0.31 renders pages as PNG images embedded as base64 HTML | 2026-04-20 |
+| PDFBox 150 DPI page rendering | Each page rendered at 150 DPI as PNG, base64-encoded, assembled into HTML loaded via loadContent() — avoids same-URI WebKit cache issue | 2026-04-20 |
 
 ---
 
@@ -81,8 +83,8 @@ _(none yet)_
 
 ## Session Continuity
 
-**Last session:** 2026-04-20T13:11:38.650Z
-**Paused at:** Completed 05-05-PLAN.md — SearchDialog, Find in Files wiring, EDIT-05 bug fix. Phase 05 fully complete.
+**Last session:** 2026-04-20T14:00:00Z
+**Paused at:** Completed 07-02-PLAN.md — PreviewController wired, PDFBox rendering fix, PREV-01..04 human-verified. Phase 07 fully complete.
 
 ---
 
