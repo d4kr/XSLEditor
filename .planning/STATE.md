@@ -83,8 +83,8 @@ _(none yet)_
 
 ## Session Continuity
 
-**Last session:** 2026-04-20T14:00:00Z
-**Paused at:** Completed 07-02-PLAN.md — PreviewController wired, PDFBox rendering fix, PREV-01..04 human-verified. Phase 07 fully complete.
+**Last session:** 2026-04-20
+**Paused at:** Phase 08 context gathered. Ready to plan.
 
 ---
 
