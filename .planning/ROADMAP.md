@@ -164,6 +164,8 @@
 
 **Requirements:** TEST-01, TEST-02, TEST-03, TEST-04, TEST-05, TEST-06, TEST-07, TEST-08
 
+**Plans:** 4 plans
+
 **Deliverables:**
 - `src/test/java/` directory structure mirrors `src/main/java/`
 - Unit tests: LibraryPreprocessor, DependencyResolver, ValidationEngine, RenderEngine, ErrorManager, LogManager
@@ -172,6 +174,12 @@
 - Integration test: pipeline failure scenario (invalid XSLT) → correct PreviewError type and location
 - All tests pass via `./gradlew test`
 - Test coverage report available via JaCoCo (optional, added to build.gradle)
+
+**Plans:**
+- [ ] 09-01-PLAN.md — Wave 1: LibraryPreprocessor + DependencyResolver unit tests (TEST-01, TEST-02)
+- [ ] 09-02-PLAN.md — Wave 1: ValidationEngine + ErrorManager + LogManager unit tests (TEST-03, TEST-05, TEST-06)
+- [ ] 09-03-PLAN.md — Wave 1: Shared fixtures (identity.xsl, input.xml, invalid.xsl) + RenderEngine unit tests with real Saxon+FOP (TEST-04)
+- [ ] 09-04-PLAN.md — Wave 2: PreviewManager integration tests — full pipeline success + invalid-XSLT failure (TEST-07, TEST-08)
 
 ---
 
