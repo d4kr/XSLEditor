@@ -72,10 +72,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **TEST-01**: Unit tests for LibraryPreprocessor (directive resolution, missing library error)
 - [x] **TEST-02**: Unit tests for DependencyResolver (include/import graph, circular detection)
-- [ ] **TEST-03**: Unit tests for ValidationEngine (well-formed pass, malformed XML error collection)
+- [x] **TEST-03**: Unit tests for ValidationEngine (well-formed pass, malformed XML error collection)
 - [x] **TEST-04**: Unit tests for RenderEngine (Saxon transform, FOP render — with fixture files)
-- [ ] **TEST-05**: Unit tests for ErrorManager (exception normalization, position extraction)
-- [ ] **TEST-06**: Unit tests for LogManager (add entries, filter by level, clear)
+- [x] **TEST-05**: Unit tests for ErrorManager (exception normalization, position extraction)
+- [x] **TEST-06**: Unit tests for LogManager (add entries, filter by level, clear)
 - [ ] **TEST-07**: Integration test: full render pipeline with real XSLT/XML fixture → PDF output
 - [ ] **TEST-08**: Integration test: pipeline failure (invalid XSLT) → PreviewError with correct type/location
 
