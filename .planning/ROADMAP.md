@@ -42,7 +42,10 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
   1. User triggers a render that produces a Saxon runtime error referencing a source file
   2. User clicks the error row and the editor opens at the correct line in the correct file
   3. Errors whose systemId contains a percent-encoded `file://` URI (e.g. `file:///path/to/my%20file.xsl`) navigate correctly without throwing an exception
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 10-01-PLAN.md — Complete resolveFilePath() exception safety, make methods package-private, and add PreviewManagerTest unit tests
 
 ### Phase 11: About Dialog
 **Goal**: Users can view app version, runtime stack, credits, and license from the Help menu
@@ -81,7 +84,7 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 | 7. PDF Preview Panel | v1.0 | 2/2 | Complete | 2026-04-20 |
 | 8. Error & Log Panel | v1.0 | 2/2 | Complete | 2026-04-20 |
 | 9. Testing | v1.0 | 4/4 | Complete | 2026-04-21 |
-| 10. Saxon URI Fix | v1.1 | 0/? | Not started | - |
+| 10. Saxon URI Fix | v1.1 | 0/1 | Not started | - |
 | 11. About Dialog | v1.1 | 0/? | Not started | - |
 | 12. AI Assist in Error Log | v1.1 | 0/? | Not started | - |
 
