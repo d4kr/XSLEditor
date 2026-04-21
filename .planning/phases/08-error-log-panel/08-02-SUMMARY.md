@@ -11,7 +11,7 @@ dependency_graph:
   provides:
     - RenderController using Consumer callbacks for errors and info strings
     - MainController wiring LogController into the sub-controller graph
-    - End-to-end ERR-01..ERR-05 data flow (pending human verify)
+    - End-to-end ERR-01..ERR-05 data flow (human-verified, all 10 checks passed)
   affects: [RenderController, MainController]
 
 tech-stack:
@@ -49,7 +49,7 @@ RenderController rewired from `ListView<String>` to `Consumer<List<PreviewError>
 - **Duration:** ~15 min
 - **Started:** 2026-04-20
 - **Completed:** 2026-04-20
-- **Tasks:** 2 of 3 complete (Task 3 = human-verify checkpoint, pending)
+- **Tasks:** 3 of 3 complete (Task 3 = human-verify checkpoint, approved)
 - **Files modified:** 2
 
 ## Accomplishments
@@ -69,7 +69,7 @@ RenderController rewired from `ListView<String>` to `Consumer<List<PreviewError>
 
 1. **Task 1: Refactor RenderController to use Consumer callbacks** - `f358d02` (refactor)
 2. **Task 2: Wire LogController in MainController** - `a7c6417` (feat)
-3. **Task 3: Human-verify log panel end-to-end** — CHECKPOINT (pending human approval)
+3. **Task 3: Human-verify log panel end-to-end** — CHECKPOINT (approved — all 10 checks passed)
 
 ## Files Created/Modified
 
@@ -91,20 +91,20 @@ None — plan executed exactly as written.
 
 ## Human Verify Checklist
 
-Pending — Task 3 checkpoint not yet approved.
+Approved — user confirmed all 10 checks passed.
 
 | Check | Description | Status |
 |-------|-------------|--------|
-| 1 | Log panel expands, shows 4 filter buttons + empty TableView | Pending |
-| 2 | Open project → INFO entry in log (Time HH:mm:ss, Level INFO) | Pending |
-| 3 | ERR-05 clear-on-render: prior entries disappear on new render | Pending |
-| 4 | Successful render → INFO row "Render complete in X.Xs" | Pending |
-| 5 | Broken XSLT → panel auto-expands, ERROR rows in red | Pending |
-| 6 | Filter buttons: Info hides ERRORs, Error shows only ERRORs, All restores all | Pending |
-| 7 | Click error row with file+line → editor navigates to that line | Pending |
-| 8 | ERROR rows: Level cell red; WARN: yellow; INFO: default | Pending |
-| 9 | Time column shows HH:mm:ss, headers Time/Level/Type/Message | Pending |
-| 10 | Regression: file tree, editor tabs, PDF preview, outdated banner all work | Pending |
+| 1 | Log panel expands, shows 4 filter buttons + empty TableView | PASS |
+| 2 | Open project → INFO entry in log (Time HH:mm:ss, Level INFO) | PASS |
+| 3 | ERR-05 clear-on-render: prior entries disappear on new render | PASS |
+| 4 | Successful render → INFO row "Render complete in X.Xs" | PASS |
+| 5 | Broken XSLT → panel auto-expands, ERROR rows in red | PASS |
+| 6 | Filter buttons: Info hides ERRORs, Error shows only ERRORs, All restores all | PASS |
+| 7 | Click error row with file+line → editor navigates to that line | PASS |
+| 8 | ERROR rows: Level cell red; WARN: yellow; INFO: default | PASS |
+| 9 | Time column shows HH:mm:ss, headers Time/Level/Type/Message | PASS |
+| 10 | Regression: file tree, editor tabs, PDF preview, outdated banner all work | PASS |
 
 ## Self-Check: PASSED
 
@@ -119,8 +119,8 @@ Commits verified:
 ## Next Phase Readiness
 
 - ERR-01..ERR-05 data path is wired end-to-end
-- Human verification of Task 3 checklist required before phase 08 can be marked complete
-- Phase 09 (tests) can begin after human approval
+- Human verification of Task 3 checklist: all 10 checks approved
+- Phase 09 (tests) is ready to begin
 
 ---
 *Phase: 08-error-log-panel*

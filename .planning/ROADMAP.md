@@ -186,7 +186,7 @@
 | 5 | Editor Features | EDIT-04..08 | Complete (2026-04-19) |
 | 6 | Render Pipeline Integration | REND-01..06 | Pending |
 | 7 | PDF Preview Panel | PREV-01..04 | Complete (2026-04-20) |
-| 8 | Error & Log Panel | ERR-01..05 | Pending |
+| 8 | Error & Log Panel | ERR-01..05 | Complete (2026-04-20) |
 | 9 | Testing | TEST-01..08 | Pending |
 
 **Total phases:** 9
