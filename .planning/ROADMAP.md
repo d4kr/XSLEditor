@@ -164,7 +164,7 @@
 
 **Requirements:** TEST-01, TEST-02, TEST-03, TEST-04, TEST-05, TEST-06, TEST-07, TEST-08
 
-**Plans:** 1/4 plans executed
+**Plans:** 3/4 plans executed
 
 **Deliverables:**
 - `src/test/java/` directory structure mirrors `src/main/java/`
@@ -177,8 +177,8 @@
 
 **Plans:**
 - [x] 09-01-PLAN.md — Wave 1: LibraryPreprocessor + DependencyResolver unit tests (TEST-01, TEST-02)
-- [ ] 09-02-PLAN.md — Wave 1: ValidationEngine + ErrorManager + LogManager unit tests (TEST-03, TEST-05, TEST-06)
-- [ ] 09-03-PLAN.md — Wave 1: Shared fixtures (identity.xsl, input.xml, invalid.xsl) + RenderEngine unit tests with real Saxon+FOP (TEST-04)
+- [x] 09-02-PLAN.md — Wave 1: ValidationEngine + ErrorManager + LogManager unit tests (TEST-03, TEST-05, TEST-06)
+- [x] 09-03-PLAN.md — Wave 1: Shared fixtures (identity.xsl, input.xml, invalid.xsl) + RenderEngine unit tests with real Saxon+FOP (TEST-04)
 - [ ] 09-04-PLAN.md — Wave 2: PreviewManager integration tests — full pipeline success + invalid-XSLT failure (TEST-07, TEST-08)
 
 ---
@@ -195,7 +195,7 @@
 | 6 | Render Pipeline Integration | REND-01..06 | Pending |
 | 7 | PDF Preview Panel | PREV-01..04 | Complete (2026-04-20) |
 | 8 | Error & Log Panel | ERR-01..05 | Complete (2026-04-20) |
-| 9 | 1/4 | In Progress|  |
+| 9 | 3/4 | In Progress|  |
 
 **Total phases:** 9
 **Total v1 requirements:** 46
