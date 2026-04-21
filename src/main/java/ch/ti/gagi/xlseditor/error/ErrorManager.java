@@ -4,6 +4,7 @@ import ch.ti.gagi.xlseditor.render.RenderError;
 import ch.ti.gagi.xlseditor.validation.ValidationError;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.apache.fop.apps.FOPException;
+import org.xml.sax.SAXParseException;
 
 import javax.xml.transform.SourceLocator;
 import javax.xml.transform.TransformerException;
@@ -17,7 +18,10 @@ public final class ErrorManager {
 
     public static RenderError fromException(Exception e) {
         String type;
-        if (e instanceof SaxonApiException || e instanceof TransformerException) {
+        if (e instanceof SaxonApiException || e instanceof TransformerException
+                || e instanceof SAXParseException) {
+            // SAXParseException covers malformed XML in XSLT files (e.g. unclosed tags caught
+            // by DependencyResolver/ValidationEngine before Saxon gets a chance to compile).
             type = "XSLT";
         } else if (e instanceof FOPException) {
             type = "FOP";
@@ -45,6 +49,9 @@ public final class ErrorManager {
                 systemId = locator.getSystemId();
                 line = locator.getLineNumber();
             }
+        } else if (e instanceof SAXParseException spe) {
+            systemId = spe.getSystemId();
+            line = spe.getLineNumber();
         }
 
         if (systemId == null || systemId.isBlank()) return null;
