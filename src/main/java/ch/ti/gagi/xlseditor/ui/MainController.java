@@ -1,6 +1,7 @@
 package ch.ti.gagi.xlseditor.ui;
 
 import ch.ti.gagi.xlseditor.XLSEditorApp;
+import ch.ti.gagi.xlseditor.log.LogEntry;
 import ch.ti.gagi.xlseditor.model.Project;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -29,7 +30,7 @@ import java.util.Optional;
  *  - fileTreePane  (fx:id) → Phase 3 replaces Label with TreeView
  *  - editorPane    (fx:id) → Phases 4-5 replace Label with TabPane/CodeArea
  *  - previewPane   (fx:id) → Phase 7 drives previewWebView
- *  - logListView   (fx:id) → Phase 8 binds to LogManager observable list
+ *  - logTableView  (fx:id) → Phase 8 binds via LogController (ERR-01..05)
  */
 public class MainController {
 
@@ -45,7 +46,15 @@ public class MainController {
     @FXML private Label previewPlaceholderLabel;
     @FXML private Label outdatedBannerLabel;         // Phase 7
     @FXML private TitledPane logPane;
-    @FXML private ListView<String> logListView;
+    @FXML private TableView<LogEntry> logTableView;
+    @FXML private TableColumn<LogEntry, String> colTime;
+    @FXML private TableColumn<LogEntry, String> colLevel;
+    @FXML private TableColumn<LogEntry, String> colType;
+    @FXML private TableColumn<LogEntry, String> colMessage;
+    @FXML private ToggleButton filterAllButton;
+    @FXML private ToggleButton filterErrorButton;
+    @FXML private ToggleButton filterWarnButton;
+    @FXML private ToggleButton filterInfoButton;
 
     // Phase 2 additions
     @FXML private MenuItem menuItemOpenProject;
@@ -71,6 +80,7 @@ public class MainController {
     private final EditorController editorController = new EditorController();  // Phase 4
     private final RenderController renderController = new RenderController();  // Phase 6
     private final PreviewController previewController = new PreviewController();  // Phase 7
+    private final LogController logController = new LogController();  // Phase 8
 
     // --- Lifecycle ---
 
@@ -107,12 +117,21 @@ public class MainController {
             previewPlaceholderLabel,
             outdatedBannerLabel
         );
+        // Phase 8 — LogController setup (ERR-01..ERR-05)
+        logController.initialize(
+            logPane,
+            logTableView,
+            colTime, colLevel, colType, colMessage,
+            filterAllButton, filterErrorButton, filterWarnButton, filterInfoButton,
+            editorController
+        );
         // Phase 6 — RenderController setup (REND-01..06)
         renderController.initialize(
             renderButton,
-            logListView,
-            s -> statusLabel.setText(s),   // D-11: persistent setter (no PauseTransition)
-            this::showTransientStatus,     // D-12/D-13: 3s auto-clear
+            logController::setErrors,     // D-06: Consumer<List<PreviewError>> callback
+            logController::addInfo,       // D-08: INFO messages
+            s -> statusLabel.setText(s),  // D-11: persistent setter (no PauseTransition)
+            this::showTransientStatus,    // D-12/D-13: 3s auto-clear
             previewController::displayPdf,
             previewController::setOutdated,
             projectContext,
@@ -193,15 +212,15 @@ public class MainController {
 
             // Log panel entry (UI-SPEC § Copywriting Contract)
             if (project.entryPoint() != null && project.xmlInput() != null) {
-                logListView.getItems().add(
+                logController.addInfo(
                     "Loaded entrypoint: " + project.entryPoint().getFileName()
                         + " \u00b7 XML input: " + project.xmlInput().getFileName());
             } else if (project.entryPoint() == null && project.xmlInput() == null) {
-                logListView.getItems().add(
+                logController.addInfo(
                     "No .xslfo-tool.json found \u2014 entrypoint and XML input not set");
             } else {
                 // Partial config — one field set, the other not
-                logListView.getItems().add(
+                logController.addInfo(
                     "Loaded partial config: entryPoint="
                         + (project.entryPoint() != null ? project.entryPoint().getFileName() : "(unset)")
                         + " \u00b7 xmlInput="
