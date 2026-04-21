@@ -7,17 +7,17 @@ import ch.ti.gagi.xlseditor.render.RenderOrchestrator;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
  * Sub-controller for the render toolbar button and result routing.
  * Owns the JavaFX Task lifecycle, button state, progress feedback, and
- * result routing (PDF bytes → pdfCallback, errors → logListView).
+ * result routing (PDF bytes → pdfCallback, errors → errorsCallback, info → infoCallback).
  *
  * Lifecycle: MainController creates one instance as a field and calls
  * {@link #initialize} from its own {@code initialize()}. This controller is
@@ -30,7 +30,8 @@ public final class RenderController {
     // --- State (D-04: sub-controller owns Task lifecycle, button state, progress, result routing) ---
 
     private Button renderButton;
-    private ListView<String> logListView;
+    private Consumer<List<PreviewError>> errorsCallback;  // D-06
+    private Consumer<String> infoCallback;                // D-08
     private Consumer<String> statusSet;       // persistent: s -> statusLabel.setText(s) (D-11)
     private Consumer<String> statusTransient; // 3s auto-clear: this::showTransientStatus (D-12/D-13)
     private Consumer<byte[]> pdfCallback;     // Phase 7 stub: bytes -> {} (D-15)
@@ -46,7 +47,8 @@ public final class RenderController {
      * Idempotent; safe to call once from MainController.initialize().
      *
      * @param renderButton      the toolbar/menu-bar render trigger button
-     * @param logListView       the log panel list view; cleared and populated on each render
+     * @param errorsCallback    receives failure errors; LogController.setErrors clears+populates+auto-expands (D-06)
+     * @param infoCallback      receives INFO messages (render duration, unexpected errors) (D-08)
      * @param statusSet         persistent status updater (no auto-clear)
      * @param statusTransient   3-second auto-clearing status updater
      * @param pdfCallback       receives PDF bytes on success; Phase 7 wires actual display
@@ -56,7 +58,8 @@ public final class RenderController {
      */
     public void initialize(
         Button renderButton,
-        ListView<String> logListView,
+        Consumer<List<PreviewError>> errorsCallback,
+        Consumer<String> infoCallback,
         Consumer<String> statusSet,
         Consumer<String> statusTransient,
         Consumer<byte[]> pdfCallback,
@@ -65,7 +68,8 @@ public final class RenderController {
         EditorController editorController
     ) {
         this.renderButton     = Objects.requireNonNull(renderButton,     "renderButton");
-        this.logListView      = Objects.requireNonNull(logListView,      "logListView");
+        this.errorsCallback   = Objects.requireNonNull(errorsCallback,   "errorsCallback");
+        this.infoCallback     = Objects.requireNonNull(infoCallback,     "infoCallback");
         this.statusSet        = Objects.requireNonNull(statusSet,        "statusSet");
         this.statusTransient  = Objects.requireNonNull(statusTransient,  "statusTransient");
         this.pdfCallback      = Objects.requireNonNull(pdfCallback,      "pdfCallback");
@@ -94,8 +98,7 @@ public final class RenderController {
             return;
         }
 
-        // D-17: clear log before new render
-        logListView.getItems().clear();
+        // ERR-05: LogController.setErrors() clears before populating. No explicit clear needed here.
 
         // D-08/D-09: save all dirty tabs; abort on disk error
         try {
@@ -137,8 +140,7 @@ public final class RenderController {
 
             if (result.success()) {
                 // D-14: log render duration as INFO entry
-                logListView.getItems().add(
-                    "[INFO] Render complete in " + String.format("%.1f", duration / 1000.0) + "s");
+                infoCallback.accept("Render complete in " + String.format("%.1f", duration / 1000.0) + "s");
                 // D-12: transient success status (auto-clears after 3s via showTransientStatus)
                 statusTransient.accept(
                     "Render complete (" + String.format("%.1f", duration / 1000.0) + "s)");
@@ -147,15 +149,8 @@ public final class RenderController {
                 // REND-05: notify that preview is NOT outdated (success -> outdated = false)
                 outdatedCallback.accept(false);
             } else {
-                // D-16: route errors to log panel as formatted strings
-                for (PreviewError err : result.errors()) {
-                    String entry = "[ERROR] " + err.type() + ": " + err.message();
-                    if (err.file() != null) {
-                        entry += " @ " + err.file();
-                        if (err.line() != null) entry += ":" + err.line();
-                    }
-                    logListView.getItems().add(entry);
-                }
+                // D-16: route errors to log panel via errorsCallback
+                errorsCallback.accept(result.errors());
                 // D-13: transient failure status
                 statusTransient.accept("Render failed");
                 // REND-05: notify that preview IS outdated (failure -> outdated = true)
@@ -170,8 +165,7 @@ public final class RenderController {
             // Re-bind disable to project loaded state now that task is done
             renderButton.disableProperty().bind(projectContext.projectLoadedProperty().not());
             Throwable ex = task.getException();
-            logListView.getItems().add(
-                "[ERROR] Unexpected render error: " + (ex != null ? ex.getMessage() : "unknown"));
+            infoCallback.accept("Unexpected render error: " + (ex != null ? ex.getMessage() : "unknown"));
             statusTransient.accept("Render failed");
         });
 
