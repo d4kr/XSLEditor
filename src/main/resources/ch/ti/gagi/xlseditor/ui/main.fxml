@@ -93,7 +93,22 @@
     <!-- BOTTOM: Collapsible log panel (Phase 8 wires log entries) -->
     <bottom>
         <TitledPane fx:id="logPane" text="Log" expanded="false" styleClass="log-titled-pane">
-            <ListView fx:id="logListView" prefHeight="150"/>
+            <VBox>
+                <HBox spacing="4" styleClass="log-filter-bar">
+                    <ToggleButton fx:id="filterAllButton"   text="All"     selected="true" styleClass="log-filter-btn"/>
+                    <ToggleButton fx:id="filterErrorButton" text="Error"                   styleClass="log-filter-btn"/>
+                    <ToggleButton fx:id="filterWarnButton"  text="Warning"                 styleClass="log-filter-btn"/>
+                    <ToggleButton fx:id="filterInfoButton"  text="Info"                    styleClass="log-filter-btn"/>
+                </HBox>
+                <TableView fx:id="logTableView" prefHeight="120" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colTime"    text="Time"    prefWidth="65"  sortable="false"/>
+                        <TableColumn fx:id="colLevel"   text="Level"   prefWidth="60"  sortable="false"/>
+                        <TableColumn fx:id="colType"    text="Type"    prefWidth="100" sortable="false"/>
+                        <TableColumn fx:id="colMessage" text="Message" prefWidth="400" sortable="false"/>
+                    </columns>
+                </TableView>
+            </VBox>
         </TitledPane>
     </bottom>
 
