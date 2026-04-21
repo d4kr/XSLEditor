@@ -23,18 +23,12 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 
 ### Active
 
-- [ ] JavaFX application shell with main window and layout skeleton
-- [ ] Project management: open directory, select entrypoint XSLT, select XML input
-- [ ] File tree view: flat project directory listing
-- [ ] Multi-tab editor with RichTextFX (XML/XSLT syntax highlighting)
-- [ ] Manual save (Ctrl+S) and dirty state indicator
-- [ ] Render trigger button connected to PreviewManager pipeline
-- [ ] Split view: editor left, PDF preview right (PDFViewerFX)
-- [ ] Error/log panel with severity filtering
-- [ ] Inline error navigation (click error → jump to file:line)
-- [ ] Project config persistence (entrypoint + XML input in `.xslfo-tool.json`)
-- [ ] Unit tests for all backend modules
-- [ ] Integration tests for full render pipeline
+_(all MVP requirements are now validated — v1.0 milestone complete)_
+
+### Previously Active — Validated in Phase 09: Testing
+
+- ✓ Unit tests for all backend modules — Validated in Phase 09 (TEST-01..TEST-06, TEST-08)
+- ✓ Integration tests for full render pipeline — Validated in Phase 09 (TEST-07, TEST-08)
 
 ### Out of Scope
 
@@ -51,11 +45,11 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 ## Context
 
 - Stack: Java 21, Saxon-HE 12.4, Apache FOP 2.9, Jackson 2.17.2
-- UI: JavaFX (to be added), RichTextFX for editor, PDFViewerFX for PDF display
-- Backend pipeline is fully implemented and tested manually (T1–T10)
+- UI: JavaFX with RichTextFX editor, PDFBox-based WebView PDF display
+- **v1.0 milestone complete** — Phase 9 (Testing) passed 8/8 requirements, 96 tests green
 - Projects are small (≈5–10 files, <1MB each)
 - Performance target: edit-to-preview < 5 seconds
-- Existing codebase has known tech debt (RenderEngine factory init, DocumentBuilderFactory reuse, error parsing fragility) — tracked in CONCERNS.md, addressed in v1 tests
+- Tech debt in CONCERNS.md addressed by Phase 9 test coverage
 
 ## Constraints
 
@@ -93,4 +87,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-14 after initialization*
+*Last updated: 2026-04-21 — Phase 09 complete, v1.0 milestone achieved*
