@@ -164,7 +164,7 @@
 
 **Requirements:** TEST-01, TEST-02, TEST-03, TEST-04, TEST-05, TEST-06, TEST-07, TEST-08
 
-**Plans:** 4 plans
+**Plans:** 1/4 plans executed
 
 **Deliverables:**
 - `src/test/java/` directory structure mirrors `src/main/java/`
@@ -176,7 +176,7 @@
 - Test coverage report available via JaCoCo (optional, added to build.gradle)
 
 **Plans:**
-- [ ] 09-01-PLAN.md — Wave 1: LibraryPreprocessor + DependencyResolver unit tests (TEST-01, TEST-02)
+- [x] 09-01-PLAN.md — Wave 1: LibraryPreprocessor + DependencyResolver unit tests (TEST-01, TEST-02)
 - [ ] 09-02-PLAN.md — Wave 1: ValidationEngine + ErrorManager + LogManager unit tests (TEST-03, TEST-05, TEST-06)
 - [ ] 09-03-PLAN.md — Wave 1: Shared fixtures (identity.xsl, input.xml, invalid.xsl) + RenderEngine unit tests with real Saxon+FOP (TEST-04)
 - [ ] 09-04-PLAN.md — Wave 2: PreviewManager integration tests — full pipeline success + invalid-XSLT failure (TEST-07, TEST-08)
@@ -195,7 +195,7 @@
 | 6 | Render Pipeline Integration | REND-01..06 | Pending |
 | 7 | PDF Preview Panel | PREV-01..04 | Complete (2026-04-20) |
 | 8 | Error & Log Panel | ERR-01..05 | Complete (2026-04-20) |
-| 9 | Testing | TEST-01..08 | Pending |
+| 9 | 1/4 | In Progress|  |
 
 **Total phases:** 9
 **Total v1 requirements:** 46

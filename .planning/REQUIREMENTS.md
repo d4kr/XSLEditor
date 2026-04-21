@@ -70,8 +70,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Testing
 
-- [ ] **TEST-01**: Unit tests for LibraryPreprocessor (directive resolution, missing library error)
-- [ ] **TEST-02**: Unit tests for DependencyResolver (include/import graph, circular detection)
+- [x] **TEST-01**: Unit tests for LibraryPreprocessor (directive resolution, missing library error)
+- [x] **TEST-02**: Unit tests for DependencyResolver (include/import graph, circular detection)
 - [ ] **TEST-03**: Unit tests for ValidationEngine (well-formed pass, malformed XML error collection)
 - [ ] **TEST-04**: Unit tests for RenderEngine (Saxon transform, FOP render — with fixture files)
 - [ ] **TEST-05**: Unit tests for ErrorManager (exception normalization, position extraction)
