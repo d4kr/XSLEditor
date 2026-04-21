@@ -20,17 +20,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-14)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** Phase 08 — error-log-panel
+**Current focus:** Phase 09 — testing
 
 ---
 
 ## Current Position
 
-Phase: 08 (error-log-panel) — Ready to execute
-Plans: 2 plans ready (08-01, 08-02)
+Phase: 09 (testing) — Ready to plan
 **Milestone:** v1.0
-**Phase:** 8 of 9 (error-log-panel)
-**Status:** Ready to plan
+**Phase:** 9 of 9 (testing)
+**Status:** Phase 08 complete (2026-04-21)
 
 ---
 
