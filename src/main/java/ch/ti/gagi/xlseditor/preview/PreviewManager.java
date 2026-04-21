@@ -5,6 +5,7 @@ import ch.ti.gagi.xlseditor.render.RenderError;
 import ch.ti.gagi.xlseditor.render.RenderOrchestrator;
 import ch.ti.gagi.xlseditor.render.RenderResult;
 
+import java.net.URI;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,20 @@ public final class PreviewManager {
                 : Preview.failure(toPreviewErrors(result.errors()));
     }
 
-    private static List<PreviewError> toPreviewErrors(List<RenderError> errors) {
+    static String resolveFilePath(String raw) {
+        if (raw != null && raw.startsWith("file://")) {
+            try {
+                return URI.create(raw).getPath();
+            } catch (IllegalArgumentException ignored) {
+                // Malformed URI — strip scheme prefix manually.
+                String stripped = raw.substring("file://".length());
+                return stripped.startsWith("/") ? stripped : "/" + stripped;
+            }
+        }
+        return raw;
+    }
+
+    static List<PreviewError> toPreviewErrors(List<RenderError> errors) {
         List<PreviewError> result = new ArrayList<>(errors.size());
         for (RenderError e : errors) {
             String file = null;
@@ -39,12 +53,12 @@ public final class PreviewManager {
                     String linePart = location.substring(colon + 1);
                     try {
                         line = Integer.parseInt(linePart);
-                        file = location.substring(0, colon);
+                        file = resolveFilePath(location.substring(0, colon));
                     } catch (NumberFormatException ignored) {
-                        file = location;
+                        file = resolveFilePath(location);
                     }
                 } else {
-                    file = location;
+                    file = resolveFilePath(location);
                 }
             }
             result.add(new PreviewError(e.message(), e.type(), file, line));
