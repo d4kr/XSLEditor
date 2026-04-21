@@ -5,7 +5,7 @@ milestone_name: Developer UX Improvements
 status: in_progress
 last_updated: "2026-04-21T00:00:00Z"
 progress:
-  total_phases: 0
+  total_phases: 3
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -18,16 +18,18 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-21)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** v1.1 — Defining requirements
+**Current focus:** v1.1 Phase 10 — Saxon URI Fix
 
 ---
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-04-21 — Milestone v1.1 started
+Phase: 10 of 12 (Saxon URI Fix)
+Plan: — (not yet planned)
+Status: Ready to plan
+Last activity: 2026-04-21 — v1.1 roadmap created (Phases 10–12)
+
+Progress: [░░░░░░░░░░] 0%
 
 ---
 
@@ -54,5 +56,12 @@ See .planning/PROJECT.md Key Decisions table for full log.
 ## Accumulated Context
 
 - v1.0 shipped 2026-04-21: 9 phases, 24 plans, 3,435 Java LOC, 96 tests green
-- Tech debt carried: ERR-04 (Saxon file:// URI), EDIT-06 partial, EDIT-07 unverified
-- v1.1 scope: About dialog + ChatGPT error-log link + ERR-04 fix
+- Tech debt carried into v1.1: ERR-04 (Saxon file:// URI), EDIT-06 partial, EDIT-07 unverified
+- v1.1 scope: ERR-04 fix + About dialog + ChatGPT error-log link (3 phases, 7 requirements)
+- Phase 11 (About Dialog) has UI hint — consider /gsd-ui-phase
+
+---
+
+## Blockers / Concerns
+
+None.
