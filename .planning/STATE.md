@@ -1,14 +1,14 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: MVP
-status: complete
+milestone: v1.1
+milestone_name: Developer UX Improvements
+status: in_progress
 last_updated: "2026-04-21T00:00:00Z"
 progress:
-  total_phases: 9
-  completed_phases: 9
-  total_plans: 24
-  completed_plans: 24
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
 ---
 
 # Project State: XLSEditor
@@ -18,20 +18,20 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-21)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** v1.0 shipped — planning next milestone
+**Current focus:** v1.1 — Defining requirements
 
 ---
 
 ## Current Position
 
-**Milestone:** v1.0 — COMPLETE (shipped 2026-04-21)
-**All 9 phases complete. All 24 plans complete.**
-
-Next step: `/gsd-new-milestone` to plan v1.1
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-04-21 — Milestone v1.1 started
 
 ---
 
-## Completed Phases
+## Completed Phases (v1.0)
 
 - **Phase 01** — JavaFX Application Shell — 2026-04-14
 - **Phase 02** — Project Management — 2026-04-15
@@ -51,17 +51,8 @@ See .planning/PROJECT.md Key Decisions table for full log.
 
 ---
 
-## Blockers / Concerns
+## Accumulated Context
 
-**Tech debt carried from v1.0:**
-- ERR-04 (MEDIUM): Saxon `file://` URI path parsing in PreviewManager.toPreviewErrors()
-- EDIT-06 (LOW): Occurrence highlighting edge cases
-- EDIT-07 (LOW): Go-to-definition human verify pending
-- Missing VERIFICATION.md for Phases 01, 05, 07
-
----
-
-## Session Continuity
-
-**Last session:** 2026-04-21
-**Paused at:** v1.0 milestone close complete. Ready for `/gsd-new-milestone`.
+- v1.0 shipped 2026-04-21: 9 phases, 24 plans, 3,435 Java LOC, 96 tests green
+- Tech debt carried: ERR-04 (Saxon file:// URI), EDIT-06 partial, EDIT-07 unverified
+- v1.1 scope: About dialog + ChatGPT error-log link + ERR-04 fix

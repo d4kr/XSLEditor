@@ -1,5 +1,14 @@
 # XLSEditor
 
+## Current Milestone: v1.1 Developer UX Improvements
+
+**Goal:** Add an About dialog and ChatGPT quick-link in the error log so developers can instantly look up pipeline errors with AI assistance.
+
+**Target features:**
+- About dialog — app version, stack info, credits
+- ChatGPT link in error log — per-error action that opens ChatGPT pre-filled with the error message
+- ERR-04 fix — Saxon `file://` URI-decode in PreviewManager.toPreviewErrors() (carried from v1.0)
+
 ## What This Is
 
 Local desktop developer tool for editing multi-file XSLT/XSL-FO templates, generating PDFs on demand, and debugging locally. Built in Java 21 with JavaFX for internal developers who work with the XML → XSLT → XSL-FO → PDF pipeline. No auth, no multi-user, no external backend dependencies. v1.0 shipped with full editor, render pipeline, PDF preview, error log, and 96-test suite.
@@ -26,6 +35,8 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 ### Active
 
 - [ ] **ERR-04 fix**: URI-decode `file://` paths in PreviewManager.toPreviewErrors() — Saxon runtime error navigation broken on macOS
+- [ ] **ABOUT-01**: User can open an About dialog showing app version, stack info, and credits
+- [ ] **ERR-06**: Error log shows a ChatGPT link per error that opens a pre-filled query for instant AI assistance
 - [ ] **EDIT-06 edge cases**: Occurrence highlighting across element boundaries
 - [ ] **Nyquist compliance**: Systematically apply test contracts for v1.1 phases
 - [ ] **EDIT-07 human verify**: Confirm Ctrl+Click go-to-definition with xsl:include file
@@ -97,4 +108,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-21 after v1.0 milestone*
+*Last updated: 2026-04-21 after v1.1 milestone start*
