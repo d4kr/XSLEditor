@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: ready
-paused_at: Phase 08 planned — 2 plans (08-01, 08-02) in 2 waves. Verification passed. Ready to execute.
-last_updated: "2026-04-20T14:30:00Z"
+status: paused
+paused_at: 08-02-PLAN.md — Task 3 human-verify checkpoint
+last_updated: "2026-04-20T00:00:00Z"
 progress:
   total_phases: 9
-  completed_phases: 5
-  total_plans: 14
-  completed_plans: 17
+  completed_phases: 8
+  total_plans: 20
+  completed_plans: 20
   percent: 100
 ---
 
@@ -66,6 +66,8 @@ Plans: 2 plans ready (08-01, 08-02)
 | highlightSub.unsubscribe() before hlExecutor.shutdownNow() | Unsubscribe first releases CodeArea strong reference; then executor shutdown releases thread — ordering required for correct GC | 2026-04-19 |
 | PDFBox for WebView PDF rendering | macOS JavaFX WebView does not render PDFs via file:// URIs; PDFBox 2.0.31 renders pages as PNG images embedded as base64 HTML | 2026-04-20 |
 | PDFBox 150 DPI page rendering | Each page rendered at 150 DPI as PNG, base64-encoded, assembled into HTML loaded via loadContent() — avoids same-URI WebKit cache issue | 2026-04-20 |
+| Consumer callback seam for log panel | RenderController uses Consumer<List<PreviewError>> errorsCallback + Consumer<String> infoCallback instead of ListView; MainController injects logController::setErrors / logController::addInfo as method references | 2026-04-20 |
+| LogController wired before RenderController | logController.initialize() must precede renderController.initialize() so callbacks are ready when RenderController is initialized | 2026-04-20 |
 
 ---
 
@@ -84,7 +86,7 @@ _(none yet)_
 ## Session Continuity
 
 **Last session:** 2026-04-20
-**Paused at:** Phase 08 context gathered. Ready to plan.
+**Paused at:** 08-02-PLAN.md Task 3 — human-verify checkpoint. Tasks 1+2 committed (f358d02, a7c6417). Awaiting human approval of 10-item checklist.
 
 ---
 

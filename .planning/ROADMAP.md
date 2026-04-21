@@ -142,6 +142,12 @@
 
 **Requirements:** ERR-01, ERR-02, ERR-03, ERR-04, ERR-05
 
+**Plans:** 2 plans
+
+**Plans:**
+- [x] 08-01-PLAN.md — LogEntry extension + LogController (TableView, filter bar, cell factory, navigation) + FXML/CSS
+- [x] 08-02-PLAN.md — RenderController Consumer-callback refactor + MainController wiring + human verify
+
 **Deliverables:**
 - Log panel as `TableView` or styled `ListView` at bottom of main window
 - Columns: timestamp, severity badge (color-coded), type, message
