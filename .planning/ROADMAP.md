@@ -28,7 +28,7 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 **Milestone Goal:** Fix Saxon error navigation, add an About dialog, and add AI-assist links in the error log so developers can instantly look up pipeline errors with ChatGPT.
 
-- [ ] **Phase 10: Saxon URI Fix** — Fix URI-decode bug so click-to-navigate works on macOS for Saxon runtime errors
+- [x] **Phase 10: Saxon URI Fix** — Fix URI-decode bug so click-to-navigate works on macOS for Saxon runtime errors (completed 2026-04-21)
 - [ ] **Phase 11: About Dialog** — Add Help menu entry and About dialog showing version, stack, credits, and license
 - [ ] **Phase 12: AI Assist in Error Log** — Add a ChatGPT button per error row that opens a pre-filled query in the browser
 
@@ -45,7 +45,7 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 **Plans**: 1 plan
 
 Plans:
-- [ ] 10-01-PLAN.md — Complete resolveFilePath() exception safety, make methods package-private, and add PreviewManagerTest unit tests
+- [x] 10-01-PLAN.md — Complete resolveFilePath() exception safety, make methods package-private, and add PreviewManagerTest unit tests
 
 ### Phase 11: About Dialog
 **Goal**: Users can view app version, runtime stack, credits, and license from the Help menu
@@ -84,7 +84,7 @@ Plans:
 | 7. PDF Preview Panel | v1.0 | 2/2 | Complete | 2026-04-20 |
 | 8. Error & Log Panel | v1.0 | 2/2 | Complete | 2026-04-20 |
 | 9. Testing | v1.0 | 4/4 | Complete | 2026-04-21 |
-| 10. Saxon URI Fix | v1.1 | 0/1 | Not started | - |
+| 10. Saxon URI Fix | v1.1 | 1/1 | Complete | 2026-04-21 |
 | 11. About Dialog | v1.1 | 0/? | Not started | - |
 | 12. AI Assist in Error Log | v1.1 | 0/? | Not started | - |
 

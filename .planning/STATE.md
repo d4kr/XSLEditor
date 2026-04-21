@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Developer UX Improvements
 status: in_progress
-last_updated: "2026-04-21T00:00:00Z"
+last_updated: "2026-04-21T12:00:00Z"
 progress:
   total_phases: 3
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  completed_phases: 1
+  total_plans: 1
+  completed_plans: 1
 ---
 
 # Project State: XLSEditor
@@ -18,16 +18,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-21)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** v1.1 Phase 10 — Saxon URI Fix
+**Current focus:** v1.1 Phase 11 — About Dialog
 
 ---
 
 ## Current Position
 
-Phase: 10 of 12 (Saxon URI Fix)
-Plan: — (not yet planned)
+Phase: 11 of 12 (About Dialog)
+Plan: TBD
 Status: Ready to plan
-Last activity: 2026-04-21 — v1.1 roadmap created (Phases 10–12)
+Last activity: 2026-04-21 — Phase 10 complete (1 plan, all tests green, ERR-04 resolved)
 
 Progress: [░░░░░░░░░░] 0%
 
