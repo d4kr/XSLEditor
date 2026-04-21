@@ -1,97 +1,67 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.0
-milestone_name: milestone
-status: paused
-paused_at: None — Phase 08 complete. 08-02 human-verify approved (all 10 checks passed). Ready for Phase 09 (Testing).
-last_updated: "2026-04-21T14:15:59.913Z"
+milestone_name: MVP
+status: complete
+last_updated: "2026-04-21T00:00:00Z"
 progress:
   total_phases: 9
-  completed_phases: 7
-  total_plans: 20
-  completed_plans: 23
+  completed_phases: 9
+  total_plans: 24
+  completed_plans: 24
 ---
 
 # Project State: XLSEditor
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-14)
+See: .planning/PROJECT.md (updated 2026-04-21)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** Phase 09 — testing
+**Current focus:** v1.0 shipped — planning next milestone
 
 ---
 
 ## Current Position
 
-Phase: 09 (testing) — EXECUTING
-Plan: Not started
-**Milestone:** v1.0
-**Phase:** 09 of 9 (testing)
-**Status:** Milestone complete
+**Milestone:** v1.0 — COMPLETE (shipped 2026-04-21)
+**All 9 phases complete. All 24 plans complete.**
+
+Next step: `/gsd-new-milestone` to plan v1.1
 
 ---
 
 ## Completed Phases
 
-- **Phase 01** — JavaFX Application Shell (2026-04-14): fat JAR shell with three-zone layout, WebView PDF scaffold, close-confirmation dirty-state pattern
-  - **Verification:** 2026-04-15 — status: human_needed (all automated checks PASS, 4 visual items for human confirmation)
-  - **Report:** `.planning/phases/01-javafx-application-shell/01-VERIFICATION.md`
+- **Phase 01** — JavaFX Application Shell — 2026-04-14
+- **Phase 02** — Project Management — 2026-04-15
+- **Phase 03** — File Tree View — 2026-04-17
+- **Phase 04** — Multi-Tab Editor Core — 2026-04-18
+- **Phase 05** — Editor Features — 2026-04-19
+- **Phase 06** — Render Pipeline Integration — 2026-04-19
+- **Phase 07** — PDF Preview Panel — 2026-04-20
+- **Phase 08** — Error & Log Panel — 2026-04-20
+- **Phase 09** — Testing — 2026-04-21
 
 ---
 
 ## Key Decisions
 
-| Decision | Context | Date |
-|----------|---------|------|
-| JavaFX for UI | Standard modern Java desktop framework | 2026-04-14 |
-| RichTextFX for editor | Native JavaFX, CSS-based syntax highlighting | 2026-04-14 |
-| PDFViewerFX for PDF preview | Open-source, JavaFX-native, PDFBox-based | 2026-04-14 |
-| Shadow plugin migrated to com.gradleup.shadow 9.0.0-beta12 | com.github.johnrengelman.shadow 8.1.1 incompatible with Gradle 9 (MissingPropertyException: mode) | 2026-04-14 |
-| WebView for PDF preview (Phase 1 scaffold) | PDFViewerFX not on Maven Central; JavaFX WebView loads file:// URIs natively via WebKit | 2026-04-14 |
-| Fine granularity phasing | 9 phases for focused, reviewable increments | 2026-04-14 |
-| Interactive workflow mode | Confirmation at key decision points | 2026-04-14 |
-| Backend pipeline complete (T1–T10) | Saxon + FOP pipeline ready before UI work begins | 2026-04-14 |
-| EditorTab uses public final fields (data carrier) | No setters needed; Plan 02 EditorController owns tab lifecycle | 2026-04-18 |
-| Dirty state via Bindings.not(atMarkedPositionProperty()) | UndoManager-based binding handles undo-back-to-clean correctly | 2026-04-18 |
-| EditorController uses Consumer&lt;Boolean&gt; dirtyCallback | Decouples sub-controller from MainController; no upward import | 2026-04-18 |
-| Per-CodeArea Ctrl+S via WellBehavedFX Nodes.addInputMap | Scene-level handler causes focus bugs; per-node InputMap is the correct pattern | 2026-04-18 |
-| Skeleton production classes in Wave 0 | Java @Disabled tests still compile; skeletons with correct signatures allow test stubs to compile and remain green until Wave 1 replaces bodies | 2026-04-19 |
-| SearchDialog.search() as static method | Extracted from Task.call() lambda for testability; follows RenderOrchestrator pattern | 2026-04-19 |
-| dialog.show() non-blocking for SearchDialog | Allows user to keep editing while background search runs; showAndWait() would block FX thread | 2026-04-19 |
-| SearchExecutor shutdownNow() dual guard | Called at new search start (cancel prior Task) AND in setOnCloseRequest (T-05-10 mitigation) | 2026-04-19 |
-| Initial highlight threshold 500 chars | Files < 500 chars highlighted sync on FX thread (safe); >= 500 submitted off-thread via hlExecutor to avoid stutter | 2026-04-19 |
-| highlightSub.unsubscribe() before hlExecutor.shutdownNow() | Unsubscribe first releases CodeArea strong reference; then executor shutdown releases thread — ordering required for correct GC | 2026-04-19 |
-| PDFBox for WebView PDF rendering | macOS JavaFX WebView does not render PDFs via file:// URIs; PDFBox 2.0.31 renders pages as PNG images embedded as base64 HTML | 2026-04-20 |
-| PDFBox 150 DPI page rendering | Each page rendered at 150 DPI as PNG, base64-encoded, assembled into HTML loaded via loadContent() — avoids same-URI WebKit cache issue | 2026-04-20 |
-| Consumer callback seam for log panel | RenderController uses Consumer<List<PreviewError>> errorsCallback + Consumer<String> infoCallback instead of ListView; MainController injects logController::setErrors / logController::addInfo as method references | 2026-04-20 |
-| LogController wired before RenderController | logController.initialize() must precede renderController.initialize() so callbacks are ready when RenderController is initialized | 2026-04-20 |
+See .planning/PROJECT.md Key Decisions table for full log.
 
 ---
 
 ## Blockers / Concerns
 
-_(none at start)_
-
----
-
-## Pending Todos
-
-_(none yet)_
+**Tech debt carried from v1.0:**
+- ERR-04 (MEDIUM): Saxon `file://` URI path parsing in PreviewManager.toPreviewErrors()
+- EDIT-06 (LOW): Occurrence highlighting edge cases
+- EDIT-07 (LOW): Go-to-definition human verify pending
+- Missing VERIFICATION.md for Phases 01, 05, 07
 
 ---
 
 ## Session Continuity
 
-**Last session:** 2026-04-21T11:37:01.510Z
-**Paused at:** None — Phase 08 complete. 08-02 human-verify approved (all 10 checks passed). Ready for Phase 09 (Testing).
-
----
-
-## Notes
-
-- Backend (pipeline, error handling, log) is fully implemented per commits T1–T10.3
-- No UI code exists yet — Phase 1 starts from scratch on the JavaFX layer
-- Codebase map is at `.planning/codebase/` (7 documents, analyzed 2026-04-14)
-- Tech debt items tracked in `.planning/codebase/CONCERNS.md` — addressed in Phase 9 (tests)
+**Last session:** 2026-04-21
+**Paused at:** v1.0 milestone close complete. Ready for `/gsd-new-milestone`.

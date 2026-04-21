@@ -2,7 +2,7 @@
 
 ## What This Is
 
-Local desktop developer tool for editing multi-file XSLT/XSL-FO templates, generating PDFs on demand, and debugging locally. Built in Java with JavaFX for internal developers who work with the XML → XSLT → XSL-FO → PDF pipeline. No auth, no multi-user, no external backend dependencies.
+Local desktop developer tool for editing multi-file XSLT/XSL-FO templates, generating PDFs on demand, and debugging locally. Built in Java 21 with JavaFX for internal developers who work with the XML → XSLT → XSL-FO → PDF pipeline. No auth, no multi-user, no external backend dependencies. v1.0 shipped with full editor, render pipeline, PDF preview, error log, and 96-test suite.
 
 ## Core Value
 
@@ -12,23 +12,23 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 
 ### Validated
 
-- ✓ LibraryPreprocessor: resolves `<?LIBRARY NAME?>` directives via physical merge — existing
-- ✓ DependencyResolver: builds `xsl:include`/`xsl:import` dependency graph with circular detection — existing
-- ✓ ValidationEngine: validates XML/XSLT well-formedness, aggregates errors — existing
-- ✓ RenderEngine: Saxon XSLT transformation + Apache FOP PDF rendering — existing
-- ✓ RenderOrchestrator: full pipeline orchestration with `renderSafe` error handling — existing
-- ✓ PreviewManager: facade over RenderOrchestrator, returns Preview DTO — existing
-- ✓ ErrorManager: exception normalization + file position extraction — existing
-- ✓ LogManager: in-memory log storage with level filtering — existing
+- ✓ APP-01..04: JavaFX shell — launches, title, close confirmation, no session restore — v1.0
+- ✓ PROJ-01..06: Project management — open, entrypoint, XML input, persist, restore, new file — v1.0
+- ✓ TREE-01..04: File tree — list, visual distinction entrypoint/xml, double-click open — v1.0
+- ✓ EDIT-01..03, EDIT-09: Multi-tab editor — tabs, dirty `*`, Ctrl+S, close confirmation — v1.0
+- ✓ EDIT-04..08: Editor features — syntax highlight, autocomplete, occurrence highlight, go-to-def, find-in-files — v1.0
+- ✓ REND-01..06: Render pipeline — full pipeline, disabled guard, progress, PDF update, error routing, < 5s — v1.0
+- ✓ PREV-01..04: PDF preview — split view, scroll/zoom, outdated indicator, placeholder — v1.0
+- ✓ ERR-01..05: Error log — TableView, severity columns, filter, click-to-navigate, clear on render — v1.0
+- ✓ TEST-01..08: Test suite — unit tests all backend modules + integration tests full pipeline — v1.0
+- ✓ Backend pipeline complete (LibraryPreprocessor, DependencyResolver, ValidationEngine, RenderEngine, etc.) — pre-v1.0
 
 ### Active
 
-_(all MVP requirements are now validated — v1.0 milestone complete)_
-
-### Previously Active — Validated in Phase 09: Testing
-
-- ✓ Unit tests for all backend modules — Validated in Phase 09 (TEST-01..TEST-06, TEST-08)
-- ✓ Integration tests for full render pipeline — Validated in Phase 09 (TEST-07, TEST-08)
+- [ ] **ERR-04 fix**: URI-decode `file://` paths in PreviewManager.toPreviewErrors() — Saxon runtime error navigation broken on macOS
+- [ ] **EDIT-06 edge cases**: Occurrence highlighting across element boundaries
+- [ ] **Nyquist compliance**: Systematically apply test contracts for v1.1 phases
+- [ ] **EDIT-07 human verify**: Confirm Ctrl+Click go-to-definition with xsl:include file
 
 ### Out of Scope
 
@@ -41,33 +41,43 @@ _(all MVP requirements are now validated — v1.0 milestone complete)_
 - File watching — no filesystem monitoring
 - Advanced autocomplete (semantic) — static tags only for v1
 - XSLT debugger — deferred to v2
+- Session restore (last project) — user opens manually, keep startup simple
+- Inline error gutter — log panel sufficient for v1
 
 ## Context
 
-- Stack: Java 21, Saxon-HE 12.4, Apache FOP 2.9, Jackson 2.17.2
-- UI: JavaFX with RichTextFX editor, PDFBox-based WebView PDF display
-- **v1.0 milestone complete** — Phase 9 (Testing) passed 8/8 requirements, 96 tests green
-- Projects are small (≈5–10 files, <1MB each)
-- Performance target: edit-to-preview < 5 seconds
-- Tech debt in CONCERNS.md addressed by Phase 9 test coverage
+- **Stack:** Java 21, Saxon-HE 12.4, Apache FOP 2.9, Jackson 2.17.2, PDFBox 2.0.31
+- **UI:** JavaFX with RichTextFX editor, PDFBox-based WebView PDF rendering (150 DPI PNG pages)
+- **v1.0 shipped 2026-04-21** — 9 phases, 24 plans, 3,435 Java LOC, 96 tests green, 14 days
+- Projects are small (≈5–10 files, <1MB each); performance target met (< 5s render confirmed)
+- Tech debt: ERR-04 Saxon URI edge case, EDIT-06 partial, missing VERIFICATION.md for phases 01/05/07
 
 ## Constraints
 
-- **Platform**: Desktop application, Java 21 runtime required
-- **UI**: JavaFX only — no Electron, no web frontend
-- **Pipeline**: Saxon for XSLT, Apache FOP for XSL-FO — not swappable
-- **Portability**: Projects must be fully portable (relative paths, config in `.xslfo-tool.json`)
-- **Performance**: Render cycle target < 5s for typical projects
+- **Platform:** Desktop application, Java 21 runtime required
+- **UI:** JavaFX only — no Electron, no web frontend
+- **Pipeline:** Saxon for XSLT, Apache FOP for XSL-FO — not swappable
+- **Portability:** Projects must be fully portable (relative paths, config in `.xslfo-tool.json`)
+- **Performance:** Render cycle target < 5s for typical projects
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| JavaFX for UI | Standard modern Java desktop, CSS styling, FXML | — Pending |
-| RichTextFX for editor | Native JavaFX, lightweight, syntax highlighting via CSS | — Pending |
-| PDFViewerFX for preview | Open-source, JavaFX-native, based on PDFBox | — Pending |
-| Fine granularity phasing | Complex UI work benefits from focused phases | — Pending |
-| Interactive mode | Prefer confirmation at key decision points | — Pending |
+| JavaFX for UI | Standard modern Java desktop, CSS styling, FXML | ✓ Good — clean architecture, CSS theming works well |
+| RichTextFX for editor | Native JavaFX, lightweight, syntax highlighting via CSS | ✓ Good — CSS StyleSpans approach solid |
+| Shadow plugin → com.gradleup.shadow 9.0.0-beta12 | com.github.johnrengelman.shadow incompatible with Gradle 9 | ✓ Good — fat JAR works |
+| WebView + PDFBox 150 DPI PNG rendering | macOS JavaFX WebView does not render PDFs via file:// URIs | ✓ Good — renders correctly, scroll/zoom via HTML |
+| EditorTab public final fields (data carrier) | No setters needed; EditorController owns lifecycle | ✓ Good — clean separation |
+| Dirty state via UndoManager.atMarkedPositionProperty() | Handles undo-back-to-clean correctly | ✓ Good — correct behavior confirmed |
+| Per-CodeArea Ctrl+S via WellBehavedFX Nodes.addInputMap | Scene-level handler causes focus bugs | ✓ Good — no focus issues |
+| Consumer callback seam for log/preview | Decouples sub-controllers, no upward imports | ✓ Good — clean dependency graph |
+| LogController wired before RenderController | Callbacks must be ready at RenderController.initialize() | ✓ Good — ordering matters, documented |
+| Fine granularity phasing (9 phases) | Complex UI work benefits from focused increments | ✓ Good — each phase reviewable in isolation |
+| Skeleton production classes in Wave 0 | @Disabled tests compile; skeletons allow test stubs green until Wave 1 | ✓ Good — Wave pattern worked well |
+| Set Entrypoint/XML Input disabled Phase 2, enabled Phase 3 | Tree doesn't exist until Phase 3 (D-04) | ✓ Good — correct partial delivery |
+| SearchDialog.search() as static method | Testability; follows RenderOrchestrator pattern | ✓ Good |
+| SearchExecutor shutdownNow() dual guard | Cancel prior task on new search + on close (T-05-10) | ✓ Good — no leaked threads |
 
 ## Evolution
 
@@ -87,4 +97,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-21 — Phase 09 complete, v1.0 milestone achieved*
+*Last updated: 2026-04-21 after v1.0 milestone*

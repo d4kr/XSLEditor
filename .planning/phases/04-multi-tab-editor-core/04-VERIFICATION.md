@@ -1,8 +1,8 @@
 ---
 phase: 04-multi-tab-editor-core
-verified: 2026-04-18T16:30:00Z
-status: human_needed
-score: 11/12 must-haves verified
+verified: 2026-04-21T00:00:00Z
+status: passed
+score: 12/12
 overrides_applied: 0
 human_verification:
   - test: "Launch `./gradlew run`, open a project, double-click file A, double-click file B, then double-click A again"
