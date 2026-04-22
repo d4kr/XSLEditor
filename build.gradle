@@ -10,7 +10,7 @@ application {
 }
 
 group = 'ch.ti.gagi'
-version = '1.0.0'
+version = '0.1.0'
 
 java {
     toolchain {
@@ -61,4 +61,10 @@ shadowJar {
 
 test {
     useJUnitPlatform()
+}
+
+processResources {
+    filesMatching('version.properties') {
+        expand(version: project.version)
+    }
 }
