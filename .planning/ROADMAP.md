@@ -30,7 +30,7 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 - [x] **Phase 10: Saxon URI Fix** — Fix URI-decode bug so click-to-navigate works on macOS for Saxon runtime errors (completed 2026-04-21)
 - [ ] **Phase 11: About Dialog** — Add Help menu entry and About dialog showing version, stack, credits, and license
-- [ ] **Phase 12: AI Assist in Error Log** — Add a ChatGPT button per error row that opens a pre-filled query in the browser
+- [x] **Phase 12: AI Assist in Error Log** — Add a ChatGPT button per error row that opens a pre-filled query in the browser (completed 2026-04-22)
 
 ## Phase Details
 
@@ -73,7 +73,10 @@ Plans:
   2. Clicking the AI assist action opens the default browser to ChatGPT with the error message text pre-filled in the prompt
   3. The action is available for all severity levels (error, warning, info)
   4. Clicking the AI assist action does not navigate the editor or alter the error log state
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 12-01-PLAN.md — Add colAi TableColumn to FXML, wire @FXML field in MainController, implement cell factory with ChatGPT URL construction in LogController
 
 ## Progress
 
@@ -90,7 +93,7 @@ Plans:
 | 9. Testing | v1.0 | 4/4 | Complete | 2026-04-21 |
 | 10. Saxon URI Fix | v1.1 | 1/1 | Complete | 2026-04-21 |
 | 11. About Dialog | v1.1 | 0/3 | Not started | - |
-| 12. AI Assist in Error Log | v1.1 | 0/? | Not started | - |
+| 12. AI Assist in Error Log | v1.1 | 0/1 | Not started | - |
 
 ---
 *Roadmap created: 2026-04-14*
