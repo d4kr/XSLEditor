@@ -1,9 +1,9 @@
-package ch.ti.gagi.xlseditor.preview;
+package ch.ti.gagi.xsleditor.preview;
 
-import ch.ti.gagi.xlseditor.model.Project;
-import ch.ti.gagi.xlseditor.render.RenderError;
-import ch.ti.gagi.xlseditor.render.RenderOrchestrator;
-import ch.ti.gagi.xlseditor.render.RenderResult;
+import ch.ti.gagi.xsleditor.model.Project;
+import ch.ti.gagi.xsleditor.render.RenderError;
+import ch.ti.gagi.xsleditor.render.RenderOrchestrator;
+import ch.ti.gagi.xsleditor.render.RenderResult;
 
 import java.net.URI;
 import java.nio.file.Path;

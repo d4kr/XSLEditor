@@ -1,4 +1,4 @@
-package ch.ti.gagi.xlseditor.render;
+package ch.ti.gagi.xsleditor.render;
 
 import java.util.List;
 

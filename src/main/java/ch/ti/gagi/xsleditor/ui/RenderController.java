@@ -1,9 +1,9 @@
-package ch.ti.gagi.xlseditor.ui;
+package ch.ti.gagi.xsleditor.ui;
 
-import ch.ti.gagi.xlseditor.preview.Preview;
-import ch.ti.gagi.xlseditor.preview.PreviewError;
-import ch.ti.gagi.xlseditor.preview.PreviewManager;
-import ch.ti.gagi.xlseditor.render.RenderOrchestrator;
+import ch.ti.gagi.xsleditor.preview.Preview;
+import ch.ti.gagi.xsleditor.preview.PreviewError;
+import ch.ti.gagi.xsleditor.preview.PreviewManager;
+import ch.ti.gagi.xsleditor.render.RenderOrchestrator;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -89,7 +89,7 @@ public final class RenderController {
      */
     public void handleRender() {
         // REND-02: runtime guard — check entryPoint and xmlInput beyond the binding
-        ch.ti.gagi.xlseditor.model.Project project = projectContext.getCurrentProject();
+        ch.ti.gagi.xsleditor.model.Project project = projectContext.getCurrentProject();
         if (project == null || project.entryPoint() == null || project.xmlInput() == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setHeaderText("Cannot Render");

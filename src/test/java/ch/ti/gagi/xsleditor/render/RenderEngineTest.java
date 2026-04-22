@@ -1,4 +1,4 @@
-package ch.ti.gagi.xlseditor.render;
+package ch.ti.gagi.xsleditor.render;
 
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XsltExecutable;

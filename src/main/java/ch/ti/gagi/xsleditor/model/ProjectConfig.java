@@ -1,4 +1,4 @@
-package ch.ti.gagi.xlseditor.model;
+package ch.ti.gagi.xsleditor.model;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

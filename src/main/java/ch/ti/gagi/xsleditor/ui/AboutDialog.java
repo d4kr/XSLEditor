@@ -1,6 +1,6 @@
-package ch.ti.gagi.xlseditor.ui;
+package ch.ti.gagi.xsleditor.ui;
 
-import ch.ti.gagi.xlseditor.XLSEditorApp;
+import ch.ti.gagi.xsleditor.XLSEditorApp;
 import javafx.application.HostServices;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

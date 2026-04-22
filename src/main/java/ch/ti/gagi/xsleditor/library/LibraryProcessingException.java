@@ -1,4 +1,4 @@
-package ch.ti.gagi.xlseditor.library;
+package ch.ti.gagi.xsleditor.library;
 
 public class LibraryProcessingException extends Exception {
 

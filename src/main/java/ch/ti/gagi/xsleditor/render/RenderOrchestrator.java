@@ -1,12 +1,12 @@
-package ch.ti.gagi.xlseditor.render;
+package ch.ti.gagi.xsleditor.render;
 
-import ch.ti.gagi.xlseditor.dependency.DependencyGraph;
-import ch.ti.gagi.xlseditor.dependency.DependencyResolver;
-import ch.ti.gagi.xlseditor.error.ErrorManager;
-import ch.ti.gagi.xlseditor.library.LibraryPreprocessor;
-import ch.ti.gagi.xlseditor.model.Project;
-import ch.ti.gagi.xlseditor.validation.ValidationEngine;
-import ch.ti.gagi.xlseditor.validation.ValidationError;
+import ch.ti.gagi.xsleditor.dependency.DependencyGraph;
+import ch.ti.gagi.xsleditor.dependency.DependencyResolver;
+import ch.ti.gagi.xsleditor.error.ErrorManager;
+import ch.ti.gagi.xsleditor.library.LibraryPreprocessor;
+import ch.ti.gagi.xsleditor.model.Project;
+import ch.ti.gagi.xsleditor.validation.ValidationEngine;
+import ch.ti.gagi.xsleditor.validation.ValidationError;
 import net.sf.saxon.s9api.XsltExecutable;
 
 import java.nio.charset.StandardCharsets;

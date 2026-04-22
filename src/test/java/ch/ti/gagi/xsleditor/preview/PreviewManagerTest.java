@@ -1,6 +1,6 @@
-package ch.ti.gagi.xlseditor.preview;
+package ch.ti.gagi.xsleditor.preview;
 
-import ch.ti.gagi.xlseditor.render.RenderError;
+import ch.ti.gagi.xsleditor.render.RenderError;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

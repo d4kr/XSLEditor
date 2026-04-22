@@ -1,7 +1,7 @@
-package ch.ti.gagi.xlseditor.preview;
+package ch.ti.gagi.xsleditor.preview;
 
-import ch.ti.gagi.xlseditor.model.Project;
-import ch.ti.gagi.xlseditor.render.RenderOrchestrator;
+import ch.ti.gagi.xsleditor.model.Project;
+import ch.ti.gagi.xsleditor.render.RenderOrchestrator;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 

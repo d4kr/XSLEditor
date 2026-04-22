@@ -1,4 +1,4 @@
-package ch.ti.gagi.xlseditor.validation;
+package ch.ti.gagi.xsleditor.validation;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

@@ -1,6 +1,6 @@
-package ch.ti.gagi.xlseditor;
+package ch.ti.gagi.xsleditor;
 
-import ch.ti.gagi.xlseditor.ui.MainController;
+import ch.ti.gagi.xsleditor.ui.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,9 +18,9 @@ import java.net.URL;
  *   3. Register close-request handler via MainController
  *   4. Show the stage
  */
-public class XLSEditorApp extends Application {
+public class XSLEditorApp extends Application {
 
-    public static final String APP_NAME = "XLSEditor";
+    public static final String APP_NAME = "XSLEditor";
 
     private static javafx.application.HostServices hostServicesInstance;
 
@@ -30,7 +30,7 @@ public class XLSEditorApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        URL fxml = getClass().getResource("/ch/ti/gagi/xlseditor/ui/main.fxml");
+        URL fxml = getClass().getResource("/ch/ti/gagi/xsleditor/ui/main.fxml");
         if (fxml == null) {
             throw new IllegalStateException("Cannot find main.fxml on classpath");
         }

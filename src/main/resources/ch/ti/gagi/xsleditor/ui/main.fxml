@@ -7,7 +7,7 @@
 <BorderPane
     xmlns="http://javafx.com/javafx/21"
     xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="ch.ti.gagi.xlseditor.ui.MainController"
+    fx:controller="ch.ti.gagi.xsleditor.ui.MainController"
     stylesheets="@main.css"
     minWidth="900"
     minHeight="600">

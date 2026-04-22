@@ -1,4 +1,4 @@
-package ch.ti.gagi.xlseditor.library;
+package ch.ti.gagi.xsleditor.library;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

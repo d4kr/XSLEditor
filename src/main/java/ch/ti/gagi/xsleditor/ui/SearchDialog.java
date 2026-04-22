@@ -1,4 +1,4 @@
-package ch.ti.gagi.xlseditor.ui;
+package ch.ti.gagi.xsleditor.ui;
 
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;

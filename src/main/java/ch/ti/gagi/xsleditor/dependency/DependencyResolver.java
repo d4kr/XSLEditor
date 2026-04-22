@@ -1,4 +1,4 @@
-package ch.ti.gagi.xlseditor.dependency;
+package ch.ti.gagi.xsleditor.dependency;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;

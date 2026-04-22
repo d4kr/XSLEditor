@@ -1,6 +1,6 @@
-package ch.ti.gagi.xlseditor.model;
+package ch.ti.gagi.xsleditor.model;
 
-import ch.ti.gagi.xlseditor.ui.ProjectContext;
+import ch.ti.gagi.xsleditor.ui.ProjectContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 

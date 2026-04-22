@@ -1,4 +1,4 @@
-package ch.ti.gagi.xlseditor.validation;
+package ch.ti.gagi.xsleditor.validation;
 
 import java.nio.file.Path;
 

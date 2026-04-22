@@ -1,4 +1,4 @@
-package ch.ti.gagi.xlseditor.model;
+package ch.ti.gagi.xsleditor.model;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

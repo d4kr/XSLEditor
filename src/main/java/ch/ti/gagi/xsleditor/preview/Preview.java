@@ -1,4 +1,4 @@
-package ch.ti.gagi.xlseditor.preview;
+package ch.ti.gagi.xsleditor.preview;
 
 import java.util.List;
 

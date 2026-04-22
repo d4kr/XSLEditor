@@ -1,4 +1,4 @@
-package ch.ti.gagi.xlseditor.ui;
+package ch.ti.gagi.xsleditor.ui;
 
 import org.fxmisc.richtext.model.StyleSpans;
 import org.junit.jupiter.api.Test;

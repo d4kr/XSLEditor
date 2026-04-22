@@ -1,4 +1,4 @@
-package ch.ti.gagi.xlseditor.ui;
+package ch.ti.gagi.xsleditor.ui;
 
 import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Task;

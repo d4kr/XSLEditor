@@ -1,4 +1,4 @@
-package ch.ti.gagi.xlseditor.model;
+package ch.ti.gagi.xsleditor.model;
 
 import java.io.IOException;
 import java.nio.file.Files;

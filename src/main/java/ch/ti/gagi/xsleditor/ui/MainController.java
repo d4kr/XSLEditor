@@ -1,9 +1,9 @@
-package ch.ti.gagi.xlseditor.ui;
+package ch.ti.gagi.xsleditor.ui;
 
-import ch.ti.gagi.xlseditor.XLSEditorApp;
-import ch.ti.gagi.xlseditor.log.LogEntry;
-import ch.ti.gagi.xlseditor.ui.AboutDialog;
-import ch.ti.gagi.xlseditor.model.Project;
+import ch.ti.gagi.xsleditor.XLSEditorApp;
+import ch.ti.gagi.xsleditor.log.LogEntry;
+import ch.ti.gagi.xsleditor.ui.AboutDialog;
+import ch.ti.gagi.xsleditor.model.Project;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

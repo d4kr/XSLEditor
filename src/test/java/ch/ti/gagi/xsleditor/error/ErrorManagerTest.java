@@ -1,7 +1,7 @@
-package ch.ti.gagi.xlseditor.error;
+package ch.ti.gagi.xsleditor.error;
 
-import ch.ti.gagi.xlseditor.render.RenderError;
-import ch.ti.gagi.xlseditor.validation.ValidationError;
+import ch.ti.gagi.xsleditor.render.RenderError;
+import ch.ti.gagi.xsleditor.validation.ValidationError;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.apache.fop.apps.FOPException;
 import org.junit.jupiter.api.Test;

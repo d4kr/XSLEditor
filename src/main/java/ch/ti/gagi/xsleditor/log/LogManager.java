@@ -1,4 +1,4 @@
-package ch.ti.gagi.xlseditor.log;
+package ch.ti.gagi.xsleditor.log;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package ch.ti.gagi.xlseditor.dependency;
+package ch.ti.gagi.xsleditor.dependency;
 
 import java.nio.file.Path;
 import java.util.List;

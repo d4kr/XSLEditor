@@ -1,7 +1,7 @@
-package ch.ti.gagi.xlseditor.validation;
+package ch.ti.gagi.xsleditor.validation;
 
-import ch.ti.gagi.xlseditor.dependency.DependencyGraph;
-import ch.ti.gagi.xlseditor.model.Project;
+import ch.ti.gagi.xsleditor.dependency.DependencyGraph;
+import ch.ti.gagi.xsleditor.model.Project;
 import org.xml.sax.SAXParseException;
 
 import javax.xml.parsers.DocumentBuilderFactory;

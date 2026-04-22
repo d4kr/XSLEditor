@@ -1,8 +1,8 @@
-package ch.ti.gagi.xlseditor.ui;
+package ch.ti.gagi.xsleditor.ui;
 
-import ch.ti.gagi.xlseditor.XLSEditorApp;
-import ch.ti.gagi.xlseditor.log.LogEntry;
-import ch.ti.gagi.xlseditor.preview.PreviewError;
+import ch.ti.gagi.xsleditor.XLSEditorApp;
+import ch.ti.gagi.xsleditor.log.LogEntry;
+import ch.ti.gagi.xsleditor.preview.PreviewError;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
