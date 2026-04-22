@@ -94,7 +94,7 @@ public class AboutDialog extends Dialog<Void> {
         VBox.setMargin(sep2, new Insets(4, 0, 4, 0));
 
         // 8. Author line
-        Label authorLabel = new Label("Author: Krähen Domenico");
+        Label authorLabel = new Label("Author: Davide Krähenbühl & Claude Code");
         authorLabel.setFont(Font.font("System", 13));
         authorLabel.setStyle("-fx-text-fill: #cccccc;");
 
@@ -154,10 +154,19 @@ public class AboutDialog extends Dialog<Void> {
      * Falls back to "2.9" if the API is unavailable.
      */
     private String fopVersion() {
+        try (InputStream in = org.apache.fop.Version.class
+                .getResourceAsStream("/META-INF/maven/org.apache.xmlgraphics/fop/pom.properties")) {
+            if (in != null) {
+                Properties p = new Properties();
+                p.load(in);
+                String v = p.getProperty("version");
+                if (v != null && !v.isEmpty()) return v;
+            }
+        } catch (Exception ignored) {}
         try {
-            return org.apache.fop.Version.getVersion();
-        } catch (Exception e) {
-            return "2.9";   // fallback per UI-SPEC
-        }
+            String v = org.apache.fop.Version.getVersion();
+            if (v != null && !v.equals("SVN")) return v;
+        } catch (Exception ignored) {}
+        return "2.9";
     }
 }
