@@ -39,7 +39,7 @@
                               accelerator="Ctrl+Shift+F" onAction="#handleFindInFiles"/>
                 </Menu>
                 <Menu text="Help">
-                    <MenuItem text="About XLSEditor..." onAction="#handleAbout"/>
+                    <MenuItem text="About XSLEditor..." onAction="#handleAbout"/>
                 </Menu>
             </MenuBar>
             <ToolBar>

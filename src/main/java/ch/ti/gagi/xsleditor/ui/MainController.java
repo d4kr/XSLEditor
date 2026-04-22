@@ -156,7 +156,7 @@ public class MainController {
     /**
      * Updates the window title. (D-08)
      *
-     * @param projectName the loaded project name, or null to reset to "XLSEditor"
+     * @param projectName the loaded project name, or null to reset to "XSLEditor"
      */
     public void updateTitle(String projectName) {
         if (primaryStage == null) {

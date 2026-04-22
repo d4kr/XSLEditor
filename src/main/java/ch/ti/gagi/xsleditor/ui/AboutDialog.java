@@ -50,7 +50,7 @@ public class AboutDialog extends Dialog<Void> {
 
         // 3. App title label
         String version = loadVersion();
-        Label titleLabel = new Label("XLSEditor  v" + version);   // two spaces between name and version
+        Label titleLabel = new Label("XSLEditor  v" + version);   // two spaces between name and version
         titleLabel.setFont(Font.font("System", FontWeight.BOLD, 18));
         titleLabel.setStyle("-fx-text-fill: #cccccc;");
 
