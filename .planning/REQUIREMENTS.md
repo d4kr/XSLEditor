@@ -8,9 +8,9 @@
 
 ### Brand Update (UI/Docs)
 
-- [ ] **RENAME-01**: Update all user-facing UI strings from "XLSEditor" to "XSLEditor".
+- [x] **RENAME-01**: Update all user-facing UI strings from "XLSEditor" to "XSLEditor".
 - [ ] **RENAME-02**: Update README.md and CLAUDE.md to use the new "XSLEditor" name.
-- [ ] **RENAME-03**: Update About dialog title and content.
+- [x] **RENAME-03**: Update About dialog title and content.
 
 ### Codebase Refactor
 
@@ -21,7 +21,7 @@
 
 ### Build & Config
 
-- [ ] **RENAME-08**: Update `build.gradle` and `settings.gradle` with new project name and main class path.
+- [x] **RENAME-08**: Update `build.gradle` and `settings.gradle` with new project name and main class path.
 - [ ] **RENAME-09**: Rename project configuration file from `.xslfo-tool.json` to `.xsle-tool.json`.
 - [ ] **RENAME-10**: Update `ProjectManager` to load/save using the new configuration filename (Breaking Change).
 
@@ -29,14 +29,14 @@
 
 | Requirement | Phase | Status | Outcome |
 |-------------|-------|--------|---------|
-| RENAME-01   | 13    | 📋 Pending | |
+| RENAME-01   | 13    | ✅ Complete | Updated UI strings in FXML and Java constants |
 | RENAME-02   | 13    | 📋 Pending | |
-| RENAME-03   | 13    | 📋 Pending | |
+| RENAME-03   | 13    | ✅ Complete | Updated title and version label in AboutDialog |
 | RENAME-04   | 13    | ✅ Complete | Renamed to XSLEditorApp.java and updated class definition |
 | RENAME-05   | 13    | ✅ Complete | Updated package declarations in all Java files |
 | RENAME-06   | 13    | ✅ Complete | Renamed directories to ch/ti/gagi/xsleditor |
 | RENAME-07   | 13    | ✅ Complete | Updated all imports, FXML controller references and resource paths |
-| RENAME-08   | 13    | 📋 Pending | |
+| RENAME-08   | 13    | ✅ Complete | Updated mainClass and JAR manifest in build.gradle |
 | RENAME-09   | 13    | 📋 Pending | |
 | RENAME-10   | 13    | 📋 Pending | |
 
