@@ -41,7 +41,7 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
 **Phase 13: Full Project Rename (XLSEditor -> XSLEditor)**
 **Plans:** 3 plans
 
-- [ ] 13-01-PLAN.md — Refactor Java packages and main class file
+- [x] 13-01-PLAN.md — Refactor Java packages and main class file — completed 2026-04-22
 - [ ] 13-02-PLAN.md — Update build system, FXML, and application constants
 - [ ] 13-03-PLAN.md — Update documentation and final verification
 
@@ -50,7 +50,7 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 1-12 | v0.1.0-v0.2.0 | 29/29 | Complete | 2026-04-22 |
-| 13. Full Project Rename | v0.2.1 | 0/3 | Pending | |
+| 13. Full Project Rename | v0.2.1 | 1/3 | In Progress | |
 
 ---
 *Roadmap updated: 2026-04-22*

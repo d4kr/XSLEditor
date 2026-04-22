@@ -14,10 +14,10 @@
 
 ### Codebase Refactor
 
-- [ ] **RENAME-04**: Rename main application class from `XLSEditorApp` to `XSLEditorApp`.
-- [ ] **RENAME-05**: Update base package from `ch.ti.gagi.xlseditor` to `ch.ti.gagi.xsleditor`.
-- [ ] **RENAME-06**: Update all source file directory structures to match the new package name.
-- [ ] **RENAME-07**: Update all imports and FXML references to the new package.
+- [x] **RENAME-04**: Rename main application class from `XLSEditorApp` to `XSLEditorApp`.
+- [x] **RENAME-05**: Update base package from `ch.ti.gagi.xlseditor` to `ch.ti.gagi.xsleditor`.
+- [x] **RENAME-06**: Update all source file directory structures to match the new package name.
+- [x] **RENAME-07**: Update all imports and FXML references to the new package.
 
 ### Build & Config
 
@@ -32,10 +32,10 @@
 | RENAME-01   | 13    | 📋 Pending | |
 | RENAME-02   | 13    | 📋 Pending | |
 | RENAME-03   | 13    | 📋 Pending | |
-| RENAME-04   | 13    | 📋 Pending | |
-| RENAME-05   | 13    | 📋 Pending | |
-| RENAME-06   | 13    | 📋 Pending | |
-| RENAME-07   | 13    | 📋 Pending | |
+| RENAME-04   | 13    | ✅ Complete | Renamed to XSLEditorApp.java and updated class definition |
+| RENAME-05   | 13    | ✅ Complete | Updated package declarations in all Java files |
+| RENAME-06   | 13    | ✅ Complete | Renamed directories to ch/ti/gagi/xsleditor |
+| RENAME-07   | 13    | ✅ Complete | Updated all imports, FXML controller references and resource paths |
 | RENAME-08   | 13    | 📋 Pending | |
 | RENAME-09   | 13    | 📋 Pending | |
 | RENAME-10   | 13    | 📋 Pending | |
