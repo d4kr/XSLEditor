@@ -38,11 +38,12 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
 
 ### 📋 v0.2.1 XSLEditor Full Rename
 
-- [ ] **Phase 13: Full Project Rename (XLSEditor -> XSLEditor)**
-    - [ ] Update UI strings, README, CLAUDE.md (RENAME-01, 02, 03)
-    - [ ] Rename main class and packages (RENAME-04, 05, 06, 07)
-    - [ ] Update build system (RENAME-08)
-    - [ ] Rename config file and update loader (RENAME-09, 10)
+**Phase 13: Full Project Rename (XLSEditor -> XSLEditor)**
+**Plans:** 3 plans
+
+- [ ] 13-01-PLAN.md — Refactor Java packages and main class file
+- [ ] 13-02-PLAN.md — Update build system, FXML, and application constants
+- [ ] 13-03-PLAN.md — Update documentation and final verification
 
 ## Progress
 
