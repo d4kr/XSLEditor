@@ -1,11 +1,13 @@
 package ch.ti.gagi.xlseditor.ui;
 
+import ch.ti.gagi.xlseditor.XLSEditorApp;
 import ch.ti.gagi.xlseditor.log.LogEntry;
 import ch.ti.gagi.xlseditor.preview.PreviewError;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -13,8 +15,11 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -32,7 +37,7 @@ import java.util.function.Predicate;
  * {@link #initialize} from its own {@code initialize()}. This controller is
  * NOT an FXML controller — MainController is the only @FXML controller.
  *
- * Phase 8 / ERR-01..ERR-05
+ * Phase 8 / ERR-01..ERR-05; Phase 12 / ERR-06
  */
 public final class LogController {
 
@@ -53,6 +58,7 @@ public final class LogController {
         TableColumn<LogEntry, String> colLevel,
         TableColumn<LogEntry, String> colType,
         TableColumn<LogEntry, String> colMessage,
+        TableColumn<LogEntry, Void>   colAi,
         ToggleButton filterAllButton,
         ToggleButton filterErrorButton,
         ToggleButton filterWarnButton,
@@ -66,6 +72,7 @@ public final class LogController {
         Objects.requireNonNull(colLevel,           "colLevel");
         Objects.requireNonNull(colType,            "colType");
         Objects.requireNonNull(colMessage,         "colMessage");
+        Objects.requireNonNull(colAi,              "colAi");
         Objects.requireNonNull(filterAllButton,    "filterAllButton");
         Objects.requireNonNull(filterErrorButton,  "filterErrorButton");
         Objects.requireNonNull(filterWarnButton,   "filterWarnButton");
@@ -129,6 +136,43 @@ public final class LogController {
             if (entry.file() != null && entry.line() != null) {
                 // LogEntry.line is 1-based (from PreviewError); navigateTo is 0-based
                 editorController.navigateTo(Path.of(entry.file()), entry.line() - 1, 0);
+            }
+        });
+
+        // 6. AI assist column cell factory (ERR-06 / D-01..D-05)
+        colAi.setCellFactory(col -> new TableCell<LogEntry, Void>() {
+            private final Button btn = createAiButton();
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btn);
+                }
+            }
+
+            private Button createAiButton() {
+                Button b = new Button("💬"); // chat bubble
+                b.setTooltip(new Tooltip("Ask ChatGPT about this error"));
+                b.setStyle("-fx-padding: 1 4 1 4; -fx-font-size: 11;");
+                b.setFocusTraversable(false);
+                b.setOnAction(evt -> {
+                    // D-05: consume event so the row click handler is not triggered
+                    evt.consume();
+                    LogEntry entry = getTableRow().getItem();
+                    if (entry == null) return;
+                    // D-02: Italian preamble + raw message
+                    String prompt = "Ho questo errore nel mio progetto XSLT/XSL-FO, puoi aiutarmi?\n\n"
+                            + entry.message();
+                    // D-03: URL-encode, replace "+" with "%20" for compatibility
+                    String encoded = URLEncoder.encode(prompt, StandardCharsets.UTF_8)
+                            .replace("+", "%20");
+                    String url = "https://chatgpt.com/?q=" + encoded;
+                    XLSEditorApp.hostServices().showDocument(url);
+                });
+                return b;
             }
         });
     }
