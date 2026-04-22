@@ -52,6 +52,7 @@ public class MainController {
     @FXML private TableColumn<LogEntry, String> colLevel;
     @FXML private TableColumn<LogEntry, String> colType;
     @FXML private TableColumn<LogEntry, String> colMessage;
+    @FXML private TableColumn<LogEntry, Void> colAi;
     @FXML private ToggleButton filterAllButton;
     @FXML private ToggleButton filterErrorButton;
     @FXML private ToggleButton filterWarnButton;
@@ -123,6 +124,7 @@ public class MainController {
             logPane,
             logTableView,
             colTime, colLevel, colType, colMessage,
+            colAi,
             filterAllButton, filterErrorButton, filterWarnButton, filterInfoButton,
             editorController
         );
