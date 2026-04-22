@@ -2,6 +2,7 @@ package ch.ti.gagi.xlseditor.ui;
 
 import ch.ti.gagi.xlseditor.XLSEditorApp;
 import ch.ti.gagi.xlseditor.log.LogEntry;
+import ch.ti.gagi.xlseditor.ui.AboutDialog;
 import ch.ti.gagi.xlseditor.model.Project;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -302,6 +303,14 @@ public class MainController {
         java.nio.file.Path root = projectContext.getCurrentProject().rootPath();
         SearchDialog dialog = new SearchDialog(primaryStage, root, editorController);
         dialog.show(); // non-blocking — user can keep editing
+    }
+
+    // --- Phase 11 action handler ---
+
+    @FXML
+    private void handleAbout() {
+        AboutDialog dialog = new AboutDialog(primaryStage, XLSEditorApp.hostServices());
+        dialog.showAndWait();
     }
 
     // --- Private helpers ---

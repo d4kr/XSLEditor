@@ -38,6 +38,9 @@
                     <MenuItem fx:id="findInFilesMenuItem" text="Find in Files"
                               accelerator="Ctrl+Shift+F" onAction="#handleFindInFiles"/>
                 </Menu>
+                <Menu text="Help">
+                    <MenuItem text="About XLSEditor..." onAction="#handleAbout"/>
+                </Menu>
             </MenuBar>
             <ToolBar>
                 <Button fx:id="renderButton" text="Render" onAction="#handleRender"/>
