@@ -6,7 +6,7 @@ plugins {
 }
 
 application {
-    mainClass = 'ch.ti.gagi.xlseditor.XLSEditorApp'
+    mainClass = 'ch.ti.gagi.xsleditor.XSLEditorApp'
 }
 
 group = 'ch.ti.gagi'
@@ -46,14 +46,14 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'ch.ti.gagi.xlseditor.XLSEditorApp'
+        attributes 'Main-Class': 'ch.ti.gagi.xsleditor.XSLEditorApp'
     }
 }
 
 shadowJar {
     archiveClassifier.set('')
     manifest {
-        attributes 'Main-Class': 'ch.ti.gagi.xlseditor.XLSEditorApp'
+        attributes 'Main-Class': 'ch.ti.gagi.xsleditor.XSLEditorApp'
     }
     // Merge service files to avoid Saxon/FOP conflicts
     mergeServiceFiles()
