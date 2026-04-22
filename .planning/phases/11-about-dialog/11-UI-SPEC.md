@@ -1,9 +1,10 @@
 ---
 phase: 11
 slug: about-dialog
-status: draft
+status: approved
 design_system: JavaFX (programmatic, no external library)
 created: 2026-04-22
+reviewed_at: 2026-04-22
 ---
 
 # Phase 11 — UI Design Contract: About Dialog
