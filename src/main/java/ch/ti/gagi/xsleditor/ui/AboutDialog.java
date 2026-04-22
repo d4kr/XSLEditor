@@ -1,6 +1,6 @@
 package ch.ti.gagi.xsleditor.ui;
 
-import ch.ti.gagi.xsleditor.XLSEditorApp;
+import ch.ti.gagi.xsleditor.XSLEditorApp;
 import javafx.application.HostServices;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -39,7 +39,7 @@ public class AboutDialog extends Dialog<Void> {
             initOwner(ownerStage);
             initModality(Modality.APPLICATION_MODAL);
         }
-        setTitle("About " + XLSEditorApp.APP_NAME);
+        setTitle("About " + XSLEditorApp.APP_NAME);
         setHeaderText(null);
         setResizable(false);
 

@@ -1,6 +1,6 @@
 package ch.ti.gagi.xsleditor.ui;
 
-import ch.ti.gagi.xsleditor.XLSEditorApp;
+import ch.ti.gagi.xsleditor.XSLEditorApp;
 import ch.ti.gagi.xsleditor.log.LogEntry;
 import ch.ti.gagi.xsleditor.ui.AboutDialog;
 import ch.ti.gagi.xsleditor.model.Project;
@@ -143,7 +143,7 @@ public class MainController {
     }
 
     /**
-     * Called by XLSEditorApp.start() immediately after FXML load.
+     * Called by XSLEditorApp.start() immediately after FXML load.
      * Registers the close-request handler (D-09).
      */
     public void setPrimaryStage(Stage stage) {
@@ -167,9 +167,9 @@ public class MainController {
             return;
         }
         if (projectName == null || projectName.isBlank()) {
-            primaryStage.setTitle(XLSEditorApp.APP_NAME);
+            primaryStage.setTitle(XSLEditorApp.APP_NAME);
         } else {
-            primaryStage.setTitle(XLSEditorApp.APP_NAME + " \u2014 " + projectName);
+            primaryStage.setTitle(XSLEditorApp.APP_NAME + " \u2014 " + projectName);
         }
     }
 
@@ -311,7 +311,7 @@ public class MainController {
 
     @FXML
     private void handleAbout() {
-        AboutDialog dialog = new AboutDialog(primaryStage, XLSEditorApp.hostServices());
+        AboutDialog dialog = new AboutDialog(primaryStage, XSLEditorApp.hostServices());
         dialog.showAndWait();
     }
 

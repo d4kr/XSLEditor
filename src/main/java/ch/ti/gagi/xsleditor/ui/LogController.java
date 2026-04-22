@@ -1,6 +1,6 @@
 package ch.ti.gagi.xsleditor.ui;
 
-import ch.ti.gagi.xsleditor.XLSEditorApp;
+import ch.ti.gagi.xsleditor.XSLEditorApp;
 import ch.ti.gagi.xsleditor.log.LogEntry;
 import ch.ti.gagi.xsleditor.preview.PreviewError;
 import javafx.beans.property.SimpleStringProperty;
@@ -171,7 +171,7 @@ public final class LogController {
                     String encoded = URLEncoder.encode(prompt, StandardCharsets.UTF_8)
                             .replace("+", "%20");
                     String url = "https://chatgpt.com/?q=" + encoded;
-                    XLSEditorApp.hostServices().showDocument(url);
+                    XSLEditorApp.hostServices().showDocument(url);
                 });
                 return b;
             }
