@@ -54,11 +54,15 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. User opens Help menu and sees an "About XLSEditor" menu item
   2. Clicking About opens a dialog (not a new window)
-  3. The dialog shows the current app version (e.g. 1.1.0)
+  3. The dialog shows the current app version (e.g. 0.1.0)
   4. The dialog shows the versions of Java, Saxon-HE, Apache FOP, and JavaFX in the running environment
   5. The dialog shows author/credits and license information (text or link)
-**Plans**: TBD
-**UI hint**: yes
+**Plans**: 3 plans
+
+Plans:
+- [ ] 11-01-PLAN.md — Correct build.gradle version to 0.1.0, add processResources for version.properties, expose static HostServices accessor in XLSEditorApp
+- [ ] 11-02-PLAN.md — Create AboutDialog.java with full dark-themed programmatic UI (title, runtime stack, author, license hyperlink)
+- [ ] 11-03-PLAN.md — Wire Help menu in main.fxml and handleAbout() in MainController; human verify checkpoint
 
 ### Phase 12: AI Assist in Error Log
 **Goal**: Developers can send any error directly to ChatGPT with one click, pre-filled with the error message
@@ -85,7 +89,7 @@ Plans:
 | 8. Error & Log Panel | v1.0 | 2/2 | Complete | 2026-04-20 |
 | 9. Testing | v1.0 | 4/4 | Complete | 2026-04-21 |
 | 10. Saxon URI Fix | v1.1 | 1/1 | Complete | 2026-04-21 |
-| 11. About Dialog | v1.1 | 0/? | Not started | - |
+| 11. About Dialog | v1.1 | 0/3 | Not started | - |
 | 12. AI Assist in Error Log | v1.1 | 0/? | Not started | - |
 
 ---
