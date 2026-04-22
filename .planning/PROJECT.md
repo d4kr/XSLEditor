@@ -1,13 +1,10 @@
 # XLSEditor
 
-## Current Milestone: v1.1 Developer UX Improvements
+## Current State: v0.2.0 Shipped 2026-04-22
 
-**Goal:** Add an About dialog and ChatGPT quick-link in the error log so developers can instantly look up pipeline errors with AI assistance.
-
-**Target features:**
-- About dialog — app version, stack info, credits
-- ChatGPT link in error log — per-error action that opens ChatGPT pre-filled with the error message
-- ERR-04 fix — Saxon `file://` URI-decode in PreviewManager.toPreviewErrors() (carried from v1.0)
+**v0.2.0 — Developer UX Improvements** — 3 phases, 5 plans, 26 commits.
+Saxon error navigation fixed, About dialog added, ChatGPT error-log button added.
+Next milestone: **v0.3.0** (scope TBD via `/gsd-new-milestone`).
 
 ## What This Is
 
@@ -29,17 +26,17 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 - ✓ REND-01..06: Render pipeline — full pipeline, disabled guard, progress, PDF update, error routing, < 5s — v1.0
 - ✓ PREV-01..04: PDF preview — split view, scroll/zoom, outdated indicator, placeholder — v1.0
 - ✓ ERR-01..05: Error log — TableView, severity columns, filter, click-to-navigate, clear on render — v1.0
-- ✓ TEST-01..08: Test suite — unit tests all backend modules + integration tests full pipeline — v1.0
-- ✓ Backend pipeline complete (LibraryPreprocessor, DependencyResolver, ValidationEngine, RenderEngine, etc.) — pre-v1.0
+- ✓ TEST-01..08: Test suite — unit tests all backend modules + integration tests full pipeline — v0.1.0
+- ✓ Backend pipeline complete (LibraryPreprocessor, DependencyResolver, ValidationEngine, RenderEngine, etc.) — pre-v0.1.0
+- ✓ ERR-04: Saxon URI-decode fix — percent-encoded file:// paths navigate correctly on macOS — v0.2.0
+- ✓ ABOUT-01..05: About dialog — version, runtime stack, author, license — v0.2.0
+- ✓ ERR-06: ChatGPT button per error log row — opens pre-filled query in browser — v0.2.0
 
-### Active
+### Active (v0.3.0 candidates)
 
-- [ ] **ERR-04 fix**: URI-decode `file://` paths in PreviewManager.toPreviewErrors() — Saxon runtime error navigation broken on macOS
-- [ ] **ABOUT-01**: User can open an About dialog showing app version, stack info, and credits
-- [ ] **ERR-06**: Error log shows a ChatGPT link per error that opens a pre-filled query for instant AI assistance
-- [ ] **EDIT-06 edge cases**: Occurrence highlighting across element boundaries
-- [ ] **Nyquist compliance**: Systematically apply test contracts for v1.1 phases
-- [ ] **EDIT-07 human verify**: Confirm Ctrl+Click go-to-definition with xsl:include file
+- [ ] **EDIT-06 edge cases**: Occurrence highlighting across element boundaries — deferred, low priority
+- [ ] **EDIT-07 human verify**: Confirm Ctrl+Click go-to-definition with xsl:include files — pending manual test
+- [ ] **Test coverage Phase 11**: About dialog has no automated tests — manual-only gap
 
 ### Out of Scope
 
@@ -59,9 +56,10 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 
 - **Stack:** Java 21, Saxon-HE 12.4, Apache FOP 2.9, Jackson 2.17.2, PDFBox 2.0.31
 - **UI:** JavaFX with RichTextFX editor, PDFBox-based WebView PDF rendering (150 DPI PNG pages)
-- **v1.0 shipped 2026-04-21** — 9 phases, 24 plans, 3,435 Java LOC, 96 tests green, 14 days
+- **v0.1.0 shipped 2026-04-21** — 9 phases, 24 plans, 3,435 Java LOC, 96 tests green, 14 days
+- **v0.2.0 shipped 2026-04-22** — 3 phases, 5 plans, 3,676 Java LOC total, +241 LOC, 2 days
 - Projects are small (≈5–10 files, <1MB each); performance target met (< 5s render confirmed)
-- Tech debt: ERR-04 Saxon URI edge case, EDIT-06 partial, missing VERIFICATION.md for phases 01/05/07
+- Tech debt: EDIT-06 partial, EDIT-07 unverified, missing VERIFICATION.md for phases 01/05/07, no automated tests for About dialog
 
 ## Constraints
 
@@ -89,6 +87,10 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 | Set Entrypoint/XML Input disabled Phase 2, enabled Phase 3 | Tree doesn't exist until Phase 3 (D-04) | ✓ Good — correct partial delivery |
 | SearchDialog.search() as static method | Testability; follows RenderOrchestrator pattern | ✓ Good |
 | SearchExecutor shutdownNow() dual guard | Cancel prior task on new search + on close (T-05-10) | ✓ Good — no leaked threads |
+| TableCell<T, Void> for action columns | No cell value needed; only graphic (button) | ✓ Good — clean pattern, reusable |
+| Italian prompt preamble in ChatGPT URL | Tool targets Italian-speaking devs; hardcoded per product intent | ✓ Good — no i18n overhead |
+| version.properties via Gradle processResources | Build-time injection avoids runtime classpath scan | ✓ Good — version always accurate |
+| addEventFilter(MOUSE_PRESSED) on AI button | evt.consume() on ActionEvent doesn't block TableView MouseEvent | ✓ Good — WR-01 fix; correct event model |
 
 ## Evolution
 
@@ -108,4 +110,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-21 after v1.1 milestone start*
+*Last updated: 2026-04-22 after v0.2.0 milestone*

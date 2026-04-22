@@ -18,7 +18,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-21)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** v1.1 complete — all 3 phases shipped
+**Current focus:** v0.2.0 shipped 2026-04-22 — planning v0.3.0
 
 ---
 
