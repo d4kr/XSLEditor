@@ -158,11 +158,12 @@ public final class LogController {
                 b.setTooltip(new Tooltip("Ask ChatGPT about this error"));
                 b.setStyle("-fx-padding: 1 4 1 4; -fx-font-size: 11;");
                 b.setFocusTraversable(false);
+                // D-05: consume MOUSE_PRESSED before it bubbles to the TableView row handler
+                b.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_PRESSED,
+                        mouseEvt -> mouseEvt.consume());
                 b.setOnAction(evt -> {
-                    // D-05: consume event so the row click handler is not triggered
-                    evt.consume();
                     LogEntry entry = getTableRow().getItem();
-                    if (entry == null) return;
+                    if (entry == null || entry.message() == null) return;
                     // D-02: Italian preamble + raw message
                     String prompt = "Ho questo errore nel mio progetto XSLT/XSL-FO, puoi aiutarmi?\n\n"
                             + entry.message();
