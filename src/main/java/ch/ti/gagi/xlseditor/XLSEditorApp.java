@@ -22,6 +22,12 @@ public class XLSEditorApp extends Application {
 
     public static final String APP_NAME = "XLSEditor";
 
+    private static javafx.application.HostServices hostServicesInstance;
+
+    public static javafx.application.HostServices hostServices() {
+        return hostServicesInstance;
+    }
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         URL fxml = getClass().getResource("/ch/ti/gagi/xlseditor/ui/main.fxml");
@@ -39,6 +45,7 @@ public class XLSEditorApp extends Application {
         primaryStage.setMinWidth(900);
         primaryStage.setMinHeight(600);
         primaryStage.setScene(scene);
+        hostServicesInstance = getHostServices();
         primaryStage.show();
     }
 
