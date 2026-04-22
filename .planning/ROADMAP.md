@@ -1,10 +1,10 @@
-# Roadmap: XLSEditor
+# Roadmap: XSLEditor
 
 ## Milestones
 
 - ✅ **v0.1.0 MVP** — Phases 1–9 (shipped 2026-04-21)
 - ✅ **v0.2.0 Developer UX Improvements** — Phases 10–12 (shipped 2026-04-22)
-- 📋 **v0.3.0** — TBD (planned via `/gsd-new-milestone`)
+- 📋 **v0.2.1 XSLEditor Full Rename** — Phase 13 (Planned)
 
 ## Phases
 
@@ -36,28 +36,20 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
 
 </details>
 
-### 📋 v0.3.0 (Planned)
+### 📋 v0.2.1 XSLEditor Full Rename
 
-*Scope TBD — run `/gsd-new-milestone` to define.*
+- [ ] **Phase 13: Full Project Rename (XLSEditor -> XSLEditor)**
+    - [ ] Update UI strings, README, CLAUDE.md (RENAME-01, 02, 03)
+    - [ ] Rename main class and packages (RENAME-04, 05, 06, 07)
+    - [ ] Update build system (RENAME-08)
+    - [ ] Rename config file and update loader (RENAME-09, 10)
 
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 1. JavaFX Application Shell | v0.1.0 | 1/1 | Complete | 2026-04-14 |
-| 2. Project Management | v0.1.0 | 2/2 | Complete | 2026-04-15 |
-| 3. File Tree View | v0.1.0 | 3/3 | Complete | 2026-04-17 |
-| 4. Multi-Tab Editor Core | v0.1.0 | 3/3 | Complete | 2026-04-18 |
-| 5. Editor Features | v0.1.0 | 5/5 | Complete | 2026-04-19 |
-| 6. Render Pipeline Integration | v0.1.0 | 2/2 | Complete | 2026-04-19 |
-| 7. PDF Preview Panel | v0.1.0 | 2/2 | Complete | 2026-04-20 |
-| 8. Error & Log Panel | v0.1.0 | 2/2 | Complete | 2026-04-20 |
-| 9. Testing | v0.1.0 | 4/4 | Complete | 2026-04-21 |
-| 10. Saxon URI Fix | v0.2.0 | 1/1 | Complete | 2026-04-21 |
-| 11. About Dialog | v0.2.0 | 3/3 | Complete | 2026-04-22 |
-| 12. AI Assist in Error Log | v0.2.0 | 1/1 | Complete | 2026-04-22 |
+| 1-12 | v0.1.0-v0.2.0 | 29/29 | Complete | 2026-04-22 |
+| 13. Full Project Rename | v0.2.1 | 0/3 | Pending | |
 
 ---
-*Roadmap created: 2026-04-14*
-*v0.1.0 archived: 2026-04-21*
-*v0.2.0 archived: 2026-04-22*
+*Roadmap updated: 2026-04-22*

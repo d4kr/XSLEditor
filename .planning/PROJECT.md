@@ -1,10 +1,10 @@
-# XLSEditor
+# XSLEditor
 
-## Current State: v0.2.0 Shipped 2026-04-22
+## Current State: v0.2.1 Planning 2026-04-22
 
-**v0.2.0 — Developer UX Improvements** — 3 phases, 5 plans, 26 commits.
-Saxon error navigation fixed, About dialog added, ChatGPT error-log button added.
-Next milestone: **v0.3.0** (scope TBD via `/gsd-new-milestone`).
+**v0.2.1 — XSLEditor Full Rename** — 1 phase, 3 plans (est).
+Full rebrand from XLSEditor to XSLEditor including packages, classes, and config files.
+Next milestone: **v0.3.0** (scope TBD).
 
 ## What This Is
 
@@ -32,8 +32,9 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 - ✓ ABOUT-01..05: About dialog — version, runtime stack, author, license — v0.2.0
 - ✓ ERR-06: ChatGPT button per error log row — opens pre-filled query in browser — v0.2.0
 
-### Active (v0.3.0 candidates)
+### Active (v0.2.1 / v0.3.0 candidates)
 
+- [ ] **RENAME-01..10**: Full project rename (XLSEditor -> XSLEditor) — v0.2.1
 - [ ] **EDIT-06 edge cases**: Occurrence highlighting across element boundaries — deferred, low priority
 - [ ] **EDIT-07 human verify**: Confirm Ctrl+Click go-to-definition with xsl:include files — pending manual test
 - [ ] **Test coverage Phase 11**: About dialog has no automated tests — manual-only gap
