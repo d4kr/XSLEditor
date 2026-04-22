@@ -30,8 +30,8 @@ tech-stack:
 key-files:
   created: []
   modified:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/ProjectContext.java
-    - src/test/java/ch/ti/gagi/xlseditor/model/ProjectContextTest.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/ProjectContext.java
+    - src/test/java/ch/ti/gagi/xsleditor/model/ProjectContextTest.java
 
 key-decisions:
   - "validateProjectRelativePath is narrower than validateSimpleFilename: allows subdirectory path segments (future-proofing for config paths) while still blocking absolute paths and ../ traversal"
@@ -89,8 +89,8 @@ Each task was committed atomically:
 
 ## Files Created/Modified
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/ProjectContext.java` — Added `projectFiles` field, `projectFilesProperty()`, `refreshProjectFiles()`, extended `openProject()` and `createFile()`, added `setEntrypoint()`, `setXmlInput()`, `writeConfigAndRebuildProject()`, `validateProjectRelativePath()`
-- `src/test/java/ch/ti/gagi/xlseditor/model/ProjectContextTest.java` — 19 new `@Test` methods appended; original 7 tests preserved unchanged
+- `src/main/java/ch/ti/gagi/xsleditor/ui/ProjectContext.java` — Added `projectFiles` field, `projectFilesProperty()`, `refreshProjectFiles()`, extended `openProject()` and `createFile()`, added `setEntrypoint()`, `setXmlInput()`, `writeConfigAndRebuildProject()`, `validateProjectRelativePath()`
+- `src/test/java/ch/ti/gagi/xsleditor/model/ProjectContextTest.java` — 19 new `@Test` methods appended; original 7 tests preserved unchanged
 
 ## Decisions Made
 
@@ -126,8 +126,8 @@ No new threat surface beyond what is documented in the plan's threat model. `val
 
 ## Self-Check
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/ProjectContext.java` — exists and contains all required methods
-- `src/test/java/ch/ti/gagi/xlseditor/model/ProjectContextTest.java` — 26 @Test methods confirmed
+- `src/main/java/ch/ti/gagi/xsleditor/ui/ProjectContext.java` — exists and contains all required methods
+- `src/test/java/ch/ti/gagi/xsleditor/model/ProjectContextTest.java` — 26 @Test methods confirmed
 - Commits `ca5b416` (test RED) and `fdfc6b6` (feat GREEN) — both exist in git log
 - `./gradlew test` exits 0
 

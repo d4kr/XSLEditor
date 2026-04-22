@@ -5,15 +5,15 @@ depth: standard
 files_reviewed: 10
 files_reviewed_list:
   - build.gradle
-  - src/main/java/ch/ti/gagi/xlseditor/model/ProjectConfig.java
-  - src/main/java/ch/ti/gagi/xlseditor/model/ProjectManager.java
-  - src/main/java/ch/ti/gagi/xlseditor/render/RenderOrchestrator.java
-  - src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java
-  - src/main/java/ch/ti/gagi/xlseditor/ui/ProjectContext.java
-  - src/main/resources/ch/ti/gagi/xlseditor/ui/main.css
-  - src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml
-  - src/test/java/ch/ti/gagi/xlseditor/model/ProjectConfigTest.java
-  - src/test/java/ch/ti/gagi/xlseditor/model/ProjectContextTest.java
+  - src/main/java/ch/ti/gagi/xsleditor/model/ProjectConfig.java
+  - src/main/java/ch/ti/gagi/xsleditor/model/ProjectManager.java
+  - src/main/java/ch/ti/gagi/xsleditor/render/RenderOrchestrator.java
+  - src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java
+  - src/main/java/ch/ti/gagi/xsleditor/ui/ProjectContext.java
+  - src/main/resources/ch/ti/gagi/xsleditor/ui/main.css
+  - src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml
+  - src/test/java/ch/ti/gagi/xsleditor/model/ProjectConfigTest.java
+  - src/test/java/ch/ti/gagi/xsleditor/model/ProjectContextTest.java
 findings:
   critical: 1
   warning: 3
@@ -39,7 +39,7 @@ Phase 02 delivers project open/load, config persistence, file creation, and the 
 
 ### CR-01: NullPointerException when `xmlInput` is null in `RenderOrchestrator`
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/render/RenderOrchestrator.java:44` (and `:73`)
+**File:** `src/main/java/ch/ti/gagi/xsleditor/render/RenderOrchestrator.java:44` (and `:73`)
 
 **Issue:** Both `render()` and `renderSafe()` call `rootPath.resolve(project.xmlInput())` without checking whether `xmlInput` is null. `Project.xmlInput()` is explicitly allowed to be null (partial project). When a project has no XML input configured, `Path.resolve(null)` throws `NullPointerException`, which in `render()` is unhandled and in `renderSafe()` is silently swallowed by the broad `catch (Exception e)` — a poor error message. The comment on line 22 acknowledges the entryPoint null concern but does not extend the guard to `xmlInput`.
 
@@ -67,7 +67,7 @@ The same guard should be added for `project.entryPoint()` in both methods (lines
 
 ### WR-01: Duplicate render pipeline in `RenderOrchestrator` — steps 3-7 copy-pasted verbatim
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/render/RenderOrchestrator.java:34-48` and `63-78`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/render/RenderOrchestrator.java:34-48` and `63-78`
 
 **Issue:** `render()` and `renderSafe()` share an identical 5-step pipeline body (load XSLT, preprocess, compile, transform, render FO). Any bug fix or change to the pipeline must be applied twice. The only difference is how errors are surfaced. This is a maintenance hazard: CR-01 is itself a consequence of this duplication (the null guard added to `render()` was not replicated to `renderSafe()`).
 
@@ -98,7 +98,7 @@ public RenderResult renderSafe(Project project, Path rootPath) {
 
 ### WR-02: `ProjectManager.loadProject` resolves relative paths without validating they stay inside the project root
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/model/ProjectManager.java:16-17`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/model/ProjectManager.java:16-17`
 
 **Issue:** `Path.of(config.entryPoint())` and `Path.of(config.xmlInput())` turn raw strings from the JSON config file into `Path` objects. Although `ProjectConfig` rejects absolute paths, a value like `../../etc/passwd` stored in `.xslfo-tool.json` passes that check and is stored as a relative `Path`. When `RenderOrchestrator` later calls `rootPath.resolve(entryPoint).normalize()` no bounds check is applied — the normalized path can escape the project root. The `createFile` path in `ProjectContext` has this protection; the config-load path does not.
 
@@ -126,7 +126,7 @@ Note: `Project` stores relative paths (the constructor receives relative `Path` 
 
 ### WR-03: Concurrent `showTransientStatus` calls cancel each other without stopping the previous `PauseTransition`
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java:249-254`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java:249-254`
 
 **Issue:** Each call to `showTransientStatus` creates a new `PauseTransition` and calls `play()`, but does not stop any previous transition still running. If the user opens two projects in quick succession (within 3 seconds), two transitions are alive simultaneously. Both fire `setOnFinished`, both call `statusLabel.setText("")` and `removeAll("status-label-success")`. The label text is overwritten immediately by the second call, then blanked twice by the two `onFinished` callbacks. The visual result is unpredictable (the second message may vanish early).
 
@@ -157,7 +157,7 @@ private void showTransientStatus(String message) {
 
 ### IN-01: `ProjectConfigTest` has no round-trip test (write then read back)
 
-**File:** `src/test/java/ch/ti/gagi/xlseditor/model/ProjectConfigTest.java`
+**File:** `src/test/java/ch/ti/gagi/xsleditor/model/ProjectConfigTest.java`
 
 **Issue:** The `writesJsonFile` test verifies that the written JSON contains expected substrings, but no test calls `write()` followed by `read()` to assert that the deserialized value equals the original. A round-trip regression would not be caught — for example, a serialization format change that writes `entry_point` instead of `entryPoint` would pass the write test but break real load behaviour.
 
@@ -176,7 +176,7 @@ void roundTrip(@TempDir Path tempDir) throws IOException {
 
 ### IN-02: `statusLabel` placed inside `fileTreePane` in FXML — unexpected coupling
 
-**File:** `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml:43-46`
+**File:** `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml:43-46`
 
 **Issue:** The `statusLabel` (fx:id) is a child of `fileTreePane` (the file tree `StackPane`), aligned to `BOTTOM_CENTER`. When Phase 3 replaces or clears the content of `fileTreePane` to install the `TreeView`, the `statusLabel` node may be removed or hidden behind the tree. A status bar belongs in a dedicated bottom zone (e.g. inside the `BorderPane`'s bottom, or a second row of the bottom `VBox`), not nested inside a functional pane that downstream phases will replace.
 

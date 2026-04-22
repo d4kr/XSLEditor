@@ -65,11 +65,11 @@ Requirements in scope: TREE-01, TREE-02, TREE-03, TREE-04 (and PROJ-02, PROJ-03,
 - `.planning/phases/03-file-tree-view/03-UI-SPEC.md` — FileItem model, FileItemTreeCell glyphs + colors, panel layout, CSS classes, state matrix, interaction contracts
 
 ### Existing code (MUST read before modifying)
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — Integration points: `fileTreePane` (fx:id StackPane), `menuItemSetEntrypoint`, `menuItemSetXmlInput`, `showTransientStatus()` pattern
-- `src/main/java/ch/ti/gagi/xlseditor/ui/ProjectContext.java` — Current state service (needs ObservableList<Path> added, plus setEntrypoint/setXmlInput methods)
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` — Current FXML (fileTreePane StackPane, menu item fx:ids)
-- `src/main/java/ch/ti/gagi/xlseditor/model/ProjectManager.java` — loadProject() — review before adding config write-back
-- `src/main/java/ch/ti/gagi/xlseditor/model/ProjectConfig.java` — Record structure (write() needed for PROJ-04)
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — Integration points: `fileTreePane` (fx:id StackPane), `menuItemSetEntrypoint`, `menuItemSetXmlInput`, `showTransientStatus()` pattern
+- `src/main/java/ch/ti/gagi/xsleditor/ui/ProjectContext.java` — Current state service (needs ObservableList<Path> added, plus setEntrypoint/setXmlInput methods)
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` — Current FXML (fileTreePane StackPane, menu item fx:ids)
+- `src/main/java/ch/ti/gagi/xsleditor/model/ProjectManager.java` — loadProject() — review before adding config write-back
+- `src/main/java/ch/ti/gagi/xsleditor/model/ProjectConfig.java` — Record structure (write() needed for PROJ-04)
 
 ### Prior phase context
 - `.planning/phases/02-project-management/02-CONTEXT.md` — D-04/D-05: Set Entrypoint/XML Input deferred to Phase 3; D-06: ProjectContext owns project state

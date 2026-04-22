@@ -52,7 +52,7 @@ created: 2026-04-19
 
 ## Wave 0 Requirements
 
-- [ ] `src/test/java/ch/ti/gagi/xlseditor/ui/RenderControllerTest.java` — stubs for REND-01, REND-02 (button disabled logic, task lifecycle)
+- [ ] `src/test/java/ch/ti/gagi/xsleditor/ui/RenderControllerTest.java` — stubs for REND-01, REND-02 (button disabled logic, task lifecycle)
 - [ ] Skeleton `RenderController.java` with correct method signatures (so stubs compile)
 
 *Existing JUnit 5 infrastructure covers all other test needs.*

@@ -19,7 +19,7 @@ Add a Help menu to the menu bar and an About dialog reachable from it. The dialo
 
 ### Dialog layout
 - **D-03:** Single-panel programmatic dialog (`Dialog<Void>`, same pattern as `SearchDialog`). No FXML. Layout is a `VBox` with distinct sections:
-  1. App title + version (e.g. `XLSEditor v0.1.0`)
+  1. App title + version (e.g. `XSLEditor v0.1.0`)
   2. `Separator`
   3. Runtime Stack label + `GridPane` (Java / Saxon-HE / FOP / JavaFX — label + version per row)
   4. `Separator`
@@ -31,7 +31,7 @@ Add a Help menu to the menu bar and an About dialog reachable from it. The dialo
 - **D-05:** One short line of license text (e.g. "Licensed under the Apache License 2.0") followed by a `Hyperlink` that opens the canonical Apache 2.0 URL in the default browser via `getHostServices().showDocument(url)`.
 
 ### Help menu wiring
-- **D-06:** A `<Menu text="Help">` is added to `main.fxml` (after the Search menu). It contains one `<MenuItem text="About XLSEditor..." onAction="#handleAbout"/>`. The handler `handleAbout()` is added to `MainController`.
+- **D-06:** A `<Menu text="Help">` is added to `main.fxml` (after the Search menu). It contains one `<MenuItem text="About XSLEditor..." onAction="#handleAbout"/>`. The handler `handleAbout()` is added to `MainController`.
 
 ### Claude's Discretion
 - Exact CSS styling of the dialog (padding, font sizes, separator color)
@@ -50,10 +50,10 @@ Add a Help menu to the menu bar and an About dialog reachable from it. The dialo
 - `.planning/REQUIREMENTS.md` §ABOUT-01..05 — full About dialog requirements
 
 ### Source files (read before planning)
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` — menu bar to extend with Help menu
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — add `handleAbout()` handler here
-- `src/main/java/ch/ti/gagi/xlseditor/ui/SearchDialog.java` — reference dialog implementation pattern (Dialog<Void>, programmatic, initOwner, initModality)
-- `src/main/java/ch/ti/gagi/xlseditor/XLSEditorApp.java` — `APP_NAME` constant already defined here
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` — menu bar to extend with Help menu
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — add `handleAbout()` handler here
+- `src/main/java/ch/ti/gagi/xsleditor/ui/SearchDialog.java` — reference dialog implementation pattern (Dialog<Void>, programmatic, initOwner, initModality)
+- `src/main/java/ch/ti/gagi/xsleditor/XSLEditorApp.java` — `APP_NAME` constant already defined here
 - `build.gradle` — version field to update from '1.0.0' to '0.1.0'; add processResources copy task for version.properties
 
 </canonical_refs>
@@ -63,19 +63,19 @@ Add a Help menu to the menu bar and an About dialog reachable from it. The dialo
 
 ### Reusable Assets
 - `SearchDialog extends Dialog<Void>` — exact dialog lifecycle pattern to follow (initOwner, initModality, DialogPane, ButtonType.CLOSE)
-- `XLSEditorApp.APP_NAME` — already defined as `"XLSEditor"`, use in dialog title
+- `XSLEditorApp.APP_NAME` — already defined as `"XSLEditor"`, use in dialog title
 - `MainController.primaryStage` — already stored as field; pass to AboutDialog constructor for initOwner
 
 ### Established Patterns
 - Programmatic dialog construction (no FXML) — SearchDialog is the canonical example
 - Handler method naming in MainController: `#handleXxx` in FXML → `@FXML private void handleXxx()` in Java
-- `getHostServices().showDocument(url)` available from `Application` subclass for opening browser — XLSEditorApp must expose it (or pass it down)
+- `getHostServices().showDocument(url)` available from `Application` subclass for opening browser — XSLEditorApp must expose it (or pass it down)
 
 ### Integration Points
 - `main.fxml`: add `<Menu text="Help">` after `<Menu text="Search">`
 - `MainController`: add `@FXML private void handleAbout()` that instantiates `AboutDialog` and calls `showAndWait()`
 - `build.gradle`: add `processResources { ... }` block to write `version.properties` into resources
-- New file: `src/main/java/ch/ti/gagi/xlseditor/ui/AboutDialog.java`
+- New file: `src/main/java/ch/ti/gagi/xsleditor/ui/AboutDialog.java`
 
 </code_context>
 
@@ -84,7 +84,7 @@ Add a Help menu to the menu bar and an About dialog reachable from it. The dialo
 
 - Dialog mockup confirmed by user:
   ```
-  XLSEditor  v0.1.0
+  XSLEditor  v0.1.0
   ─────────────────────
   Runtime Stack
    Java      21.0.3

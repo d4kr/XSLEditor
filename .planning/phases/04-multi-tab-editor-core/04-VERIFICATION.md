@@ -61,10 +61,10 @@ human_verification:
 
 | Artifact | Expected | Status | Details |
 |----------|----------|--------|---------|
-| `src/main/java/ch/ti/gagi/xlseditor/ui/EditorTab.java` | Per-file model: path + CodeArea + dirty BooleanBinding | VERIFIED | 70 lines; `public final class EditorTab`; all 3 public final fields present; load-order contract correct; no @FXML, no textProperty listener |
-| `src/test/java/ch/ti/gagi/xlseditor/ui/EditorTabTest.java` | 4 JUnit 5 tests for EDIT-02 dirty-state logic | VERIFIED | 50 lines; all 4 test methods present with correct names; Platform.startup bootstrap; assertion messages include "EDIT-02" |
-| `src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java` | Sub-controller: TabPane, open/save/close, registry, Ctrl+S, close confirmation | VERIFIED | 186 lines; `public final class EditorController`; no @FXML; openOrFocusTab, buildTab, saveTab, initialize, showError, updateAppDirtyState all present |
-| `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` | Integration wiring: EditorController field + initialize + seam hookup | VERIFIED | EditorController field on line 63; editorController.initialize() on line 82; setOnFileOpenRequest seam on line 88 |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/EditorTab.java` | Per-file model: path + CodeArea + dirty BooleanBinding | VERIFIED | 70 lines; `public final class EditorTab`; all 3 public final fields present; load-order contract correct; no @FXML, no textProperty listener |
+| `src/test/java/ch/ti/gagi/xsleditor/ui/EditorTabTest.java` | 4 JUnit 5 tests for EDIT-02 dirty-state logic | VERIFIED | 50 lines; all 4 test methods present with correct names; Platform.startup bootstrap; assertion messages include "EDIT-02" |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java` | Sub-controller: TabPane, open/save/close, registry, Ctrl+S, close confirmation | VERIFIED | 186 lines; `public final class EditorController`; no @FXML; openOrFocusTab, buildTab, saveTab, initialize, showError, updateAppDirtyState all present |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` | Integration wiring: EditorController field + initialize + seam hookup | VERIFIED | EditorController field on line 63; editorController.initialize() on line 82; setOnFileOpenRequest seam on line 88 |
 
 ---
 

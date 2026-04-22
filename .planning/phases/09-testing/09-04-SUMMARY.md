@@ -12,9 +12,9 @@ tech_stack:
   patterns: ["JUnit 5 @Tag(integration)", "real Saxon+FOP pipeline, no mocks"]
 key_files:
   created:
-    - src/test/java/ch/ti/gagi/xlseditor/preview/PreviewManagerIntegrationTest.java
+    - src/test/java/ch/ti/gagi/xsleditor/preview/PreviewManagerIntegrationTest.java
   modified:
-    - src/main/java/ch/ti/gagi/xlseditor/error/ErrorManager.java
+    - src/main/java/ch/ti/gagi/xsleditor/error/ErrorManager.java
 decisions:
   - "SAXParseException classified as XSLT error type in ErrorManager (malformed XML in XSLT files caught at dependency-graph stage)"
 metrics:
@@ -89,7 +89,7 @@ Zero regressions against pre-Phase-9 test count.
 - **Found during:** Task 1 (GREEN phase) — TEST-08 failed with `expected: <XSLT> but was: <UNKNOWN>`
 - **Issue:** `DependencyResolver.buildGraph` parses the XSLT file as XML using `DocumentBuilder.parse()`. When `invalid.xsl` contains malformed XML (unclosed `<broken>` element), a `SAXParseException` is thrown. The `ErrorManager.fromException` method only mapped `SaxonApiException` and `TransformerException` to type `"XSLT"` — `SAXParseException` fell through to `"UNKNOWN"`.
 - **Fix:** Added `|| e instanceof SAXParseException` to the XSLT branch in `fromException`. Also extended `extractLocation` to extract `systemId` and `lineNumber` from `SAXParseException` for proper error location reporting.
-- **Files modified:** `src/main/java/ch/ti/gagi/xlseditor/error/ErrorManager.java`
+- **Files modified:** `src/main/java/ch/ti/gagi/xsleditor/error/ErrorManager.java`
 - **Commit:** e54dfd6
 - **Rationale:** `SAXParseException` is semantically an XML/XSLT parsing error — mapping it to `UNKNOWN` was incorrect. This fix also improves error location reporting for malformed XSLT files.
 

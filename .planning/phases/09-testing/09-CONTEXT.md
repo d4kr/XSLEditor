@@ -55,18 +55,18 @@ Requirements in scope: TEST-01, TEST-02, TEST-03, TEST-04, TEST-05, TEST-06, TES
 - `.planning/ROADMAP.md` §Phase 9 — Deliverables list (directory structure, fixture location, JaCoCo note)
 
 ### Backend modules under test (do not re-implement)
-- `src/main/java/ch/ti/gagi/xlseditor/library/LibraryPreprocessor.java` — TEST-01
-- `src/main/java/ch/ti/gagi/xlseditor/dependency/DependencyResolver.java` — TEST-02
-- `src/main/java/ch/ti/gagi/xlseditor/validation/ValidationEngine.java` — TEST-03
-- `src/main/java/ch/ti/gagi/xlseditor/render/RenderEngine.java` — TEST-04
-- `src/main/java/ch/ti/gagi/xlseditor/error/ErrorManager.java` — TEST-05
-- `src/main/java/ch/ti/gagi/xlseditor/log/LogManager.java` — TEST-06
-- `src/main/java/ch/ti/gagi/xlseditor/preview/PreviewManager.java` — used by TEST-07, TEST-08 (full pipeline)
-- `src/main/java/ch/ti/gagi/xlseditor/render/RenderOrchestrator.java` — entry point for TEST-07, TEST-08
+- `src/main/java/ch/ti/gagi/xsleditor/library/LibraryPreprocessor.java` — TEST-01
+- `src/main/java/ch/ti/gagi/xsleditor/dependency/DependencyResolver.java` — TEST-02
+- `src/main/java/ch/ti/gagi/xsleditor/validation/ValidationEngine.java` — TEST-03
+- `src/main/java/ch/ti/gagi/xsleditor/render/RenderEngine.java` — TEST-04
+- `src/main/java/ch/ti/gagi/xsleditor/error/ErrorManager.java` — TEST-05
+- `src/main/java/ch/ti/gagi/xsleditor/log/LogManager.java` — TEST-06
+- `src/main/java/ch/ti/gagi/xsleditor/preview/PreviewManager.java` — used by TEST-07, TEST-08 (full pipeline)
+- `src/main/java/ch/ti/gagi/xsleditor/render/RenderOrchestrator.java` — entry point for TEST-07, TEST-08
 
 ### Existing tests (context, not targets)
-- `src/test/java/ch/ti/gagi/xlseditor/model/ProjectConfigTest.java` — pattern for `@TempDir` usage
-- `src/test/java/ch/ti/gagi/xlseditor/ui/RenderControllerTest.java` — Wave 0/Wave 1 stub pattern (reference only)
+- `src/test/java/ch/ti/gagi/xsleditor/model/ProjectConfigTest.java` — pattern for `@TempDir` usage
+- `src/test/java/ch/ti/gagi/xsleditor/ui/RenderControllerTest.java` — Wave 0/Wave 1 stub pattern (reference only)
 
 ### Tech debt reference
 - `.planning/codebase/CONCERNS.md` — Full list of known issues; use to identify which ones block test writing (D-06/D-07)

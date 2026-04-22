@@ -20,7 +20,7 @@ overrides_applied: 0
 | #   | Truth                                                                              | Status     | Evidence                                                                                                           |
 | --- | ---------------------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------ |
 | 1   | Every row in the error log shows a small button in the AI column                  | ✓ VERIFIED | `colAi.setCellFactory` in LogController.java:143; `updateItem` sets `setGraphic(btn)` for non-empty rows          |
-| 2   | Clicking the button opens chatgpt.com in the browser with the error text pre-filled | ✓ VERIFIED | `XLSEditorApp.hostServices().showDocument(url)` at LogController.java:173; URL = `https://chatgpt.com/?q=<encoded>` |
+| 2   | Clicking the button opens chatgpt.com in the browser with the error text pre-filled | ✓ VERIFIED | `XSLEditorApp.hostServices().showDocument(url)` at LogController.java:173; URL = `https://chatgpt.com/?q=<encoded>` |
 | 3   | The button is available for ERROR, WARN, and INFO rows                             | ✓ VERIFIED | Cell factory has no level filter — `updateItem` shows button for any non-empty row regardless of severity          |
 | 4   | Clicking the button does not select the row, navigate the editor, or change allEntries/filteredEntries | ✓ VERIFIED | `evt.consume()` at LogController.java:163; no `navigateTo`, `allEntries`, or `filteredEntries` references inside cell factory block (lines 142–177) |
 
@@ -30,15 +30,15 @@ overrides_applied: 0
 
 | Artifact                                                             | Expected                                               | Status     | Details                                                                                          |
 | -------------------------------------------------------------------- | ------------------------------------------------------ | ---------- | ------------------------------------------------------------------------------------------------ |
-| `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml`              | colAi TableColumn declaration                          | ✓ VERIFIED | Line 112: `<TableColumn fx:id="colAi" text="" prefWidth="40" sortable="false"/>` after colMessage |
-| `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java`         | @FXML colAi field and passing it to logController.initialize() | ✓ VERIFIED | Line 55: `@FXML private TableColumn<LogEntry, Void> colAi;`; Line 127: `colAi,` in initialize call |
-| `src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java`          | setCellFactory producing button and ChatGPT URL construction | ✓ VERIFIED | Lines 61, 75, 143–177: signature param, null-check, and full cell factory with `https://chatgpt.com/?q=` |
+| `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml`              | colAi TableColumn declaration                          | ✓ VERIFIED | Line 112: `<TableColumn fx:id="colAi" text="" prefWidth="40" sortable="false"/>` after colMessage |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java`         | @FXML colAi field and passing it to logController.initialize() | ✓ VERIFIED | Line 55: `@FXML private TableColumn<LogEntry, Void> colAi;`; Line 127: `colAi,` in initialize call |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java`          | setCellFactory producing button and ChatGPT URL construction | ✓ VERIFIED | Lines 61, 75, 143–177: signature param, null-check, and full cell factory with `https://chatgpt.com/?q=` |
 
 ### Key Link Verification
 
 | From                                  | To                                        | Via                   | Status     | Details                                                                                              |
 | ------------------------------------- | ----------------------------------------- | --------------------- | ---------- | ---------------------------------------------------------------------------------------------------- |
-| LogController colAi cell factory      | XLSEditorApp.hostServices().showDocument(url) | button.setOnAction | ✓ WIRED    | LogController.java:173 — `XLSEditorApp.hostServices().showDocument(url)` inside `b.setOnAction`      |
+| LogController colAi cell factory      | XSLEditorApp.hostServices().showDocument(url) | button.setOnAction | ✓ WIRED    | LogController.java:173 — `XSLEditorApp.hostServices().showDocument(url)` inside `b.setOnAction`      |
 | LogController button action           | URLEncoder.encode                         | prompt string assembly | ✓ WIRED   | LogController.java:170–171 — `URLEncoder.encode(prompt, StandardCharsets.UTF_8).replace("+", "%20")` |
 
 ### Data-Flow Trace (Level 4)

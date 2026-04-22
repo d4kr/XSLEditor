@@ -30,15 +30,15 @@ overrides_applied: 0
 
 | Artifact | Expected | Status | Details |
 |----------|----------|--------|---------|
-| `src/main/java/ch/ti/gagi/xlseditor/preview/PreviewManager.java` | resolveFilePath() with try/catch; both methods package-private | VERIFIED | File exists, 69 LOC; `catch (IllegalArgumentException ignored)` present at line 35; neither `resolveFilePath` nor `toPreviewErrors` carries `private` modifier |
-| `src/test/java/ch/ti/gagi/xlseditor/preview/PreviewManagerTest.java` | Unit test for toPreviewErrors() URI-decode behaviour | VERIFIED | File exists, 53 LOC; 3 test methods present; XML report: tests=3 failures=0 errors=0 |
+| `src/main/java/ch/ti/gagi/xsleditor/preview/PreviewManager.java` | resolveFilePath() with try/catch; both methods package-private | VERIFIED | File exists, 69 LOC; `catch (IllegalArgumentException ignored)` present at line 35; neither `resolveFilePath` nor `toPreviewErrors` carries `private` modifier |
+| `src/test/java/ch/ti/gagi/xsleditor/preview/PreviewManagerTest.java` | Unit test for toPreviewErrors() URI-decode behaviour | VERIFIED | File exists, 53 LOC; 3 test methods present; XML report: tests=3 failures=0 errors=0 |
 
 ### Key Link Verification
 
 | From | To | Via | Status | Details |
 |------|----|-----|--------|---------|
 | `PreviewManager.toPreviewErrors()` | `resolveFilePath()` | direct call for file path portion of location string | WIRED | Line 56: `file = resolveFilePath(location.substring(0, colon));` and line 58: `file = resolveFilePath(location);` |
-| `PreviewManagerTest` | `PreviewManager.toPreviewErrors()` | package-private direct call | WIRED | Lines 20 and 35 call `PreviewManager.toPreviewErrors(List.of(error))` directly; same package `ch.ti.gagi.xlseditor.preview` |
+| `PreviewManagerTest` | `PreviewManager.toPreviewErrors()` | package-private direct call | WIRED | Lines 20 and 35 call `PreviewManager.toPreviewErrors(List.of(error))` directly; same package `ch.ti.gagi.xsleditor.preview` |
 
 ### Data-Flow Trace (Level 4)
 

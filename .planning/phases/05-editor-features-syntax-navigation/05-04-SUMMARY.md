@@ -28,8 +28,8 @@ tech_stack:
 key_files:
   created: []
   modified:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java
-    - src/main/resources/ch/ti/gagi/xlseditor/ui/main.css
+    - src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java
+    - src/main/resources/ch/ti/gagi/xsleditor/ui/main.css
 decisions:
   - "Initial highlight uses 500-char threshold: < 500 is synchronous (safe for FX thread), >= 500 submits off-thread Task to avoid stutter on medium/large files"
   - "tab.setOnClosed unsubscribes highlightSub before shutdownNow — ordering matters to release CodeArea strong reference first (T-05-08)"
@@ -103,8 +103,8 @@ No new trust boundaries introduced beyond what the plan's threat model covers.
 ## Self-Check: PASSED
 
 Files exist on disk:
-- src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java - FOUND
-- src/main/resources/ch/ti/gagi/xlseditor/ui/main.css - FOUND
+- src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java - FOUND
+- src/main/resources/ch/ti/gagi/xsleditor/ui/main.css - FOUND
 
 Commits verified:
 - e22591f (Task 1 — EditorController wiring) - FOUND

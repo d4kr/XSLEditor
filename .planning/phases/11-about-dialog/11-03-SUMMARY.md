@@ -8,7 +8,7 @@ tags: [javafx, fxml, menu, about-dialog, wiring]
 requires:
   - phase: 11-about-dialog
     plan: "01"
-    provides: "XLSEditorApp.hostServices() static accessor"
+    provides: "XSLEditorApp.hostServices() static accessor"
   - phase: 11-about-dialog
     plan: "02"
     provides: "AboutDialog(Stage, HostServices) constructor and full UI layout"
@@ -29,8 +29,8 @@ tech-stack:
 key-files:
   created: []
   modified:
-    - src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml
-    - src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java
+    - src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml
+    - src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java
 
 key-decisions:
   - "showAndWait() used (not show()) because AboutDialog is APPLICATION_MODAL — blocking call integrates correctly with JavaFX event loop"
@@ -64,8 +64,8 @@ completed: "2026-04-22"
 
 ## Accomplishments
 
-- Added `<Menu text="Help">` with `<MenuItem text="About XLSEditor..." onAction="#handleAbout"/>` to main.fxml, positioned after the Search menu, before the closing `</MenuBar>` tag (satisfies ABOUT-01)
-- Added `@FXML private void handleAbout()` to MainController, which instantiates `new AboutDialog(primaryStage, XLSEditorApp.hostServices())` and calls `dialog.showAndWait()`
+- Added `<Menu text="Help">` with `<MenuItem text="About XSLEditor..." onAction="#handleAbout"/>` to main.fxml, positioned after the Search menu, before the closing `</MenuBar>` tag (satisfies ABOUT-01)
+- Added `@FXML private void handleAbout()` to MainController, which instantiates `new AboutDialog(primaryStage, XSLEditorApp.hostServices())` and calls `dialog.showAndWait()`
 - Fixed FOP version string to read from `META-INF/maven/org.apache.xmlgraphics/fop/pom.properties` (fix commit 38784aa)
 - Fixed author name to correctly render "Krähen Domenico" with umlaut (fix commit 38784aa)
 - Human verify checkpoint approved: dialog opens modal, dark theme, correct version rows, hyperlink opens browser and dialog stays open, non-resizable, Escape closes
@@ -82,8 +82,8 @@ Each task was committed atomically:
 
 ## Files Created/Modified
 
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` - Help menu node added after Search menu; MenuItem bound to #handleAbout
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` - @FXML handleAbout() handler added; AboutDialog import added
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` - Help menu node added after Search menu; MenuItem bound to #handleAbout
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` - @FXML handleAbout() handler added; AboutDialog import added
 
 ## Decisions Made
 
@@ -99,7 +99,7 @@ Each task was committed atomically:
 - **Found during:** Task 1 post-wiring smoke test (human verify)
 - **Issue:** FOP version could not be resolved via the reflection path originally used in AboutDialog; the runtime stack row showed "unknown"
 - **Fix:** Changed version lookup to read `META-INF/maven/org.apache.xmlgraphics/fop/pom.properties` via classloader resource stream, which reliably returns the FOP version string
-- **Files modified:** `src/main/java/ch/ti/gagi/xlseditor/ui/AboutDialog.java`
+- **Files modified:** `src/main/java/ch/ti/gagi/xsleditor/ui/AboutDialog.java`
 - **Verification:** Human verify checkpoint confirmed FOP row shows version (e.g. "2.9"), not "unknown"
 - **Committed in:** `38784aa` (fix commit)
 
@@ -107,7 +107,7 @@ Each task was committed atomically:
 - **Found during:** Human verify checkpoint
 - **Issue:** Author name rendered without the ä character due to source file encoding issue
 - **Fix:** Corrected the string literal in AboutDialog.java with proper UTF-8 umlaut
-- **Files modified:** `src/main/java/ch/ti/gagi/xlseditor/ui/AboutDialog.java`
+- **Files modified:** `src/main/java/ch/ti/gagi/xsleditor/ui/AboutDialog.java`
 - **Verification:** Human verify checkpoint confirmed "Krähen Domenico" renders correctly in dialog
 - **Committed in:** `38784aa` (fix commit)
 

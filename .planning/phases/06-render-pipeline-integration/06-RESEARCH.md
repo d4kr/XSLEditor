@@ -34,7 +34,7 @@
 - Exact ToolBar + VBox FXML structure (how toolbar integrates with existing BorderPane top zone)
 - Whether `renderableProperty()` is a computed property on `ProjectContext` or derived inline in `RenderController`
 - Whether `RenderController` receives `EditorController` by constructor or setter
-- `PreviewManager` instantiation location (RenderController constructor, or `XLSEditorApp.start()` wiring)
+- `PreviewManager` instantiation location (RenderController constructor, or `XSLEditorApp.start()` wiring)
 - Error string formatting details beyond `"[ERROR] {type}: {message}"` prefix
 
 ### Deferred Ideas (OUT OF SCOPE)
@@ -105,10 +105,10 @@ The key gap to close before implementation: `EditorController` does not yet have
 ### No New Dependencies Required
 
 The backend pipeline is already compiled and available:
-- `ch.ti.gagi.xlseditor.preview.PreviewManager` [VERIFIED: codebase read]
-- `ch.ti.gagi.xlseditor.preview.Preview` [VERIFIED: codebase read]
-- `ch.ti.gagi.xlseditor.preview.PreviewError` [VERIFIED: codebase read]
-- `ch.ti.gagi.xlseditor.render.RenderOrchestrator` [VERIFIED: codebase read]
+- `ch.ti.gagi.xsleditor.preview.PreviewManager` [VERIFIED: codebase read]
+- `ch.ti.gagi.xsleditor.preview.Preview` [VERIFIED: codebase read]
+- `ch.ti.gagi.xsleditor.preview.PreviewError` [VERIFIED: codebase read]
+- `ch.ti.gagi.xsleditor.render.RenderOrchestrator` [VERIFIED: codebase read]
 
 **Installation:** No new `build.gradle` changes needed for Phase 6.
 
@@ -180,17 +180,17 @@ Task<Preview>.call()    [background thread — NOT FX thread]
 ### Recommended Project Structure (new files only)
 
 ```
-src/main/java/ch/ti/gagi/xlseditor/ui/
+src/main/java/ch/ti/gagi/xsleditor/ui/
 └── RenderController.java    # new sub-controller for render lifecycle
 
-src/test/java/ch/ti/gagi/xlseditor/ui/
+src/test/java/ch/ti/gagi/xsleditor/ui/
 └── RenderControllerTest.java  # unit tests for pure-logic methods (error formatting, etc.)
 ```
 
 **Modified files:**
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — add `renderController` field + `initialize()` call + FXML `@FXML` refs (ToolBar button, Run menu item)
-- `src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java` — add `saveAll()` public method
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` — add ToolBar in VBox, add "Render" item to "Run" menu
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — add `renderController` field + `initialize()` call + FXML `@FXML` refs (ToolBar button, Run menu item)
+- `src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java` — add `saveAll()` public method
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` — add ToolBar in VBox, add "Render" item to "Run" menu
 
 ### Pattern 1: RenderController Shape (mirrors FileTreeController)
 
@@ -338,7 +338,7 @@ public void saveAll() throws IOException {
 ### Pitfall 2: PreviewManager Instantiation
 **What goes wrong:** `RenderController` instantiates `PreviewManager(new RenderOrchestrator())` in `handleRender()` (i.e., once per click). `RenderOrchestrator` creates a `RenderEngine` which may hold heavy Saxon/FOP state.
 **Why it happens:** Forgetting that `PreviewManager` should be created once and reused.
-**How to avoid:** Instantiate `PreviewManager` once — either in `RenderController`'s constructor/`initialize()`, or (if XLSEditorApp wiring is preferred) pass it in as a constructor argument.
+**How to avoid:** Instantiate `PreviewManager` once — either in `RenderController`'s constructor/`initialize()`, or (if XSLEditorApp wiring is preferred) pass it in as a constructor argument.
 **Warning signs:** Slower first render each time, memory churn.
 
 ### Pitfall 3: statusLabel Owned by MainController
@@ -557,7 +557,7 @@ Step 2.6: SKIPPED — Phase 6 has no new external dependencies. All required too
 |----------|-------|
 | Framework | JUnit Jupiter 5.10.0 |
 | Config file | `build.gradle` — `test { useJUnitPlatform() }` |
-| Quick run command | `./gradlew test --tests "ch.ti.gagi.xlseditor.ui.RenderController*"` |
+| Quick run command | `./gradlew test --tests "ch.ti.gagi.xsleditor.ui.RenderController*"` |
 | Full suite command | `./gradlew test` |
 
 ### Phase Requirements → Test Map
@@ -575,7 +575,7 @@ Step 2.6: SKIPPED — Phase 6 has no new external dependencies. All required too
 
 ### Wave 0 Gaps
 
-- [ ] `src/test/java/ch/ti/gagi/xlseditor/ui/RenderControllerTest.java` — covers REND-02, REND-04, REND-05 via extracted logic methods
+- [ ] `src/test/java/ch/ti/gagi/xsleditor/ui/RenderControllerTest.java` — covers REND-02, REND-04, REND-05 via extracted logic methods
 - [ ] `EditorController.saveAll()` method — must exist before any test can compile against it
 
 *(Existing test infrastructure: JUnit Jupiter platform configured, `Platform.startup` pattern established in EditorTabTest — no new framework setup needed)*
@@ -593,18 +593,18 @@ Applicable ASVS categories: None for Phase 6.
 ## Sources
 
 ### Primary (HIGH confidence — direct codebase reads)
-- `src/main/java/ch/ti/gagi/xlseditor/preview/PreviewManager.java` — API signature, contract
-- `src/main/java/ch/ti/gagi/xlseditor/preview/Preview.java` — DTO fields: success(), outdated(), pdf(), errors()
-- `src/main/java/ch/ti/gagi/xlseditor/preview/PreviewError.java` — DTO fields: message(), type(), file(), line()
-- `src/main/java/ch/ti/gagi/xlseditor/render/RenderOrchestrator.java` — renderSafe() contract (never throws)
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — statusLabel, logListView, showTransientStatus pattern, existing controller init pattern
-- `src/main/java/ch/ti/gagi/xlseditor/ui/ProjectContext.java` — projectLoadedProperty(), getCurrentProject() API
-- `src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java` — Task<StyleSpans> usage pattern (lines 201–215), saveTab() pattern, registry structure
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` — existing ToolBar-less structure, Run menu, fx:id names
-- `src/main/java/ch/ti/gagi/xlseditor/log/LogManager.java` — in-memory log (not bound to UI in Phase 6)
-- `src/main/java/ch/ti/gagi/xlseditor/log/LogEntry.java` — LogEntry structure
+- `src/main/java/ch/ti/gagi/xsleditor/preview/PreviewManager.java` — API signature, contract
+- `src/main/java/ch/ti/gagi/xsleditor/preview/Preview.java` — DTO fields: success(), outdated(), pdf(), errors()
+- `src/main/java/ch/ti/gagi/xsleditor/preview/PreviewError.java` — DTO fields: message(), type(), file(), line()
+- `src/main/java/ch/ti/gagi/xsleditor/render/RenderOrchestrator.java` — renderSafe() contract (never throws)
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — statusLabel, logListView, showTransientStatus pattern, existing controller init pattern
+- `src/main/java/ch/ti/gagi/xsleditor/ui/ProjectContext.java` — projectLoadedProperty(), getCurrentProject() API
+- `src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java` — Task<StyleSpans> usage pattern (lines 201–215), saveTab() pattern, registry structure
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` — existing ToolBar-less structure, Run menu, fx:id names
+- `src/main/java/ch/ti/gagi/xsleditor/log/LogManager.java` — in-memory log (not bound to UI in Phase 6)
+- `src/main/java/ch/ti/gagi/xsleditor/log/LogEntry.java` — LogEntry structure
 - `.planning/phases/06-render-pipeline-integration/06-CONTEXT.md` — all locked decisions D-01..D-17
-- `src/test/java/ch/ti/gagi/xlseditor/ui/EditorTabTest.java` — Platform.startup test pattern
+- `src/test/java/ch/ti/gagi/xsleditor/ui/EditorTabTest.java` — Platform.startup test pattern
 
 ### Secondary (MEDIUM confidence)
 - JavaFX 21 Task Javadoc (ASSUMED based on training, corroborated by existing Task usage patterns in EditorController.java)

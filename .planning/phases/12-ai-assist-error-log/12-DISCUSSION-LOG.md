@@ -38,7 +38,7 @@
 | Option | Description | Selected |
 |--------|-------------|----------|
 | Minimal preamble | "Ho questo errore nel mio progetto XSLT/XSL-FO, puoi aiutarmi?\n\n{message}" | ✓ |
-| Tool context preamble | "Sto usando XLSEditor (pipeline XML→XSLT→XSL-FO→PDF) e ricevo questo errore:\n\n{message}" | |
+| Tool context preamble | "Sto usando XSLEditor (pipeline XML→XSLT→XSL-FO→PDF) e ricevo questo errore:\n\n{message}" | |
 | Generic question | "Cosa significa questo errore?\n\n{message}" | |
 
 **Notes:** Multi-language preferences deferred to a future phase.

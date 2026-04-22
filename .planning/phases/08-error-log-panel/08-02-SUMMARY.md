@@ -21,8 +21,8 @@ tech-stack:
 key-files:
   created: []
   modified:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java
-    - src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java
 
 key-decisions:
   - "D-06: errorsCallback.accept(result.errors()) replaces for-loop building [ERROR] prefixed strings into ListView"
@@ -73,8 +73,8 @@ RenderController rewired from `ListView<String>` to `Consumer<List<PreviewError>
 
 ## Files Created/Modified
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java` — Consumer callbacks replace ListView parameter; import ListView removed; import List added
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — LogController field + FXML injections + initialize wiring + 3 addInfo sites
+- `src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java` — Consumer callbacks replace ListView parameter; import ListView removed; import List added
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — LogController field + FXML injections + initialize wiring + 3 addInfo sites
 
 ## Decisions Made
 
@@ -109,8 +109,8 @@ Approved — user confirmed all 10 checks passed.
 ## Self-Check: PASSED
 
 Files verified:
-- FOUND: src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java
-- FOUND: src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java
+- FOUND: src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java
+- FOUND: src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java
 
 Commits verified:
 - FOUND: f358d02 (refactor(08-02): rewire RenderController to Consumer callbacks)

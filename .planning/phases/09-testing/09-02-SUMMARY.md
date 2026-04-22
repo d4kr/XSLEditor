@@ -12,9 +12,9 @@ tech_stack:
   patterns: [JUnit5-TempDir, static-call-testing, immutability-assertion]
 key_files:
   created:
-    - src/test/java/ch/ti/gagi/xlseditor/validation/ValidationEngineTest.java
-    - src/test/java/ch/ti/gagi/xlseditor/error/ErrorManagerTest.java
-    - src/test/java/ch/ti/gagi/xlseditor/log/LogManagerTest.java
+    - src/test/java/ch/ti/gagi/xsleditor/validation/ValidationEngineTest.java
+    - src/test/java/ch/ti/gagi/xsleditor/error/ErrorManagerTest.java
+    - src/test/java/ch/ti/gagi/xsleditor/log/LogManagerTest.java
   modified: []
 decisions: []
 metrics:
@@ -33,7 +33,7 @@ Unit tests for three stable backend modules: SAXParseException-aware XML validat
 
 ### Task 1: ValidationEngineTest (4 tests — TEST-03)
 
-File: `src/test/java/ch/ti/gagi/xlseditor/validation/ValidationEngineTest.java`
+File: `src/test/java/ch/ti/gagi/xsleditor/validation/ValidationEngineTest.java`
 
 | Test | Scenario |
 |------|----------|
@@ -46,7 +46,7 @@ Uses `@TempDir` for file creation (no persistent temp files). No Mockito.
 
 ### Task 2: ErrorManagerTest (10 tests — TEST-05)
 
-File: `src/test/java/ch/ti/gagi/xlseditor/error/ErrorManagerTest.java`
+File: `src/test/java/ch/ti/gagi/xsleditor/error/ErrorManagerTest.java`
 
 | Test | Scenario |
 |------|----------|
@@ -65,7 +65,7 @@ No Mockito. Uses real Saxon-HE 12.4 and FOP 2.9 constructors.
 
 ### Task 3: LogManagerTest (6 tests — TEST-06)
 
-File: `src/test/java/ch/ti/gagi/xlseditor/log/LogManagerTest.java`
+File: `src/test/java/ch/ti/gagi/xsleditor/log/LogManagerTest.java`
 
 | Test | Scenario |
 |------|----------|
@@ -98,9 +98,9 @@ None.
 ## Self-Check: PASSED
 
 Files exist:
-- FOUND: src/test/java/ch/ti/gagi/xlseditor/validation/ValidationEngineTest.java
-- FOUND: src/test/java/ch/ti/gagi/xlseditor/error/ErrorManagerTest.java
-- FOUND: src/test/java/ch/ti/gagi/xlseditor/log/LogManagerTest.java
+- FOUND: src/test/java/ch/ti/gagi/xsleditor/validation/ValidationEngineTest.java
+- FOUND: src/test/java/ch/ti/gagi/xsleditor/error/ErrorManagerTest.java
+- FOUND: src/test/java/ch/ti/gagi/xsleditor/log/LogManagerTest.java
 
 Commits exist:
 - 855289f: test(09-02): add ValidationEngineTest

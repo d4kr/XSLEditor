@@ -28,7 +28,7 @@ tech_stack:
     - Consumer<Boolean> dirtyCallback for aggregate dirty propagation
 key_files:
   created:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java
   modified: []
 decisions:
   - "Both tasks implemented atomically in one file creation; skeleton + methods written together since all acceptance criteria were verifiable in a single compile pass"
@@ -168,7 +168,7 @@ None. The controller is fully implemented. No placeholder text, hardcoded empty 
 
 ## Self-Check: PASSED
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java` exists: CONFIRMED
+- `src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java` exists: CONFIRMED
 - Commit `d39c6e4` exists: CONFIRMED via `git log`
 - All grep assertions pass: CONFIRMED above
 - `./gradlew test` exits 0: CONFIRMED

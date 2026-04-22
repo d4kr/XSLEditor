@@ -52,8 +52,8 @@ created: 2026-04-15
 
 ## Wave 0 Requirements
 
-- [ ] `src/test/java/ch/ti/gagi/xlseditor/model/ProjectConfigTest.java` — stubs for PROJ-04, PROJ-05 (config write/read with null fields)
-- [ ] `src/test/java/ch/ti/gagi/xlseditor/model/ProjectContextTest.java` — stubs for PROJ-06 (createFile, path traversal guard)
+- [ ] `src/test/java/ch/ti/gagi/xsleditor/model/ProjectConfigTest.java` — stubs for PROJ-04, PROJ-05 (config write/read with null fields)
+- [ ] `src/test/java/ch/ti/gagi/xsleditor/model/ProjectContextTest.java` — stubs for PROJ-06 (createFile, path traversal guard)
 - [ ] `src/test/resources/` — temp directory fixtures (use `@TempDir` JUnit annotation; no static fixtures needed)
 
 *Existing infrastructure: JUnit Jupiter 5.10.0 declared in `build.gradle`; `test { useJUnitPlatform() }` configured; no source directory exists yet.*

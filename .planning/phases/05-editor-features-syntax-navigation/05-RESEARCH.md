@@ -142,7 +142,7 @@ Multi-file search dialog submitted
 ### Recommended Project Structure
 
 ```
-src/main/java/ch/ti/gagi/xlseditor/
+src/main/java/ch/ti/gagi/xsleditor/
 ├── ui/
 │   ├── EditorController.java      (Phase 4 — extend with phase 5 hooks)
 │   ├── EditorTab.java             (Phase 4 — unchanged)
@@ -150,7 +150,7 @@ src/main/java/ch/ti/gagi/xlseditor/
 │   ├── AutocompleteProvider.java  (NEW: keyword list + ContextMenu show/hide)
 │   ├── OccurrenceHighlighter.java (NEW: regex-based same-file occurrence scan)
 │   └── SearchDialog.java          (NEW: Dialog subclass for EDIT-08)
-src/main/resources/ch/ti/gagi/xlseditor/ui/
+src/main/resources/ch/ti/gagi/xsleditor/ui/
 │   └── main.css                   (extend with syntax highlight CSS classes)
 ```
 
@@ -575,11 +575,11 @@ Nodes.addInputMap(codeArea, consume(keyPressed(SPACE, CONTROL_DOWN), e -> {
 - **Phase gate:** Full suite green before `/gsd-verify-work`
 
 ### Wave 0 Gaps
-- [ ] `src/test/java/ch/ti/gagi/xlseditor/ui/XmlSyntaxHighlighterTest.java` — covers EDIT-04
-- [ ] `src/test/java/ch/ti/gagi/xlseditor/ui/AutocompleteProviderTest.java` — covers EDIT-05
-- [ ] `src/test/java/ch/ti/gagi/xlseditor/ui/OccurrenceHighlighterTest.java` — covers EDIT-06
-- [ ] `src/test/java/ch/ti/gagi/xlseditor/ui/HrefExtractorTest.java` — covers EDIT-07
-- [ ] `src/test/java/ch/ti/gagi/xlseditor/ui/SearchTaskTest.java` — covers EDIT-08
+- [ ] `src/test/java/ch/ti/gagi/xsleditor/ui/XmlSyntaxHighlighterTest.java` — covers EDIT-04
+- [ ] `src/test/java/ch/ti/gagi/xsleditor/ui/AutocompleteProviderTest.java` — covers EDIT-05
+- [ ] `src/test/java/ch/ti/gagi/xsleditor/ui/OccurrenceHighlighterTest.java` — covers EDIT-06
+- [ ] `src/test/java/ch/ti/gagi/xsleditor/ui/HrefExtractorTest.java` — covers EDIT-07
+- [ ] `src/test/java/ch/ti/gagi/xsleditor/ui/SearchTaskTest.java` — covers EDIT-08
 
 ---
 

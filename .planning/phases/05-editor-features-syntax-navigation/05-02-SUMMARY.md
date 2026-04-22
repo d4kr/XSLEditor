@@ -12,11 +12,11 @@ tech_stack:
   patterns: ["pure static utility class", "regex-based StyleSpans", "ContextMenu autocomplete"]
 key_files:
   created:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/XmlSyntaxHighlighter.java
-    - src/main/java/ch/ti/gagi/xlseditor/ui/AutocompleteProvider.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/XmlSyntaxHighlighter.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/AutocompleteProvider.java
   modified:
-    - src/test/java/ch/ti/gagi/xlseditor/ui/XmlSyntaxHighlighterTest.java
-    - src/test/java/ch/ti/gagi/xlseditor/ui/AutocompleteProviderTest.java
+    - src/test/java/ch/ti/gagi/xsleditor/ui/XmlSyntaxHighlighterTest.java
+    - src/test/java/ch/ti/gagi/xsleditor/ui/AutocompleteProviderTest.java
 decisions:
   - "XmlSyntaxHighlighter uses possessive/reluctant regex quantifiers ([\\s\\S]*?) to avoid catastrophic backtracking"
   - "AutocompleteProvider.getMatches() is pure Java — no JavaFX dependency, fully testable without toolkit"

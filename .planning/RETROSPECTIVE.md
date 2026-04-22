@@ -1,4 +1,4 @@
-# Retrospective: XLSEditor
+# Retrospective: XSLEditor
 
 ## Milestone: v1.0 — MVP
 

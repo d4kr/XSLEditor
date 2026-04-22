@@ -8,7 +8,7 @@ tags: [javafx, fxml, gradle, shadow, richtextfx, webview]
 requires: []
 provides:
   - JavaFX application shell with BorderPane three-zone layout
-  - XLSEditorApp entry point (fat JAR, shadowJar)
+  - XSLEditorApp entry point (fat JAR, shadowJar)
   - MainController with updateTitle(), setDirty(), close-request dialog
   - fx:id anchors: fileTreePane, editorPane, previewPane, previewWebView, logListView
   - Gradle build with JavaFX plugin, shadow plugin, RichTextFX, javafx.web
@@ -26,7 +26,7 @@ tech-stack:
     - com.gradleup.shadow 9.0.0-beta12 (fat JAR packaging)
     - org.fxmisc.richtext:richtextfx:0.11.5
   patterns:
-    - FXMLLoader pattern: XLSEditorApp.start() loads main.fxml, retrieves controller, calls setPrimaryStage()
+    - FXMLLoader pattern: XSLEditorApp.start() loads main.fxml, retrieves controller, calls setPrimaryStage()
     - Controller API pattern: MainController exposes public methods for downstream phases
     - PDF preview via WebView: file:// URI loaded into previewWebView, no external library needed
 
@@ -34,10 +34,10 @@ key-files:
   created:
     - build.gradle
     - settings.gradle
-    - src/main/java/ch/ti/gagi/xlseditor/XLSEditorApp.java
-    - src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java
-    - src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml
-    - src/main/resources/ch/ti/gagi/xlseditor/ui/main.css
+    - src/main/java/ch/ti/gagi/xsleditor/XSLEditorApp.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java
+    - src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml
+    - src/main/resources/ch/ti/gagi/xsleditor/ui/main.css
   modified: []
 
 key-decisions:
@@ -46,9 +46,9 @@ key-decisions:
   - "No module-info.java: traditional classpath approach per D-04 decision"
 
 patterns-established:
-  - "FXMLLoader: XLSEditorApp.start() loads /ch/ti/gagi/xlseditor/ui/main.fxml from classpath"
+  - "FXMLLoader: XSLEditorApp.start() loads /ch/ti/gagi/xsleditor/ui/main.fxml from classpath"
   - "Controller lifecycle: setPrimaryStage() called after FXMLLoader.getController() to register close handler"
-  - "Title format: 'XLSEditor' baseline, 'XLSEditor — {projectName}' when project is loaded (em-dash U+2014)"
+  - "Title format: 'XSLEditor' baseline, 'XSLEditor — {projectName}' when project is loaded (em-dash U+2014)"
   - "Dirty flag: setDirty(true) triggers confirmation dialog on window close"
 
 requirements-completed: [APP-01, APP-02, APP-03, APP-04]
@@ -71,7 +71,7 @@ completed: 2026-04-14
 - **Files modified:** 6
 
 ## Accomplishments
-- Runnable fat JAR built via `./gradlew shadowJar` — produces `build/libs/xlseditor-1.0.0.jar` (60MB including JavaFX natives)
+- Runnable fat JAR built via `./gradlew shadowJar` — produces `build/libs/xsleditor-1.0.0.jar` (60MB including JavaFX natives)
 - Three-zone layout with fx:id anchors ready for Phase 3 (file tree), Phase 4-5 (editor), Phase 7 (PDF), Phase 8 (log)
 - WebView PDF preview approach adopted — no additional dependency needed; Phase 7 wires actual PDF loading
 - Close-confirmation scaffold wired via `setDirty()` / `handleCloseRequest()`
@@ -86,10 +86,10 @@ completed: 2026-04-14
 
 - `build.gradle` - JavaFX plugin, shadow plugin (gradleup 9.0.0-beta12), RichTextFX, shadowJar config
 - `settings.gradle` - pluginManagement block, rootProject.name
-- `src/main/java/ch/ti/gagi/xlseditor/XLSEditorApp.java` - Application entry point, FXMLLoader, min window 900x600
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` - FXML controller: updateTitle(), setDirty(), handleCloseRequest()
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` - BorderPane with MenuBar, SplitPanes, TitledPane log
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css` - Dark placeholder styling, divider and log panel styles
+- `src/main/java/ch/ti/gagi/xsleditor/XSLEditorApp.java` - Application entry point, FXMLLoader, min window 900x600
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` - FXML controller: updateTitle(), setDirty(), handleCloseRequest()
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` - BorderPane with MenuBar, SplitPanes, TitledPane log
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` - Dark placeholder styling, divider and log panel styles
 
 ## Decisions Made
 
@@ -105,7 +105,7 @@ completed: 2026-04-14
 - **Issue:** `com.github.johnrengelman.shadow 8.1.1` throws `MissingPropertyException: No such property: mode` when running `shadowJar` under Gradle 9.5.0-rc-2
 - **Fix:** Replaced with `com.gradleup.shadow 9.0.0-beta12` — the maintained Gradle 9-compatible fork
 - **Files modified:** `build.gradle`
-- **Verification:** `./gradlew clean shadowJar` exits 0, produces `build/libs/xlseditor-1.0.0.jar` (60MB)
+- **Verification:** `./gradlew clean shadowJar` exits 0, produces `build/libs/xsleditor-1.0.0.jar` (60MB)
 - **Committed in:** `259ba04`
 
 ---
@@ -135,7 +135,7 @@ None — no external service configuration required.
 
 ## Next Phase Readiness
 
-- Fat JAR is runnable: `java -jar build/libs/xlseditor-1.0.0.jar` launches the shell window
+- Fat JAR is runnable: `java -jar build/libs/xsleditor-1.0.0.jar` launches the shell window
 - All pane fx:id anchors are in place for Phase 2 (project management) and beyond
 - RichTextFX dependency declared and resolvable — Phase 4-5 can use it immediately
 - WebView declared in FXML — Phase 7 can wire PDF loading without FXML changes

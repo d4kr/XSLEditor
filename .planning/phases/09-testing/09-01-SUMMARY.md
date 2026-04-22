@@ -12,8 +12,8 @@ tech_stack:
   patterns: [JUnit5-TempDir-inline-fixtures]
 key_files:
   created:
-    - src/test/java/ch/ti/gagi/xlseditor/library/LibraryPreprocessorTest.java
-    - src/test/java/ch/ti/gagi/xlseditor/dependency/DependencyResolverTest.java
+    - src/test/java/ch/ti/gagi/xsleditor/library/LibraryPreprocessorTest.java
+    - src/test/java/ch/ti/gagi/xsleditor/dependency/DependencyResolverTest.java
   modified: []
 decisions:
   - "Used inline @TempDir file writes for all filesystem fixtures per D-02 — no static fixture files on disk"
@@ -37,7 +37,7 @@ Unit tests for LibraryPreprocessor and DependencyResolver — directive detectio
 
 ### Task 1: LibraryPreprocessorTest (TEST-01)
 
-Five tests in `src/test/java/ch/ti/gagi/xlseditor/library/LibraryPreprocessorTest.java`:
+Five tests in `src/test/java/ch/ti/gagi/xsleditor/library/LibraryPreprocessorTest.java`:
 
 | Test | Scenario | API Called |
 |------|----------|------------|
@@ -51,7 +51,7 @@ All 5 tests use `@TempDir` with `Files.writeString` inline. No static fixtures. 
 
 ### Task 2: DependencyResolverTest (TEST-02)
 
-Five tests in `src/test/java/ch/ti/gagi/xlseditor/dependency/DependencyResolverTest.java`:
+Five tests in `src/test/java/ch/ti/gagi/xsleditor/dependency/DependencyResolverTest.java`:
 
 | Test | Scenario | API Called |
 |------|----------|------------|
@@ -91,7 +91,7 @@ None.
 
 ## Self-Check: PASSED
 
-- `src/test/java/ch/ti/gagi/xlseditor/library/LibraryPreprocessorTest.java` — FOUND
-- `src/test/java/ch/ti/gagi/xlseditor/dependency/DependencyResolverTest.java` — FOUND
+- `src/test/java/ch/ti/gagi/xsleditor/library/LibraryPreprocessorTest.java` — FOUND
+- `src/test/java/ch/ti/gagi/xsleditor/dependency/DependencyResolverTest.java` — FOUND
 - Commit c403264 — FOUND
 - Commit 3a01da4 — FOUND

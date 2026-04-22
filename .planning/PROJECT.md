@@ -3,7 +3,7 @@
 ## Current State: v0.2.1 Planning 2026-04-22
 
 **v0.2.1 — XSLEditor Full Rename** — 1 phase, 3 plans (est).
-Full rebrand from XLSEditor to XSLEditor including packages, classes, and config files.
+Full rebrand from XSLEditor to XSLEditor including packages, classes, and config files.
 Next milestone: **v0.3.0** (scope TBD).
 
 ## What This Is
@@ -34,7 +34,7 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 
 ### Active (v0.2.1 / v0.3.0 candidates)
 
-- [ ] **RENAME-01..10**: Full project rename (XLSEditor -> XSLEditor) — v0.2.1
+- [ ] **RENAME-01..10**: Full project rename (XSLEditor -> XSLEditor) — v0.2.1
 - [ ] **EDIT-06 edge cases**: Occurrence highlighting across element boundaries — deferred, low priority
 - [ ] **EDIT-07 human verify**: Confirm Ctrl+Click go-to-definition with xsl:include files — pending manual test
 - [ ] **Test coverage Phase 11**: About dialog has no automated tests — manual-only gap

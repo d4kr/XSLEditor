@@ -54,7 +54,7 @@ Requirements in scope: REND-01, REND-02, REND-03, REND-04, REND-05, REND-06
 - Exact ToolBar + VBox FXML structure (how toolbar integrates with existing BorderPane top zone)
 - Whether `renderableProperty()` is a computed property on `ProjectContext` or derived inline in `RenderController`
 - Whether `RenderController` receives `EditorController` by constructor or setter
-- `PreviewManager` instantiation location (RenderController constructor, or `XLSEditorApp.start()` wiring)
+- `PreviewManager` instantiation location (RenderController constructor, or `XSLEditorApp.start()` wiring)
 - Error string formatting details beyond `"[ERROR] {type}: {message}"` prefix
 
 </decisions>
@@ -69,17 +69,17 @@ Requirements in scope: REND-01, REND-02, REND-03, REND-04, REND-05, REND-06
 - `docs/PRD.md` — Product requirements (performance target < 5s, no auto-render, manual trigger)
 
 ### Existing backend (MUST read — fully implemented, do not re-implement)
-- `src/main/java/ch/ti/gagi/xlseditor/preview/PreviewManager.java` — Entry point: `generatePreview(Project, Path)` → `Preview`
-- `src/main/java/ch/ti/gagi/xlseditor/preview/Preview.java` — DTO: `success()`, `outdated()`, `pdf()`, `errors()`
-- `src/main/java/ch/ti/gagi/xlseditor/preview/PreviewError.java` — Error DTO: `message()`, `type()`, `file()`, `line()`
-- `src/main/java/ch/ti/gagi/xlseditor/render/RenderOrchestrator.java` — Passed to `PreviewManager` constructor; `renderSafe()` never throws
-- `src/main/java/ch/ti/gagi/xlseditor/log/LogManager.java` — In-memory log (Phase 8 will bind to it; Phase 6 uses `logListView` as stopgap)
+- `src/main/java/ch/ti/gagi/xsleditor/preview/PreviewManager.java` — Entry point: `generatePreview(Project, Path)` → `Preview`
+- `src/main/java/ch/ti/gagi/xsleditor/preview/Preview.java` — DTO: `success()`, `outdated()`, `pdf()`, `errors()`
+- `src/main/java/ch/ti/gagi/xsleditor/preview/PreviewError.java` — Error DTO: `message()`, `type()`, `file()`, `line()`
+- `src/main/java/ch/ti/gagi/xsleditor/render/RenderOrchestrator.java` — Passed to `PreviewManager` constructor; `renderSafe()` never throws
+- `src/main/java/ch/ti/gagi/xsleditor/log/LogManager.java` — In-memory log (Phase 8 will bind to it; Phase 6 uses `logListView` as stopgap)
 
 ### Existing UI (integration points)
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — `statusLabel`, `logListView`, `previewPane`, `menuBar`; all wiring seams for Phase 6
-- `src/main/java/ch/ti/gagi/xlseditor/ui/ProjectContext.java` — `getCurrentProject()`, `projectLoadedProperty()`, `projectFilesProperty()`
-- `src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java` — Needs `saveAll()` method (or equivalent); `RenderController` calls this before spawning Task
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` — Current FXML (BorderPane, MenuBar, SplitPane layout); ToolBar and Run menu must be added here
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — `statusLabel`, `logListView`, `previewPane`, `menuBar`; all wiring seams for Phase 6
+- `src/main/java/ch/ti/gagi/xsleditor/ui/ProjectContext.java` — `getCurrentProject()`, `projectLoadedProperty()`, `projectFilesProperty()`
+- `src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java` — Needs `saveAll()` method (or equivalent); `RenderController` calls this before spawning Task
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` — Current FXML (BorderPane, MenuBar, SplitPane layout); ToolBar and Run menu must be added here
 
 ### Prior phase context
 - `.planning/phases/01-javafx-application-shell/01-CONTEXT.md` — D-05: FXML + controller pattern; D-06: three-zone BorderPane layout (ToolBar goes into top VBox)

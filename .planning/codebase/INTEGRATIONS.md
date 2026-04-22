@@ -6,7 +6,7 @@
 
 **None.**
 
-XLSEditor is designed as a local desktop tool with no external API dependencies or network calls.
+XSLEditor is designed as a local desktop tool with no external API dependencies or network calls.
 
 ## Data Storage
 
@@ -17,11 +17,11 @@ XLSEditor is designed as a local desktop tool with no external API dependencies 
 - Local filesystem - All project files, XML inputs, XSLT templates, and generated PDFs are stored locally
   - Projects loaded from user-selected directories
   - Configuration stored in JSON files in project root
-  - Input XML files managed via ProjectFileManager (`src/main/java/ch/ti/gagi/xlseditor/model/ProjectFileManager.java`)
+  - Input XML files managed via ProjectFileManager (`src/main/java/ch/ti/gagi/xsleditor/model/ProjectFileManager.java`)
   - Generated PDFs output to local filesystem via RenderEngine
 
 **Caching:**
-- In-memory log management via LogManager (`src/main/java/ch/ti/gagi/xlseditor/log/LogManager.java`)
+- In-memory log management via LogManager (`src/main/java/ch/ti/gagi/xsleditor/log/LogManager.java`)
 - XSLT compilation cache within RenderEngine process lifetime
 - No persistent caching layer
 
@@ -33,13 +33,13 @@ XLSEditor is designed as a local desktop tool with no external API dependencies 
 ## Monitoring & Observability
 
 **Error Tracking:**
-- None - Errors handled locally via ErrorManager (`src/main/java/ch/ti/gagi/xlseditor/error/ErrorManager.java`)
+- None - Errors handled locally via ErrorManager (`src/main/java/ch/ti/gagi/xsleditor/error/ErrorManager.java`)
   - Exception parsing and file position extraction
   - PreviewError DTO for user-facing error messages
 
 **Logs:**
 - In-memory logging via LogManager with three levels: INFO, WARN, ERROR
-  - Stored as LogEntry objects (`src/main/java/ch/ti/gagi/xlseditor/log/LogEntry.java`)
+  - Stored as LogEntry objects (`src/main/java/ch/ti/gagi/xsleditor/log/LogEntry.java`)
   - Accessible via getByLevel() filtering method
   - No persistent log files or external log aggregation
 
@@ -70,18 +70,18 @@ XLSEditor is designed as a local desktop tool with no external API dependencies 
 ## XML Processing
 
 **Standards & Specifications:**
-- XML 1.0 via DocumentBuilderFactory (`src/main/java/ch/ti/gagi/xlseditor/validation/ValidationEngine.java`)
+- XML 1.0 via DocumentBuilderFactory (`src/main/java/ch/ti/gagi/xsleditor/validation/ValidationEngine.java`)
   - Namespace-aware parsing enabled
   - SAX parse exception handling with line/column tracking
-- XSLT 2.0 via Saxon-HE (`src/main/java/ch/ti/gagi/xlseditor/render/RenderEngine.java`)
-  - Custom preprocessing support for library directives (`src/main/java/ch/ti/gagi/xlseditor/library/LibraryPreprocessor.java`)
-- XSL-FO to PDF via Apache FOP (`src/main/java/ch/ti/gagi/xlseditor/render/RenderEngine.java`)
+- XSLT 2.0 via Saxon-HE (`src/main/java/ch/ti/gagi/xsleditor/render/RenderEngine.java`)
+  - Custom preprocessing support for library directives (`src/main/java/ch/ti/gagi/xsleditor/library/LibraryPreprocessor.java`)
+- XSL-FO to PDF via Apache FOP (`src/main/java/ch/ti/gagi/xsleditor/render/RenderEngine.java`)
 
 ## Project Configuration Format
 
 **Config File:**
 - JSON format parsed via Jackson ObjectMapper
-- Location: `xlseditor-config.json` in project root (assumed)
+- Location: `xsleditor-config.json` in project root (assumed)
 - Schema:
   ```json
   {

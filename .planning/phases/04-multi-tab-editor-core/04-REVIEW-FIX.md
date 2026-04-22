@@ -24,7 +24,7 @@ status: all_fixed
 
 ### WR-01: EditorTab listener leaks on close — CodeArea retained indefinitely
 
-**Files modified:** `src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java`
+**Files modified:** `src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java`
 **Commit:** 0a5a9ec
 **Applied fix:**
 - Added `import javafx.beans.value.ChangeListener;`
@@ -37,7 +37,7 @@ This eliminates the strong reference chain `BooleanBinding → ChangeListener �
 
 ### WR-02: `updateTitle` silently no-ops when `primaryStage` is null
 
-**Files modified:** `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java`
+**Files modified:** `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java`
 **Commit:** 7b3e746
 **Applied fix:**
 - Expanded the single-line `if (primaryStage == null) return;` into a block form with an inline comment explaining the contract: `setPrimaryStage()` is always called before any user-triggered path reaches `updateTitle()`, so hitting this guard signals a call-ordering regression

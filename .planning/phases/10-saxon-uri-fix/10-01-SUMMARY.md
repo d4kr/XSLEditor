@@ -26,10 +26,10 @@ Completed the Saxon URI-decode fix in `PreviewManager` and added unit tests.
 ## Key Files
 
 ### Modified
-- `src/main/java/ch/ti/gagi/xlseditor/preview/PreviewManager.java`
+- `src/main/java/ch/ti/gagi/xsleditor/preview/PreviewManager.java`
 
 ### Created
-- `src/test/java/ch/ti/gagi/xlseditor/preview/PreviewManagerTest.java`
+- `src/test/java/ch/ti/gagi/xsleditor/preview/PreviewManagerTest.java`
 
 ## Verification
 

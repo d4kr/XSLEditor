@@ -31,9 +31,9 @@ tech-stack:
 
 key-files:
   created:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/FileTreeController.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/FileTreeController.java
   modified:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java
 
 key-decisions:
   - "FileTreeController mounts the tree programmatically into fileTreePane (no main.fxml change) — tree is added as a VBox child at runtime on projectLoaded transition"
@@ -101,8 +101,8 @@ completed: 2026-04-17
 
 ## Files Created/Modified
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/FileTreeController.java` — new; ~230 lines; plain Java sub-controller, six-parameter initialize, full reactive tree lifecycle
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — modified; +11/-4 lines; one new field, one delegate call, two stubs removed
+- `src/main/java/ch/ti/gagi/xsleditor/ui/FileTreeController.java` — new; ~230 lines; plain Java sub-controller, six-parameter initialize, full reactive tree lifecycle
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — modified; +11/-4 lines; one new field, one delegate call, two stubs removed
 
 ## Notable Design Details
 
@@ -124,7 +124,7 @@ completed: 2026-04-17
 
 3. **Selection preservation via path-match:** After `setRoot()` clears selection, we restore it by finding the TreeItem whose `FileItem.path()` equals the previously selected path. This keeps the compound disable binding in the "enabled" state after any rebuild triggered by Set Entrypoint/Set XML Input.
 
-4. **`() -> primaryStage` deferred supplier:** `MainController.initialize()` is called by the JavaFX FXML loader before `XLSEditorApp.start()` calls `setPrimaryStage(stage)`. Using a supplier defers the Stage lookup to the first time an Alert needs to be shown, by which time primaryStage is guaranteed to be set.
+4. **`() -> primaryStage` deferred supplier:** `MainController.initialize()` is called by the JavaFX FXML loader before `XSLEditorApp.start()` calls `setPrimaryStage(stage)`. Using a supplier defers the Stage lookup to the first time an Alert needs to be shown, by which time primaryStage is guaranteed to be set.
 
 ## Deviations from Plan
 
@@ -134,7 +134,7 @@ completed: 2026-04-17
 - **Found during:** Task 3 (human UAT — user reported "Set Entrypoint deselect non funziona")
 - **Root cause:** The original binding used `fileTree.getSelectionModel().selectedItemProperty().isNull()`. JavaFX's `MultipleSelectionModel` does not reliably fire property change notifications when the selection is cleared by clicking empty space or pressing Escape — the `selectedItem` property transitions to null without triggering the binding's invalidation in all scenarios.
 - **Fix:** Added `private final BooleanProperty treeHasSelection = new SimpleBooleanProperty(false)` as a field. In `buildTreeView()`, attached a `ChangeListener` on `selectedItemProperty()` that calls `treeHasSelection.set(newItem != null)`. Updated `wireMenuActions()` to bind both menu items to `treeHasSelection.not()` instead of `selectedItemProperty().isNull()`. The `ChangeListener` approach fires unconditionally on every selection change including null, making deselection detection reliable.
-- **Files modified:** `src/main/java/ch/ti/gagi/xlseditor/ui/FileTreeController.java`
+- **Files modified:** `src/main/java/ch/ti/gagi/xsleditor/ui/FileTreeController.java`
 - **Commit:** `ef24687`
 
 ## Known Stubs
@@ -151,8 +151,8 @@ No new threat surface beyond what is documented in the plan's threat model (T-03
 
 ## Self-Check
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/FileTreeController.java` — FOUND
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — modified, FOUND
+- `src/main/java/ch/ti/gagi/xsleditor/ui/FileTreeController.java` — FOUND
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — modified, FOUND
 - Commit `2528d0e` (Task 1) — FOUND in git log
 - Commit `ea26d4d` (Task 2) — FOUND in git log
 - Commit `ef24687` (Task 3 deselect fix) — FOUND in git log

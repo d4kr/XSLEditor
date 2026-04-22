@@ -21,7 +21,7 @@ tech-stack:
 
 key-files:
   created:
-    - src/test/java/ch/ti/gagi/xlseditor/ui/PreviewControllerTest.java
+    - src/test/java/ch/ti/gagi/xsleditor/ui/PreviewControllerTest.java
   modified: []
 
 key-decisions:
@@ -64,7 +64,7 @@ Each task was committed atomically:
 **Plan metadata:** (to be added after final commit)
 
 ## Files Created/Modified
-- `src/test/java/ch/ti/gagi/xlseditor/ui/PreviewControllerTest.java` - Wave 0 test stubs for PreviewController, four @Disabled tests covering state-transition behaviors
+- `src/test/java/ch/ti/gagi/xsleditor/ui/PreviewControllerTest.java` - Wave 0 test stubs for PreviewController, four @Disabled tests covering state-transition behaviors
 
 ## Decisions Made
 None - followed plan as specified.

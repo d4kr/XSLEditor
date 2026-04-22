@@ -56,13 +56,13 @@ overrides_applied: 0
 
 | Artifact | Expected | Status | Details |
 |----------|----------|--------|---------|
-| `src/main/java/ch/ti/gagi/xlseditor/ui/ProjectContext.java` | Extended with projectFilesProperty(), setEntrypoint(), setXmlInput() | VERIFIED | All 3 methods present; refreshProjectFiles, writeConfigAndRebuildProject, validateProjectRelativePath helpers confirmed |
-| `src/test/java/ch/ti/gagi/xlseditor/model/ProjectContextTest.java` | 26 @Test methods (7 Plan 02 + 19 new) | VERIFIED | grep -c "@Test" == 26; test run shows 26 tests, 0 failures |
-| `src/main/java/ch/ti/gagi/xlseditor/ui/FileItem.java` | Immutable record FileItem(Path, FileRole) with nested FileRole enum | VERIFIED | `public record FileItem(Path path, FileRole role)` with compact non-null constructor; 3-value enum confirmed |
-| `src/main/java/ch/ti/gagi/xlseditor/ui/FileItemTreeCell.java` | Custom TreeCell<FileItem> with glyph, CSS class, tooltip | VERIFIED | `extends TreeCell<FileItem>`; switch on role(); unconditional removeAll; 2 Tooltip instantiations, 2 setTooltip(null) |
-| `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css` | 7 Phase 3 CSS rules appended; Phase 1/2 rules preserved | VERIFIED | All 7 rules present lines 45-89; .placeholder-label, .status-label-success, .menu-item:disabled .label preserved |
-| `src/main/java/ch/ti/gagi/xlseditor/ui/FileTreeController.java` | Sub-controller with full TreeView lifecycle, menu bindings, action handlers | VERIFIED | ~330 lines; all required methods present; no @FXML annotations; no MainController reference |
-| `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` | FileTreeController instantiated, initialize() called, Phase 2 stubs removed | VERIFIED | `new FileTreeController()` field; `fileTreeController.initialize(...)` call; setDisable(true) count == 0 |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/ProjectContext.java` | Extended with projectFilesProperty(), setEntrypoint(), setXmlInput() | VERIFIED | All 3 methods present; refreshProjectFiles, writeConfigAndRebuildProject, validateProjectRelativePath helpers confirmed |
+| `src/test/java/ch/ti/gagi/xsleditor/model/ProjectContextTest.java` | 26 @Test methods (7 Plan 02 + 19 new) | VERIFIED | grep -c "@Test" == 26; test run shows 26 tests, 0 failures |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/FileItem.java` | Immutable record FileItem(Path, FileRole) with nested FileRole enum | VERIFIED | `public record FileItem(Path path, FileRole role)` with compact non-null constructor; 3-value enum confirmed |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/FileItemTreeCell.java` | Custom TreeCell<FileItem> with glyph, CSS class, tooltip | VERIFIED | `extends TreeCell<FileItem>`; switch on role(); unconditional removeAll; 2 Tooltip instantiations, 2 setTooltip(null) |
+| `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` | 7 Phase 3 CSS rules appended; Phase 1/2 rules preserved | VERIFIED | All 7 rules present lines 45-89; .placeholder-label, .status-label-success, .menu-item:disabled .label preserved |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/FileTreeController.java` | Sub-controller with full TreeView lifecycle, menu bindings, action handlers | VERIFIED | ~330 lines; all required methods present; no @FXML annotations; no MainController reference |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` | FileTreeController instantiated, initialize() called, Phase 2 stubs removed | VERIFIED | `new FileTreeController()` field; `fileTreeController.initialize(...)` call; setDisable(true) count == 0 |
 
 ---
 

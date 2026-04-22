@@ -19,7 +19,7 @@ Out of scope: Log panel UI (Phase 8), render trigger (Phase 6 done).
 
 ### PDF rendering mechanism
 
-- **D-01:** Use WebView + temp file approach. Write `byte[]` to a fixed temp file created once per session via `Files.createTempFile("xlseditor-preview", ".pdf")`. Load it with `webView.getEngine().load(tempFile.toUri().toString())`. Overwrite the same temp file on each successful render — no new file per render, no explicit cleanup needed (OS cleans at reboot).
+- **D-01:** Use WebView + temp file approach. Write `byte[]` to a fixed temp file created once per session via `Files.createTempFile("xsleditor-preview", ".pdf")`. Load it with `webView.getEngine().load(tempFile.toUri().toString())`. Overwrite the same temp file on each successful render — no new file per render, no explicit cleanup needed (OS cleans at reboot).
 - **D-02:** PDFViewerFX is NOT available on Maven Central — do not attempt to add it as a dependency. WebView (already in `javafx.web` module, already in FXML as `fx:id="previewWebView"`) is the confirmed implementation technology.
 - **D-03:** Scroll and zoom rely on the platform's built-in WebView PDF plugin (Chrome/Edge on Windows, WebKit on macOS). This is acceptable for an internal developer tool.
 
@@ -64,14 +64,14 @@ Out of scope: Log panel UI (Phase 8), render trigger (Phase 6 done).
 - `docs/PRD.md` — Product requirements (split view, no auto-render, < 5s target)
 
 ### Existing UI seams (Phase 6 left these as no-ops — Phase 7 fills them)
-- `src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java` — `pdfCallback` (line ~61) and `outdatedCallback` (line ~63) fields; constructor args in `initialize()` at lines ~84–85; wired as `bytes -> { }` and `b -> { }` in `MainController`
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — `previewController` field to add; `initialize()` where seam lambdas are replaced; `previewPane`, `previewWebView`, `previewPlaceholderLabel` fx:id injections
+- `src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java` — `pdfCallback` (line ~61) and `outdatedCallback` (line ~63) fields; constructor args in `initialize()` at lines ~84–85; wired as `bytes -> { }` and `b -> { }` in `MainController`
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — `previewController` field to add; `initialize()` where seam lambdas are replaced; `previewPane`, `previewWebView`, `previewPlaceholderLabel` fx:id injections
 
 ### Existing FXML (must read before editing)
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` — `previewPane` StackPane with `previewWebView` + `previewPlaceholderLabel`; outdated banner label must be added here
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` — `previewPane` StackPane with `previewWebView` + `previewPlaceholderLabel`; outdated banner label must be added here
 
 ### Existing CSS
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css` — add `.preview-outdated-banner` style here
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` — add `.preview-outdated-banner` style here
 
 ### Prior phase context
 - `.planning/phases/06-render-pipeline-integration/06-CONTEXT.md` — D-15: `pdfCallback` seam; REND-05: `outdatedCallback` seam; D-04: RenderController sub-controller pattern to follow
@@ -103,7 +103,7 @@ Out of scope: Log panel UI (Phase 8), render trigger (Phase 6 done).
 <specifics>
 ## Specific Ideas
 
-- Temp file created once in `PreviewController.initialize()` via `Files.createTempFile("xlseditor-preview", ".pdf")`; overwritten on each `displayPdf()` call
+- Temp file created once in `PreviewController.initialize()` via `Files.createTempFile("xsleditor-preview", ".pdf")`; overwritten on each `displayPdf()` call
 - Outdated banner CSS: `background-color: #f97316; -fx-text-fill: white; -fx-padding: 6 12;` — matches orange used in prior phases' discussion (same color as chat-more indicator in power mode)
 - No need for animation or dismissal on the banner — it clears automatically on next successful render
 

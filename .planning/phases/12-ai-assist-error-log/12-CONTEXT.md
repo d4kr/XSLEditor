@@ -24,7 +24,7 @@ Add a per-row AI assist action to the existing error log TableView. Clicking the
   {message}
   ```
   The preamble is hardcoded Italian for now. Multi-language prompt preferences are deferred to a future phase.
-- **D-03:** Full prompt is URL-encoded and appended to `https://chatgpt.com/?q=`. Opened via `XLSEditorApp.hostServices().showDocument(url)` — same pattern as the About dialog license link.
+- **D-03:** Full prompt is URL-encoded and appended to `https://chatgpt.com/?q=`. Opened via `XSLEditorApp.hostServices().showDocument(url)` — same pattern as the About dialog license link.
 
 ### Button style
 - **D-04:** Small icon button (no text label). Use a chat/AI icon — `💬` as Unicode label or a Glyph if available, otherwise a simple text icon character. Column width ~40px.
@@ -50,11 +50,11 @@ Add a per-row AI assist action to the existing error log TableView. Clicking the
 - `.planning/REQUIREMENTS.md` §ERR-06 — AI assist button requirement
 
 ### Source files (read before planning)
-- `src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java` — owns column factories; add 5th column cell factory here
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` — TableView declaration (lines ~98–111); add `<TableColumn fx:id="colAi">` here
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — wires LogController; must pass `colAi` in the `initialize()` call
-- `src/main/java/ch/ti/gagi/xlseditor/log/LogEntry.java` — data model; `message()` is the field used for the prompt
-- `src/main/java/ch/ti/gagi/xlseditor/XLSEditorApp.java` — `hostServices()` static accessor for `showDocument(url)`
+- `src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java` — owns column factories; add 5th column cell factory here
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` — TableView declaration (lines ~98–111); add `<TableColumn fx:id="colAi">` here
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — wires LogController; must pass `colAi` in the `initialize()` call
+- `src/main/java/ch/ti/gagi/xsleditor/log/LogEntry.java` — data model; `message()` is the field used for the prompt
+- `src/main/java/ch/ti/gagi/xsleditor/XSLEditorApp.java` — `hostServices()` static accessor for `showDocument(url)`
 
 ### Prior phase context
 - `.planning/phases/11-about-dialog/11-CONTEXT.md` — established `HostServices` pattern (D-05 / license link)
@@ -65,7 +65,7 @@ Add a per-row AI assist action to the existing error log TableView. Clicking the
 ## Existing Code Insights
 
 ### Reusable Assets
-- `XLSEditorApp.hostServices().showDocument(url)` — already wired in Phase 11; open browser with this
+- `XSLEditorApp.hostServices().showDocument(url)` — already wired in Phase 11; open browser with this
 - `LogController.initialize()` — receives each `TableColumn` as a parameter; add `TableColumn<LogEntry, Void> colAi` as the last parameter and wire the cell factory inside
 - `LogEntry.message()` — the string to embed in the ChatGPT URL
 

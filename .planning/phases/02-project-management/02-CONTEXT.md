@@ -56,11 +56,11 @@ Requirements in scope: PROJ-01, PROJ-02, PROJ-03, PROJ-04, PROJ-05, PROJ-06
 - `docs/PRD.md` — Product requirements and non-goals
 
 ### Existing model classes (MUST read before modifying)
-- `src/main/java/ch/ti/gagi/xlseditor/model/ProjectConfig.java` — Current record structure (needs relaxation for D-03)
-- `src/main/java/ch/ti/gagi/xlseditor/model/Project.java` — Domain object
-- `src/main/java/ch/ti/gagi/xlseditor/model/ProjectManager.java` — Current load logic
-- `src/main/java/ch/ti/gagi/xlseditor/model/ProjectFileManager.java` — File save/load utilities
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — Integration point (updateTitle, FXML slots)
+- `src/main/java/ch/ti/gagi/xsleditor/model/ProjectConfig.java` — Current record structure (needs relaxation for D-03)
+- `src/main/java/ch/ti/gagi/xsleditor/model/Project.java` — Domain object
+- `src/main/java/ch/ti/gagi/xsleditor/model/ProjectManager.java` — Current load logic
+- `src/main/java/ch/ti/gagi/xsleditor/model/ProjectFileManager.java` — File save/load utilities
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — Integration point (updateTitle, FXML slots)
 
 ### Phase 1 output (build on this)
 - `.planning/phases/01-javafx-application-shell/01-CONTEXT.md` — Layout decisions and integration points defined in Phase 1

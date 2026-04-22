@@ -8,14 +8,14 @@
 
 ### Brand Update (UI/Docs)
 
-- [x] **RENAME-01**: Update all user-facing UI strings from "XLSEditor" to "XSLEditor".
+- [x] **RENAME-01**: Update all user-facing UI strings from "XSLEditor" to "XSLEditor".
 - [ ] **RENAME-02**: Update README.md and CLAUDE.md to use the new "XSLEditor" name.
 - [x] **RENAME-03**: Update About dialog title and content.
 
 ### Codebase Refactor
 
-- [x] **RENAME-04**: Rename main application class from `XLSEditorApp` to `XSLEditorApp`.
-- [x] **RENAME-05**: Update base package from `ch.ti.gagi.xlseditor` to `ch.ti.gagi.xsleditor`.
+- [x] **RENAME-04**: Rename main application class from `XSLEditorApp` to `XSLEditorApp`.
+- [x] **RENAME-05**: Update base package from `ch.ti.gagi.xsleditor` to `ch.ti.gagi.xsleditor`.
 - [x] **RENAME-06**: Update all source file directory structures to match the new package name.
 - [x] **RENAME-07**: Update all imports and FXML references to the new package.
 

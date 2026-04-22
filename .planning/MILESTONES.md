@@ -1,4 +1,4 @@
-# Milestones: XLSEditor
+# Milestones: XSLEditor
 
 ## v1.0 MVP — Shipped 2026-04-21
 

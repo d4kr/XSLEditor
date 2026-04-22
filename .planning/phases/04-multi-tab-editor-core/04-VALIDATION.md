@@ -19,7 +19,7 @@ created: 2026-04-18
 |----------|-------|
 | **Framework** | JUnit 5 + TestFX (JavaFX UI testing) |
 | **Config file** | `build.gradle` — `test { useJUnitPlatform() }` |
-| **Quick run command** | `./gradlew test --tests "com.xlseditor.editor.*"` |
+| **Quick run command** | `./gradlew test --tests "com.xsleditor.editor.*"` |
 | **Full suite command** | `./gradlew test` |
 | **Estimated runtime** | ~15 seconds |
 
@@ -27,7 +27,7 @@ created: 2026-04-18
 
 ## Sampling Rate
 
-- **After every task commit:** Run `./gradlew test --tests "com.xlseditor.editor.*"`
+- **After every task commit:** Run `./gradlew test --tests "com.xsleditor.editor.*"`
 - **After every plan wave:** Run `./gradlew test`
 - **Before `/gsd-verify-work`:** Full suite must be green
 - **Max feedback latency:** 15 seconds
@@ -50,7 +50,7 @@ created: 2026-04-18
 
 ## Wave 0 Requirements
 
-- [ ] `src/test/java/com/xlseditor/editor/EditorControllerTest.java` — stubs for EDIT-01, EDIT-02, EDIT-03, EDIT-09
+- [ ] `src/test/java/com/xsleditor/editor/EditorControllerTest.java` — stubs for EDIT-01, EDIT-02, EDIT-03, EDIT-09
 - [ ] Verify `testImplementation("org.testfx:testfx-junit5:4.0.18")` in `build.gradle`
 
 *If none: "Existing infrastructure covers all phase requirements."*

@@ -15,7 +15,7 @@ key_files:
     - src/test/resources/fixtures/identity.xsl
     - src/test/resources/fixtures/input.xml
     - src/test/resources/fixtures/invalid.xsl
-    - src/test/java/ch/ti/gagi/xlseditor/render/RenderEngineTest.java
+    - src/test/java/ch/ti/gagi/xsleditor/render/RenderEngineTest.java
   modified: []
 decisions:
   - "Filesystem path (Paths.get) used for fixture loading — working dir is repo root in Gradle test runs"
@@ -83,6 +83,6 @@ None — all test assertions exercise real behavior. No placeholder data or hard
 - `src/test/resources/fixtures/identity.xsl`: FOUND
 - `src/test/resources/fixtures/input.xml`: FOUND
 - `src/test/resources/fixtures/invalid.xsl`: FOUND
-- `src/test/java/ch/ti/gagi/xlseditor/render/RenderEngineTest.java`: FOUND
+- `src/test/java/ch/ti/gagi/xsleditor/render/RenderEngineTest.java`: FOUND
 - Commit `00324f2`: FOUND
 - Commit `1476096`: FOUND

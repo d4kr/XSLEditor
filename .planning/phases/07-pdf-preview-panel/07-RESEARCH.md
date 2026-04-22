@@ -12,7 +12,7 @@
 ### Locked Decisions
 
 - **D-01:** Use WebView + temp file approach. Write `byte[]` to a fixed temp file created once per
-  session via `Files.createTempFile("xlseditor-preview", ".pdf")`. Load it with
+  session via `Files.createTempFile("xsleditor-preview", ".pdf")`. Load it with
   `webView.getEngine().load(tempFile.toUri().toString())`. Overwrite the same temp file on each
   successful render — no new file per render, no explicit cleanup needed (OS cleans at reboot).
 - **D-02:** PDFViewerFX is NOT available on Maven Central. WebView (already in `javafx.web` module,
@@ -169,10 +169,10 @@ RenderController.handleRender() [FX thread, task.setOnSucceeded]
 No new directories. Single new file:
 
 ```
-src/main/java/ch/ti/gagi/xlseditor/ui/
+src/main/java/ch/ti/gagi/xsleditor/ui/
 ├── PreviewController.java     # NEW — Phase 7
 ├── MainController.java        # EDIT — replace 2 no-op lambdas, add previewController field
-src/main/resources/ch/ti/gagi/xlseditor/ui/
+src/main/resources/ch/ti/gagi/xsleditor/ui/
 ├── main.fxml                  # EDIT — add outdatedBannerLabel as first child of previewPane
 ├── main.css                   # EDIT — add .preview-outdated-banner rule
 ```
@@ -204,7 +204,7 @@ public final class PreviewController {
         this.previewPlaceholderLabel = Objects.requireNonNull(previewPlaceholderLabel);
         this.outdatedBannerLabel     = Objects.requireNonNull(outdatedBannerLabel);
         try {
-            this.tempFile = Files.createTempFile("xlseditor-preview", ".pdf");
+            this.tempFile = Files.createTempFile("xsleditor-preview", ".pdf");
         } catch (IOException e) {
             // Temp file creation failure: log to stderr; displayPdf will be a no-op
             System.err.println("[PreviewController] Failed to create temp file: " + e.getMessage());
@@ -268,7 +268,7 @@ overlays in a StackPane.
 ```java
 // Source: openjfx.io/javadoc/21 WebEngine API (VERIFIED via Context7)
 webView.getEngine().load(tempFile.toUri().toString());
-// toUri().toString() produces: "file:///path/to/xlseditor-preview12345.pdf"
+// toUri().toString() produces: "file:///path/to/xsleditor-preview12345.pdf"
 // WebEngine.load() is asynchronous — returns immediately, loads in background.
 // All UI updates around this call are safe on the FX thread without Platform.runLater().
 ```
@@ -534,7 +534,7 @@ already on the classpath and standard JDK Files API).
 |----------|-------|
 | Framework | JUnit Jupiter 5.10.0 |
 | Config file | build.gradle (`test { useJUnitPlatform() }`) |
-| Quick run command | `./gradlew test --tests "ch.ti.gagi.xlseditor.ui.PreviewControllerTest"` |
+| Quick run command | `./gradlew test --tests "ch.ti.gagi.xsleditor.ui.PreviewControllerTest"` |
 | Full suite command | `./gradlew test` |
 
 [VERIFIED: build.gradle line 57]
@@ -571,7 +571,7 @@ infrastructure (no TestFX or headless toolkit configured). Consistent with Phase
 
 ### Wave 0 Gaps
 
-- [ ] `src/test/java/ch/ti/gagi/xlseditor/ui/PreviewControllerTest.java` — covers PREV-03, PREV-04
+- [ ] `src/test/java/ch/ti/gagi/xsleditor/ui/PreviewControllerTest.java` — covers PREV-03, PREV-04
 
 *(Existing test infrastructure — JUnit 5, `Platform.startup()` pattern — covers all Phase 7
   test needs. No framework install or additional fixtures needed.)*
@@ -612,10 +612,10 @@ not raw user input. No sanitization required beyond what the pipeline already pr
 ### Primary (HIGH confidence)
 
 - `/websites/openjfx_io_javadoc_21` (Context7) — WebView, WebEngine, Node visibility, Platform.runLater
-- `src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java` — callback seam signatures verified
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — no-op lambda locations verified
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` — previewPane StackPane structure verified
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css` — existing CSS conventions verified
+- `src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java` — callback seam signatures verified
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — no-op lambda locations verified
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` — previewPane StackPane structure verified
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` — existing CSS conventions verified
 - `.planning/phases/07-pdf-preview-panel/07-CONTEXT.md` — all locked decisions
 - `.planning/phases/07-pdf-preview-panel/07-UI-SPEC.md` — CSS contract, component inventory
 

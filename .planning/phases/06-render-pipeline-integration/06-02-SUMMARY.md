@@ -34,9 +34,9 @@ tech-stack:
 key-files:
   created: []
   modified:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java
-    - src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java
-    - src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml
+    - src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java
+    - src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml
 
 key-decisions:
   - "unbind disableProperty before Task spawn; rebind in setOnSucceeded and setOnFailed to restore project-loaded guard"
@@ -85,9 +85,9 @@ Each task was committed atomically:
 
 ## Files Created/Modified
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java` - Full handleRender() with Task<Preview> lifecycle, button state management, result routing
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` - Added renderButton/@FXML, menuItemRender/@FXML, RenderController field, initialize() wiring, handleRender() action handler
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` - MenuBar+ToolBar wrapped in VBox, Run menu with Render item + F5, renderButton in ToolBar
+- `src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java` - Full handleRender() with Task<Preview> lifecycle, button state management, result routing
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` - Added renderButton/@FXML, menuItemRender/@FXML, RenderController field, initialize() wiring, handleRender() action handler
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` - MenuBar+ToolBar wrapped in VBox, Run menu with Render item + F5, renderButton in ToolBar
 
 ## Decisions Made
 
@@ -102,7 +102,7 @@ Each task was committed atomically:
 - **Found during:** Task 1 (RenderController.handleRender() implementation)
 - **Issue:** `renderButton.disableProperty()` is bound to `projectContext.projectLoadedProperty().not()` in `initialize()`. Calling `renderButton.setDisable(true)` on a bound property throws `RuntimeException: A bound value cannot be set`.
 - **Fix:** Call `renderButton.disableProperty().unbind()` before `setDisable(true)`. Re-bind with `renderButton.disableProperty().bind(projectContext.projectLoadedProperty().not())` in both `setOnSucceeded` and `setOnFailed` handlers to restore the project-loaded guard after the Task completes.
-- **Files modified:** `src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java`
+- **Files modified:** `src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java`
 - **Verification:** `./gradlew build` exits 0
 - **Committed in:** `53d777b` (Task 1 commit)
 

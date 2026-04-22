@@ -32,9 +32,9 @@ tech-stack:
 key-files:
   created: []
   modified:
-    - src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml
-    - src/main/resources/ch/ti/gagi/xlseditor/ui/main.css
-    - src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java
+    - src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml
+    - src/main/resources/ch/ti/gagi/xsleditor/ui/main.css
+    - src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java
 
 key-decisions:
   - "PROJ-02 / PROJ-03 (Set Entrypoint, Set XML Input) are scaffolded-only per D-04 — fx:id declared, no onAction, setDisable(true) in initialize(); Phase 3 enables them with tree-selection bindings"
@@ -79,9 +79,9 @@ completed: "2026-04-15"
 
 ## Files Created/Modified
 
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` — File menu replaced, fileTreePane placeholder copy updated, statusLabel added
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css` — Two Phase 2 CSS rules appended
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — New imports, @FXML injections, ProjectContext field, initialize() bindings, handleOpenProject, handleNewFile, showTransientStatus
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` — File menu replaced, fileTreePane placeholder copy updated, statusLabel added
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` — Two Phase 2 CSS rules appended
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — New imports, @FXML injections, ProjectContext field, initialize() bindings, handleOpenProject, handleNewFile, showTransientStatus
 
 ## Decisions Made
 

@@ -27,10 +27,10 @@ tech_stack:
 key_files:
   created: []
   modified:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/OccurrenceHighlighter.java
-    - src/main/java/ch/ti/gagi/xlseditor/ui/HrefExtractor.java
-    - src/test/java/ch/ti/gagi/xlseditor/ui/OccurrenceHighlighterTest.java
-    - src/test/java/ch/ti/gagi/xlseditor/ui/HrefExtractorTest.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/OccurrenceHighlighter.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/HrefExtractor.java
+    - src/test/java/ch/ti/gagi/xsleditor/ui/OccurrenceHighlighterTest.java
+    - src/test/java/ch/ti/gagi/xsleditor/ui/HrefExtractorTest.java
 decisions:
   - "OccurrenceHighlighterTest single-char guard test updated to use token '$' (length 1) instead of '$x' (length 2) — '$x' would not be filtered by token.length() < 2; plan spec explicitly calls for this correction"
   - "applyTo uses overlayOccurrences to merge 'occurrence' CSS class into base StyleSpans rather than calling setStyle() per range — prevents syntax class erasure (A1 resolved per plan)"
@@ -79,7 +79,7 @@ metrics:
 - **Found during:** Task 1 RED phase analysis
 - **Issue:** The Wave 0 stub used token `"$x"` (length 2) for the `findOccurrencesReturnsEmptyForSingleCharToken` test, but asserted `isEmpty()`. The guard is `token.length() < 2`, which does NOT filter `"$x"` (length 2). Running the test with the skeleton would have passed accidentally (skeleton always returns empty), but enabling with the real implementation would have caused this test to fail incorrectly — `"$x"` has 4 occurrences in `"$x is here and $x more"`.
 - **Fix:** Updated test to use token `"$"` (length 1), which is genuinely filtered by the `< 2` guard. This is consistent with the plan's own resolution note in Task 1 action section.
-- **Files modified:** src/test/java/ch/ti/gagi/xlseditor/ui/OccurrenceHighlighterTest.java
+- **Files modified:** src/test/java/ch/ti/gagi/xsleditor/ui/OccurrenceHighlighterTest.java
 - **Commit:** dbca5c1
 
 ---
@@ -110,10 +110,10 @@ No new security surface introduced beyond what was planned. Both threat mitigati
 ## Self-Check: PASSED
 
 Files exist on disk:
-- src/main/java/ch/ti/gagi/xlseditor/ui/OccurrenceHighlighter.java - FOUND
-- src/main/java/ch/ti/gagi/xlseditor/ui/HrefExtractor.java - FOUND
-- src/test/java/ch/ti/gagi/xlseditor/ui/OccurrenceHighlighterTest.java - FOUND
-- src/test/java/ch/ti/gagi/xlseditor/ui/HrefExtractorTest.java - FOUND
+- src/main/java/ch/ti/gagi/xsleditor/ui/OccurrenceHighlighter.java - FOUND
+- src/main/java/ch/ti/gagi/xsleditor/ui/HrefExtractor.java - FOUND
+- src/test/java/ch/ti/gagi/xsleditor/ui/OccurrenceHighlighterTest.java - FOUND
+- src/test/java/ch/ti/gagi/xsleditor/ui/HrefExtractorTest.java - FOUND
 
 Commits verified:
 - dbca5c1 (OccurrenceHighlighter) - present in git log

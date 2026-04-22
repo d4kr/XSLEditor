@@ -76,16 +76,16 @@ Requirements in scope: ERR-01, ERR-02, ERR-03, ERR-04, ERR-05.
 - `docs/PRD.md` — Product requirements (error feedback, navigation from error to source line)
 
 ### Existing backend (do not re-implement)
-- `src/main/java/ch/ti/gagi/xlseditor/log/LogManager.java` — In-memory log storage; Phase 8 extends `LogEntry` and routes through `LogController`
-- `src/main/java/ch/ti/gagi/xlseditor/log/LogEntry.java` — **Extend this class** with optional `type`, `file`, `line` fields (D-03)
-- `src/main/java/ch/ti/gagi/xlseditor/preview/PreviewError.java` — Source of `type()`, `file()`, `line()` data; converted to `LogEntry` by `LogController`
+- `src/main/java/ch/ti/gagi/xsleditor/log/LogManager.java` — In-memory log storage; Phase 8 extends `LogEntry` and routes through `LogController`
+- `src/main/java/ch/ti/gagi/xsleditor/log/LogEntry.java` — **Extend this class** with optional `type`, `file`, `line` fields (D-03)
+- `src/main/java/ch/ti/gagi/xsleditor/preview/PreviewError.java` — Source of `type()`, `file()`, `line()` data; converted to `LogEntry` by `LogController`
 
 ### Existing UI (integration points)
-- `src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java` — Replace `ListView<String> logListView` parameter with `Consumer<List<PreviewError>>` callback (D-06); also add `Consumer<String>` for INFO messages (D-08)
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — Wire `logController.initialize(...)` and replace `logListView` injection; all sub-controller wiring seams
-- `src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java` — `navigateTo(Path, int, int)` at line 156; called by `LogController` for click-to-navigate (D-14)
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` — `TitledPane fx:id="logPane"` at line 95; inner `ListView fx:id="logListView"` replaced by VBox+HBox+TableView (D-17)
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css` — Add severity color rules and filter button styles
+- `src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java` — Replace `ListView<String> logListView` parameter with `Consumer<List<PreviewError>>` callback (D-06); also add `Consumer<String>` for INFO messages (D-08)
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — Wire `logController.initialize(...)` and replace `logListView` injection; all sub-controller wiring seams
+- `src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java` — `navigateTo(Path, int, int)` at line 156; called by `LogController` for click-to-navigate (D-14)
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` — `TitledPane fx:id="logPane"` at line 95; inner `ListView fx:id="logListView"` replaced by VBox+HBox+TableView (D-17)
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` — Add severity color rules and filter button styles
 
 ### Prior phase context
 - `.planning/phases/06-render-pipeline-integration/06-CONTEXT.md` — D-16: `logListView` stopgap pattern being replaced; D-17: `logListView.getItems().clear()` pattern (ERR-05) moves to `LogController`

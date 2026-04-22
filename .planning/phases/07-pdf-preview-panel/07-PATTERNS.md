@@ -8,22 +8,22 @@
 
 | New/Modified File | Role | Data Flow | Closest Analog | Match Quality |
 |---|---|---|---|---|
-| `src/main/java/ch/ti/gagi/xlseditor/ui/PreviewController.java` | sub-controller | request-response | `src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java` | exact |
-| `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` | controller (edit) | request-response | self — existing file | n/a (edit) |
-| `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` | FXML view (edit) | n/a | self — lines 73–78 (previewPane StackPane) | n/a (edit) |
-| `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css` | stylesheet (edit) | n/a | self — `.status-label-success` rule (line 34) | n/a (edit) |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/PreviewController.java` | sub-controller | request-response | `src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java` | exact |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` | controller (edit) | request-response | self — existing file | n/a (edit) |
+| `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` | FXML view (edit) | n/a | self — lines 73–78 (previewPane StackPane) | n/a (edit) |
+| `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` | stylesheet (edit) | n/a | self — `.status-label-success` rule (line 34) | n/a (edit) |
 
 ---
 
 ## Pattern Assignments
 
-### `src/main/java/ch/ti/gagi/xlseditor/ui/PreviewController.java` (new sub-controller, request-response)
+### `src/main/java/ch/ti/gagi/xsleditor/ui/PreviewController.java` (new sub-controller, request-response)
 
-**Analog:** `src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java`
+**Analog:** `src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java`
 
 **Imports pattern** — copy structure from RenderController.java lines 1–16:
 ```java
-package ch.ti.gagi.xlseditor.ui;
+package ch.ti.gagi.xsleditor.ui;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -75,7 +75,7 @@ public final class PreviewController {
         this.previewPlaceholderLabel = Objects.requireNonNull(previewPlaceholderLabel, "previewPlaceholderLabel");
         this.outdatedBannerLabel     = Objects.requireNonNull(outdatedBannerLabel,     "outdatedBannerLabel");
         try {
-            this.tempFile = Files.createTempFile("xlseditor-preview", ".pdf");
+            this.tempFile = Files.createTempFile("xsleditor-preview", ".pdf");
         } catch (IOException e) {
             System.err.println("[PreviewController] Failed to create temp file: " + e.getMessage());
         }
@@ -117,11 +117,11 @@ The `setManaged(false); setVisible(false)` pair is the established pattern for h
     }
 ```
 
-**No-analog for test file** — see `src/test/java/ch/ti/gagi/xlseditor/ui/PreviewControllerTest.java` below.
+**No-analog for test file** — see `src/test/java/ch/ti/gagi/xsleditor/ui/PreviewControllerTest.java` below.
 
 ---
 
-### `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` (edit — add field + replace two lambdas)
+### `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` (edit — add field + replace two lambdas)
 
 **Analog:** self (existing file at lines 63–111)
 
@@ -169,7 +169,7 @@ Add the `previewController.initialize()` call before `renderController.initializ
 
 ---
 
-### `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` (edit — add banner label + fix WebView initial visibility)
+### `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` (edit — add banner label + fix WebView initial visibility)
 
 **Analog:** existing `previewPane` StackPane block at main.fxml lines 73–78
 
@@ -216,7 +216,7 @@ Two changes:
 
 ---
 
-### `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css` (edit — add one CSS rule)
+### `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` (edit — add one CSS rule)
 
 **Analog:** `.status-label-success` rule at main.css lines 34–37:
 ```css
@@ -243,13 +243,13 @@ Append after line 104 (the last existing rule). Follow the per-phase comment con
 
 ---
 
-### `src/test/java/ch/ti/gagi/xlseditor/ui/PreviewControllerTest.java` (new test)
+### `src/test/java/ch/ti/gagi/xsleditor/ui/PreviewControllerTest.java` (new test)
 
-**Analog:** `src/test/java/ch/ti/gagi/xlseditor/ui/RenderControllerTest.java` (primary) and `EditorTabTest.java` (for Platform.startup pattern)
+**Analog:** `src/test/java/ch/ti/gagi/xsleditor/ui/RenderControllerTest.java` (primary) and `EditorTabTest.java` (for Platform.startup pattern)
 
 **Test class skeleton pattern** — copy from RenderControllerTest.java lines 1–27:
 ```java
-package ch.ti.gagi.xlseditor.ui;
+package ch.ti.gagi.xsleditor.ui;
 
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -299,7 +299,7 @@ node.setVisible(true);
 Setting only `visible=false` leaves the node in the StackPane layout flow, reserving space. Setting only `managed=false` makes the node invisible from layout but technically still visible for rendering. Always set both.
 
 ### Objects.requireNonNull Guards in initialize()
-**Source:** `src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java` lines 67–74
+**Source:** `src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java` lines 67–74
 **Apply to:** PreviewController.initialize() — all four node parameters
 ```java
 this.previewPane = Objects.requireNonNull(previewPane, "previewPane");
@@ -307,7 +307,7 @@ this.previewPane = Objects.requireNonNull(previewPane, "previewPane");
 Pattern: second argument is the parameter name as a string (provides a readable NPE message). Import: `java.util.Objects`.
 
 ### Sub-controller Field Declaration in MainController
-**Source:** `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` lines 69–71
+**Source:** `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` lines 69–71
 **Apply to:** PreviewController field addition in MainController
 ```java
 private final PreviewController previewController = new PreviewController();  // Phase 7
@@ -315,7 +315,7 @@ private final PreviewController previewController = new PreviewController();  //
 Pattern: `private final`, inline instantiation with `new`, phase comment.
 
 ### Phase Comment in CSS
-**Source:** `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css` lines 33, 45, 53, 91
+**Source:** `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` lines 33, 45, 53, 91
 **Apply to:** New `.preview-outdated-banner` rule
 ```css
 /* Phase 7: Outdated preview banner */
@@ -323,7 +323,7 @@ Pattern: `private final`, inline instantiation with `new`, phase comment.
 All CSS sections carry a phase comment. Match this convention.
 
 ### Platform.startup() Guard in Tests
-**Source:** `src/test/java/ch/ti/gagi/xlseditor/ui/RenderControllerTest.java` lines 21–27
+**Source:** `src/test/java/ch/ti/gagi/xsleditor/ui/RenderControllerTest.java` lines 21–27
 **Apply to:** PreviewControllerTest.@BeforeAll
 ```java
 @BeforeAll
@@ -346,6 +346,6 @@ All four files have direct analogs in the codebase. No files require fallback to
 
 ## Metadata
 
-**Analog search scope:** `src/main/java/ch/ti/gagi/xlseditor/ui/`, `src/main/resources/ch/ti/gagi/xlseditor/ui/`, `src/test/java/ch/ti/gagi/xlseditor/ui/`
+**Analog search scope:** `src/main/java/ch/ti/gagi/xsleditor/ui/`, `src/main/resources/ch/ti/gagi/xsleditor/ui/`, `src/test/java/ch/ti/gagi/xsleditor/ui/`
 **Files scanned:** 7 (MainController, RenderController, FileTreeController, main.fxml, main.css, RenderControllerTest, EditorTabTest)
 **Pattern extraction date:** 2026-04-20

@@ -18,7 +18,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-22)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** v0.2.1 — Full project rename (XLSEditor -> XSLEditor)
+**Current focus:** v0.2.1 — Full project rename (XSLEditor -> XSLEditor)
 
 ---
 

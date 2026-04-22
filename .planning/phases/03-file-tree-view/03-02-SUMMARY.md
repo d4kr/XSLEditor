@@ -26,10 +26,10 @@ tech-stack:
 
 key-files:
   created:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/FileItem.java
-    - src/main/java/ch/ti/gagi/xlseditor/ui/FileItemTreeCell.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/FileItem.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/FileItemTreeCell.java
   modified:
-    - src/main/resources/ch/ti/gagi/xlseditor/ui/main.css
+    - src/main/resources/ch/ti/gagi/xsleditor/ui/main.css
 
 key-decisions:
   - "FileItemTreeCell uses a no-arg constructor (deviates from 03-PATTERNS.md Consumer<Path> sketch): event wiring belongs on the TreeView in Plan 03 via fileTree.setOnMouseClicked — cells are state-free, factory is tv -> new FileItemTreeCell() with zero captured references"
@@ -72,9 +72,9 @@ Each task was committed atomically:
 
 ## Files Created/Modified
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/FileItem.java` — new; public record with compact non-null constructor and nested FileRole enum
-- `src/main/java/ch/ti/gagi/xlseditor/ui/FileItemTreeCell.java` — new; final TreeCell subclass, no-arg constructor, switch-expression on FileRole, unconditional CSS class cleanup
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css` — appended seven Phase 3 rules after line 43; no existing rule modified
+- `src/main/java/ch/ti/gagi/xsleditor/ui/FileItem.java` — new; public record with compact non-null constructor and nested FileRole enum
+- `src/main/java/ch/ti/gagi/xsleditor/ui/FileItemTreeCell.java` — new; final TreeCell subclass, no-arg constructor, switch-expression on FileRole, unconditional CSS class cleanup
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` — appended seven Phase 3 rules after line 43; no existing rule modified
 
 ## Decisions Made
 
@@ -106,8 +106,8 @@ No new threat surface. T-03-07 (stale CSS class on recycled TreeCell) is mitigat
 
 ## Self-Check
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/FileItem.java` — FOUND
-- `src/main/java/ch/ti/gagi/xlseditor/ui/FileItemTreeCell.java` — FOUND
+- `src/main/java/ch/ti/gagi/xsleditor/ui/FileItem.java` — FOUND
+- `src/main/java/ch/ti/gagi/xsleditor/ui/FileItemTreeCell.java` — FOUND
 - Commit `81848cb` (Task 1) — FOUND in git log
 - Commit `5dd8851` (Task 2) — FOUND in git log
 - Commit `24a74b8` (Task 3) — FOUND in git log

@@ -21,7 +21,7 @@ Updated the build system, UI resources (FXML/CSS), and application constants to 
 - **Build System**: Updated `mainClass` and JAR manifest attributes in `build.gradle` to point to `ch.ti.gagi.xsleditor.XSLEditorApp`.
 - **UI Resources**:
     - Updated `fx:controller` in `main.fxml` to the new package.
-    - Updated "About XLSEditor..." menu item to "About XSLEditor...".
+    - Updated "About XSLEditor..." menu item to "About XSLEditor...".
     - Updated CSS comments in `main.css`.
 - **Java Constants**:
     - Updated `APP_NAME` constant in `XSLEditorApp.java` to "XSLEditor".

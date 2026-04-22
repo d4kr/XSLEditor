@@ -25,8 +25,8 @@ tech_stack:
     - "Platform.startup() bootstrap in @BeforeAll for JavaFX unit tests without TestFX"
 key_files:
   created:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/EditorTab.java
-    - src/test/java/ch/ti/gagi/xlseditor/ui/EditorTabTest.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/EditorTab.java
+    - src/test/java/ch/ti/gagi/xsleditor/ui/EditorTabTest.java
   modified: []
 decisions:
   - "Use Bindings.not(atMarkedPositionProperty()) for dirty binding (plan-specified idiom)"
@@ -59,8 +59,8 @@ for EDIT-02.
 
 | File | Lines | Role |
 |------|-------|------|
-| `src/main/java/ch/ti/gagi/xlseditor/ui/EditorTab.java` | 70 | Per-file model: path + CodeArea + dirty binding |
-| `src/test/java/ch/ti/gagi/xlseditor/ui/EditorTabTest.java` | 50 | 4 JUnit 5 tests for EDIT-02 dirty-state logic |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/EditorTab.java` | 70 | Per-file model: path + CodeArea + dirty binding |
+| `src/test/java/ch/ti/gagi/xsleditor/ui/EditorTabTest.java` | 50 | 4 JUnit 5 tests for EDIT-02 dirty-state logic |
 
 ---
 
@@ -80,7 +80,7 @@ Any other order causes the tab to appear dirty immediately on open (tab title sh
 ## Test Results
 
 ```
-./gradlew test --tests "ch.ti.gagi.xlseditor.ui.EditorTabTest"  →  BUILD SUCCESSFUL (4/4 tests pass)
+./gradlew test --tests "ch.ti.gagi.xsleditor.ui.EditorTabTest"  →  BUILD SUCCESSFUL (4/4 tests pass)
 ./gradlew test                                                   →  BUILD SUCCESSFUL (full suite green, no regressions)
 ```
 
@@ -138,8 +138,8 @@ The `EditorTab` class is intentionally minimal: it owns only the `CodeArea` and 
 
 | Item | Status |
 |------|--------|
-| `src/main/java/ch/ti/gagi/xlseditor/ui/EditorTab.java` exists | FOUND |
-| `src/test/java/ch/ti/gagi/xlseditor/ui/EditorTabTest.java` exists | FOUND |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/EditorTab.java` exists | FOUND |
+| `src/test/java/ch/ti/gagi/xsleditor/ui/EditorTabTest.java` exists | FOUND |
 | `.planning/phases/04-multi-tab-editor-core/04-01-SUMMARY.md` exists | FOUND |
 | Commit `ebebcf6` (feat: EditorTab model) | FOUND |
 | Commit `0077535` (test: EditorTabTest) | FOUND |

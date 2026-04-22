@@ -22,13 +22,13 @@ tech_stack:
     - Dual-layer path traversal guard: pattern block + normalize().startsWith() check
 key_files:
   created:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/ProjectContext.java
-    - src/test/java/ch/ti/gagi/xlseditor/model/ProjectConfigTest.java
-    - src/test/java/ch/ti/gagi/xlseditor/model/ProjectContextTest.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/ProjectContext.java
+    - src/test/java/ch/ti/gagi/xsleditor/model/ProjectConfigTest.java
+    - src/test/java/ch/ti/gagi/xsleditor/model/ProjectContextTest.java
   modified:
-    - src/main/java/ch/ti/gagi/xlseditor/model/ProjectConfig.java
-    - src/main/java/ch/ti/gagi/xlseditor/model/ProjectManager.java
-    - src/main/java/ch/ti/gagi/xlseditor/render/RenderOrchestrator.java
+    - src/main/java/ch/ti/gagi/xsleditor/model/ProjectConfig.java
+    - src/main/java/ch/ti/gagi/xsleditor/model/ProjectManager.java
+    - src/main/java/ch/ti/gagi/xsleditor/render/RenderOrchestrator.java
     - build.gradle
 decisions:
   - "Null fields in ProjectConfig are allowed (D-03) — both entryPoint and xmlInput are optional for partial config state"
@@ -127,11 +127,11 @@ None — all model/service layer APIs are fully wired. No placeholder data flows
 
 ## Self-Check: PASSED
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/ProjectContext.java` — FOUND
-- `src/main/java/ch/ti/gagi/xlseditor/model/ProjectConfig.java` — FOUND (contains `public void write(`)
-- `src/main/java/ch/ti/gagi/xlseditor/model/ProjectManager.java` — FOUND (contains `Files.exists(configPath)`)
-- `src/test/java/ch/ti/gagi/xlseditor/model/ProjectConfigTest.java` — FOUND (7 @Test)
-- `src/test/java/ch/ti/gagi/xlseditor/model/ProjectContextTest.java` — FOUND (7 @Test)
+- `src/main/java/ch/ti/gagi/xsleditor/ui/ProjectContext.java` — FOUND
+- `src/main/java/ch/ti/gagi/xsleditor/model/ProjectConfig.java` — FOUND (contains `public void write(`)
+- `src/main/java/ch/ti/gagi/xsleditor/model/ProjectManager.java` — FOUND (contains `Files.exists(configPath)`)
+- `src/test/java/ch/ti/gagi/xsleditor/model/ProjectConfigTest.java` — FOUND (7 @Test)
+- `src/test/java/ch/ti/gagi/xsleditor/model/ProjectContextTest.java` — FOUND (7 @Test)
 - Commit `d7e5da2` — FOUND (RED test stubs)
 - Commit `0cef2fd` — FOUND (ProjectConfig + ProjectManager)
 - Commit `fd0a2de` — FOUND (ProjectContext + build.gradle)

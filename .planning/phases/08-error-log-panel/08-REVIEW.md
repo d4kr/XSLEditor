@@ -4,12 +4,12 @@ reviewed: 2026-04-21T05:02:00Z
 depth: standard
 files_reviewed: 6
 files_reviewed_list:
-  - src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java
-  - src/main/java/ch/ti/gagi/xlseditor/log/LogEntry.java
-  - src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml
-  - src/main/resources/ch/ti/gagi/xlseditor/ui/main.css
-  - src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java
-  - src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java
+  - src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java
+  - src/main/java/ch/ti/gagi/xsleditor/log/LogEntry.java
+  - src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml
+  - src/main/resources/ch/ti/gagi/xsleditor/ui/main.css
+  - src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java
+  - src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java
 findings:
   critical: 0
   warning: 3
@@ -37,7 +37,7 @@ Three warnings stand out: the `setOnFailed` path in `RenderController` never inv
 
 ### WR-01: `setOnFailed` does not clear or replace the log panel
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java:161`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java:161`
 
 **Issue:** When the background `Task<Preview>` throws an unexpected exception (the `setOnFailed` branch), `errorsCallback` is never called. The log panel retains errors from the previous render run while the status label says "Render failed" — the user sees no entry that explains the current failure, and the stale previous errors are misleading.
 
@@ -53,7 +53,7 @@ task.setOnFailed(e -> {
     String msg = ex != null ? ex.getMessage() : "unknown";
     // Clear previous errors and surface the unexpected failure as a log entry
     errorsCallback.accept(List.of(
-        new ch.ti.gagi.xlseditor.preview.PreviewError(
+        new ch.ti.gagi.xsleditor.preview.PreviewError(
             "Unexpected render error: " + msg, "INTERNAL", null, null)));
     statusTransient.accept("Render failed");
 });
@@ -64,7 +64,7 @@ Alternatively, call `errorsCallback.accept(List.of())` to at least clear stale e
 
 ### WR-02: All `PreviewError` entries are hardcoded to `"ERROR"` level
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java:153-157`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java:153-157`
 
 **Issue:** `setErrors` maps every `PreviewError` to a `LogEntry` with level `"ERROR"` unconditionally:
 ```java
@@ -93,7 +93,7 @@ allEntries.add(new LogEntry(
 
 ### WR-03: CSS column-header text color selector will not apply
 
-**File:** `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css:138-143`
+**File:** `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css:138-143`
 
 **Issue:** The rule:
 ```css
@@ -121,7 +121,7 @@ Keep the background color rule on `.column-header` and `.column-header-backgroun
 
 ### IN-01: `menuItemRender` is injected but never used
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java:71`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java:71`
 
 **Issue:** `@FXML private MenuItem menuItemRender;` is declared and FXML-injected but is never referenced in the controller body. The accelerator and `onAction="#handleRender"` wiring are in FXML, so the menu item works — the field is simply dead. This suggests a planned use (e.g., disabling it during render like the render button) that was not implemented.
 
@@ -135,7 +135,7 @@ menuItemRender.disableProperty().bind(projectContext.projectLoadedProperty().not
 
 ### IN-02: `PreviewManager` location parsing fails silently on Windows-style paths
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/preview/PreviewManager.java:37-44`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/preview/PreviewManager.java:37-44`
 
 **Issue:** `location.lastIndexOf(':')` is used to split `"file:line"`. On Windows absolute paths (`C:\path\to\file:42`), this finds the drive-letter colon rather than the line separator, causing the line number to not be parsed and `file` to be set to the full location string including the line number. Navigation from the log panel will silently fail (the file path will not resolve). This project is macOS-only per the CLAUDE.md description, so this is low-risk today, but the silent failure mode is worth noting.
 
@@ -155,7 +155,7 @@ if (m.matches()) {
 
 ### IN-03: `setErrors` discards all prior INFO entries
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java:151`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java:151`
 
 **Issue:** `allEntries.clear()` on every `setErrors` call wipes `addInfo` entries added by `handleOpenProject` or earlier renders. After the first render attempt, the "Loaded entrypoint: ..." project-open message is gone from the log. This is consistent with the ERR-05 spec ("clears before populating"), but means INFO history is non-persistent across render cycles, which may surprise users who open the log panel after a failed render.
 
@@ -165,7 +165,7 @@ if (m.matches()) {
 
 ### IN-04: `updateTitle` silent guard may mask call-ordering bugs in production
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java:159-165`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java:159-165`
 
 **Issue:** The `updateTitle` guard silently returns when `primaryStage == null`, with a comment noting this "should" never happen and suggesting an `IllegalStateException` during development. In the current build there is no way to distinguish a production silent-skip from an actual call-ordering regression. The guard is safe (no crash), but the suggestion in the comment is not implemented.
 

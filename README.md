@@ -1,4 +1,4 @@
-# XLSEditor
+# XSLEditor
 
 A local desktop tool for developers to edit multi-file XSLT/XSL-FO templates, generate PDFs on demand, and perform advanced debugging.
 

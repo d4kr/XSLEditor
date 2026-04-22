@@ -43,16 +43,16 @@ re_verification:
 
 | Artifact | Expected | Status | Details |
 |----------|----------|--------|---------|
-| `src/test/java/ch/ti/gagi/xlseditor/library/LibraryPreprocessorTest.java` | 5 tests: detect, merge, cache, missing-file error | VERIFIED | 51 lines; 5 @Test methods using @TempDir and real static calls; 0 failures in XML report |
-| `src/test/java/ch/ti/gagi/xlseditor/dependency/DependencyResolverTest.java` | 5 tests: parseIncludes, parseImports, buildGraph, circular detection, leaf | VERIFIED | 72 lines; 5 @Test methods using @TempDir and real static calls; 0 failures in XML report |
-| `src/test/java/ch/ti/gagi/xlseditor/validation/ValidationEngineTest.java` | 4 tests for ValidationEngine | VERIFIED | 4 @Test methods, uses @TempDir, no Mockito |
-| `src/test/java/ch/ti/gagi/xlseditor/error/ErrorManagerTest.java` | 10 tests for ErrorManager | VERIFIED | 10 @Test methods, covers all branches, no Mockito |
-| `src/test/java/ch/ti/gagi/xlseditor/log/LogManagerTest.java` | 6 tests for LogManager | VERIFIED | 6 @Test methods, immutability assertion present |
+| `src/test/java/ch/ti/gagi/xsleditor/library/LibraryPreprocessorTest.java` | 5 tests: detect, merge, cache, missing-file error | VERIFIED | 51 lines; 5 @Test methods using @TempDir and real static calls; 0 failures in XML report |
+| `src/test/java/ch/ti/gagi/xsleditor/dependency/DependencyResolverTest.java` | 5 tests: parseIncludes, parseImports, buildGraph, circular detection, leaf | VERIFIED | 72 lines; 5 @Test methods using @TempDir and real static calls; 0 failures in XML report |
+| `src/test/java/ch/ti/gagi/xsleditor/validation/ValidationEngineTest.java` | 4 tests for ValidationEngine | VERIFIED | 4 @Test methods, uses @TempDir, no Mockito |
+| `src/test/java/ch/ti/gagi/xsleditor/error/ErrorManagerTest.java` | 10 tests for ErrorManager | VERIFIED | 10 @Test methods, covers all branches, no Mockito |
+| `src/test/java/ch/ti/gagi/xsleditor/log/LogManagerTest.java` | 6 tests for LogManager | VERIFIED | 6 @Test methods, immutability assertion present |
 | `src/test/resources/fixtures/identity.xsl` | Minimal XSLT 1.0 → XSL-FO with fo:block | VERIFIED | 19 lines, xmlns:fo declared, fo:block present |
 | `src/test/resources/fixtures/input.xml` | Minimal XML with `<item>hello</item>` | VERIFIED | 2 lines, well-formed |
 | `src/test/resources/fixtures/invalid.xsl` | Intentionally malformed XSLT | VERIFIED | 6 lines, unclosed `<broken>` element |
-| `src/test/java/ch/ti/gagi/xlseditor/render/RenderEngineTest.java` | 5 tests: compile(path), compile(string), malformed-throw, transform→FO, FO→PDF | VERIFIED | 5 @Test methods, no mocks, real Saxon+FOP |
-| `src/test/java/ch/ti/gagi/xlseditor/preview/PreviewManagerIntegrationTest.java` | 2 integration tests: happy-path PDF + invalid-XSLT failure | VERIFIED | 2 @Test methods, @Tag("integration"), new PreviewManager(new RenderOrchestrator()) |
+| `src/test/java/ch/ti/gagi/xsleditor/render/RenderEngineTest.java` | 5 tests: compile(path), compile(string), malformed-throw, transform→FO, FO→PDF | VERIFIED | 5 @Test methods, no mocks, real Saxon+FOP |
+| `src/test/java/ch/ti/gagi/xsleditor/preview/PreviewManagerIntegrationTest.java` | 2 integration tests: happy-path PDF + invalid-XSLT failure | VERIFIED | 2 @Test methods, @Tag("integration"), new PreviewManager(new RenderOrchestrator()) |
 
 ---
 
@@ -84,8 +84,8 @@ Test suite run: `./gradlew clean test` — BUILD SUCCESSFUL in 7s, then XML repo
 | Behavior | Verification | Result |
 |----------|-------------|--------|
 | Total suite: 96 tests, 0 failures, 0 errors | XML report aggregate across 17 test classes | PASS |
-| LibraryPreprocessorTest: 5 tests, 0 failures | TEST-ch.ti.gagi.xlseditor.library.LibraryPreprocessorTest.xml | PASS |
-| DependencyResolverTest: 5 tests, 0 failures | TEST-ch.ti.gagi.xlseditor.dependency.DependencyResolverTest.xml | PASS |
+| LibraryPreprocessorTest: 5 tests, 0 failures | TEST-ch.ti.gagi.xsleditor.library.LibraryPreprocessorTest.xml | PASS |
+| DependencyResolverTest: 5 tests, 0 failures | TEST-ch.ti.gagi.xsleditor.dependency.DependencyResolverTest.xml | PASS |
 | ValidationEngineTest: 4 tests, 0 failures | XML report confirmed | PASS |
 | ErrorManagerTest: 10 tests, 0 failures | XML report confirmed | PASS |
 | LogManagerTest: 6 tests, 0 failures | XML report confirmed | PASS |

@@ -28,13 +28,13 @@ tech-stack:
 
 key-files:
   created:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/SearchDialog.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/SearchDialog.java
   modified:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java
-    - src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml
-    - src/test/java/ch/ti/gagi/xlseditor/ui/SearchTaskTest.java
-    - src/main/java/ch/ti/gagi/xlseditor/ui/AutocompleteProvider.java
-    - src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java
+    - src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml
+    - src/test/java/ch/ti/gagi/xsleditor/ui/SearchTaskTest.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/AutocompleteProvider.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java
 
 key-decisions:
   - "SearchDialog.search() is a static method so SearchTaskTest can call it without a JavaFX toolkit"
@@ -92,12 +92,12 @@ Each task was committed atomically:
 
 ## Files Created/Modified
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/SearchDialog.java` — Created. Full search dialog with SearchHit record and static search() method
-- `src/test/java/ch/ti/gagi/xlseditor/ui/SearchTaskTest.java` — @Disabled removed; both tests now active and passing
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — Added @FXML findInFilesMenuItem field and handleFindInFiles() handler
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` — Added Search menu with findInFilesMenuItem and Ctrl+Shift+F accelerator
-- `src/main/java/ch/ti/gagi/xlseditor/ui/AutocompleteProvider.java` — Fixed extractPrefixBeforeCaret to stop at `<`
-- `src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java` — Improved occurrence token stripping in selection listener
+- `src/main/java/ch/ti/gagi/xsleditor/ui/SearchDialog.java` — Created. Full search dialog with SearchHit record and static search() method
+- `src/test/java/ch/ti/gagi/xsleditor/ui/SearchTaskTest.java` — @Disabled removed; both tests now active and passing
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — Added @FXML findInFilesMenuItem field and handleFindInFiles() handler
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` — Added Search menu with findInFilesMenuItem and Ctrl+Shift+F accelerator
+- `src/main/java/ch/ti/gagi/xsleditor/ui/AutocompleteProvider.java` — Fixed extractPrefixBeforeCaret to stop at `<`
+- `src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java` — Improved occurrence token stripping in selection listener
 
 ---
 
@@ -117,7 +117,7 @@ Each task was committed atomically:
 - **Found during:** Human verification checkpoint
 - **Issue:** `extractPrefixBeforeCaret` returned `<xsl:if` instead of `xsl:if` because it did not stop at `<`. No keyword in the autocomplete list starts with `<`, so the popup would never match any entry.
 - **Fix:** Added `'<'` to the stop-character set in `extractPrefixBeforeCaret` in `AutocompleteProvider.java`
-- **Files modified:** `src/main/java/ch/ti/gagi/xlseditor/ui/AutocompleteProvider.java`
+- **Files modified:** `src/main/java/ch/ti/gagi/xsleditor/ui/AutocompleteProvider.java`
 - **Verification:** Human verified autocomplete popup shows keyword entries after fix
 - **Committed in:** `4a33be5`
 
@@ -125,7 +125,7 @@ Each task was committed atomically:
 - **Found during:** Bug fix pass after EDIT-05 fix
 - **Issue:** Selection of `<xsl:template>` (with angle brackets) would not match the name token in closing tags because the regex included the punctuation characters
 - **Fix:** Stripped outer XML punctuation (`<>/\"'=`) from the selected token before the regex search in `EditorController`
-- **Files modified:** `src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java`
+- **Files modified:** `src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java`
 - **Verification:** Committed; full occurrence highlighting for complex selections remains a known issue (see below)
 - **Committed in:** `4a33be5`
 
@@ -184,9 +184,9 @@ No new trust boundaries beyond the plan's threat model.
 ## Self-Check: PASSED
 
 Files exist on disk:
-- `src/main/java/ch/ti/gagi/xlseditor/ui/SearchDialog.java` — FOUND (commit 17f677d)
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — FOUND (commit f82640f)
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` — FOUND (commit f82640f)
+- `src/main/java/ch/ti/gagi/xsleditor/ui/SearchDialog.java` — FOUND (commit 17f677d)
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — FOUND (commit f82640f)
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` — FOUND (commit f82640f)
 
 Commits verified:
 - `17f677d` (Task 1 — SearchDialog) — FOUND

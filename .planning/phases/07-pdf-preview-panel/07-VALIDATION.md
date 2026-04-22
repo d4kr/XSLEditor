@@ -19,7 +19,7 @@ created: 2026-04-20
 |----------|-------|
 | **Framework** | JUnit Jupiter 5.10.0 |
 | **Config file** | `build.gradle` (`test { useJUnitPlatform() }`) |
-| **Quick run command** | `./gradlew test --tests "ch.ti.gagi.xlseditor.ui.PreviewControllerTest"` |
+| **Quick run command** | `./gradlew test --tests "ch.ti.gagi.xsleditor.ui.PreviewControllerTest"` |
 | **Full suite command** | `./gradlew test` |
 | **Estimated runtime** | ~10 seconds |
 
@@ -27,7 +27,7 @@ created: 2026-04-20
 
 ## Sampling Rate
 
-- **After every task commit:** Run `./gradlew test --tests "ch.ti.gagi.xlseditor.ui.PreviewControllerTest"`
+- **After every task commit:** Run `./gradlew test --tests "ch.ti.gagi.xsleditor.ui.PreviewControllerTest"`
 - **After every plan wave:** Run `./gradlew test`
 - **Before `/gsd-verify-work`:** Full suite must be green
 - **Max feedback latency:** ~10 seconds
@@ -50,7 +50,7 @@ created: 2026-04-20
 
 ## Wave 0 Requirements
 
-- [ ] `src/test/java/ch/ti/gagi/xlseditor/ui/PreviewControllerTest.java` — stubs for PREV-03, PREV-04
+- [ ] `src/test/java/ch/ti/gagi/xsleditor/ui/PreviewControllerTest.java` — stubs for PREV-03, PREV-04
 
 *Existing test infrastructure (JUnit 5, `Platform.startup()` pattern from EditorTabTest) covers all Phase 7 test needs. No framework install or additional fixtures needed.*
 

@@ -24,7 +24,7 @@ status: all_fixed
 
 ### WR-01: `evt.consume()` does not prevent row-click navigation
 
-**Files modified:** `src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java`
+**Files modified:** `src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java`
 **Commit:** 57520c6
 **Applied fix:** Removed the ineffective `evt.consume()` call on the `ActionEvent` handler.
 Added `b.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_PRESSED, mouseEvt -> mouseEvt.consume())`
@@ -34,7 +34,7 @@ unintended row-selection navigation when the AI assist button is clicked.
 
 ### WR-02: `URLEncoder.encode` throws NPE if `entry.message()` is null
 
-**Files modified:** `src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java`
+**Files modified:** `src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java`
 **Commit:** 57520c6
 **Applied fix:** Extended the null guard at the top of the `setOnAction` lambda from
 `if (entry == null) return;` to `if (entry == null || entry.message() == null) return;`.

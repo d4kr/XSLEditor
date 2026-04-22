@@ -4,9 +4,9 @@ reviewed: 2026-04-22T00:00:00Z
 depth: standard
 files_reviewed: 3
 files_reviewed_list:
-  - src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml
-  - src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java
-  - src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java
+  - src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml
+  - src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java
+  - src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java
 findings:
   critical: 0
   warning: 2
@@ -41,7 +41,7 @@ ever null, and a quality concern around unbounded URL length.
 
 ### WR-01: `evt.consume()` does not prevent row-click navigation
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java:161-163`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java:161-163`
 
 **Issue:** The comment at line 161 states "D-05: consume event so the row click handler is not
 triggered", but this does not work. The button's `OnAction` handler receives a `javafx.event.ActionEvent`;
@@ -71,7 +71,7 @@ private Button createAiButton() {
                 + entry.message();
         String encoded = URLEncoder.encode(prompt, StandardCharsets.UTF_8)
                 .replace("+", "%20");
-        XLSEditorApp.hostServices().showDocument("https://chatgpt.com/?q=" + encoded);
+        XSLEditorApp.hostServices().showDocument("https://chatgpt.com/?q=" + encoded);
     });
     return b;
 }
@@ -84,7 +84,7 @@ filter prevents selection while still allowing the button's own click action to 
 
 ### WR-02: `URLEncoder.encode` throws NPE if `entry.message()` is null
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java:170`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java:170`
 
 **Issue:** `URLEncoder.encode(prompt, ...)` throws `NullPointerException` when `prompt` is null.
 `prompt` is built by concatenating a string literal with `entry.message()`. In Java, string
@@ -110,7 +110,7 @@ b.setOnAction(evt -> {
 
 ### IN-01: No URL length guard — very long messages produce oversized URLs
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java:167-172`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java:167-172`
 
 **Issue:** The full message is appended without truncation. XSLT/FO runtime errors can include
 multi-line excerpts or embedded stack traces. After percent-encoding, a 2 KB message becomes
@@ -134,7 +134,7 @@ the 2 000-character safe limit.
 
 ### IN-02: `getTableRow()` called twice in `updateItem` guard — cache the reference
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java:149`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java:149`
 
 **Issue:** The null guard calls `getTableRow()` twice:
 

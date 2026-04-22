@@ -10,11 +10,11 @@
 
 | New/Modified File | Role | Data Flow | Closest Analog | Match Quality |
 |-------------------|------|-----------|----------------|---------------|
-| `src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java` | controller | request-response + event-driven (Task) | `FileTreeController.java` | exact |
-| `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` (modify) | controller | request-response | `MainController.java` lines 70-96 (initialize block) | self-referential (add wiring) |
-| `src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java` (modify) | controller | file-I/O | `EditorController.java` lines 299-308 (saveTab) | self-referential (extract + promote) |
-| `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` (modify) | config | — | `main.fxml` lines 16-35 (existing top zone) | self-referential (extend VBox) |
-| `src/test/java/ch/ti/gagi/xlseditor/ui/RenderControllerTest.java` | test | — | `EditorTabTest.java` | role-match |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java` | controller | request-response + event-driven (Task) | `FileTreeController.java` | exact |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` (modify) | controller | request-response | `MainController.java` lines 70-96 (initialize block) | self-referential (add wiring) |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java` (modify) | controller | file-I/O | `EditorController.java` lines 299-308 (saveTab) | self-referential (extract + promote) |
+| `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` (modify) | config | — | `main.fxml` lines 16-35 (existing top zone) | self-referential (extend VBox) |
+| `src/test/java/ch/ti/gagi/xsleditor/ui/RenderControllerTest.java` | test | — | `EditorTabTest.java` | role-match |
 
 ---
 
@@ -22,20 +22,20 @@
 
 ### `RenderController.java` (new — controller, request-response + Task)
 
-**Primary analog:** `src/main/java/ch/ti/gagi/xlseditor/ui/FileTreeController.java`
-**Secondary analog:** `src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java` (Task pattern)
+**Primary analog:** `src/main/java/ch/ti/gagi/xsleditor/ui/FileTreeController.java`
+**Secondary analog:** `src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java` (Task pattern)
 
 **Imports pattern** — copy the structural imports from FileTreeController + add Task and preview types:
 
 ```java
 // FileTreeController.java lines 1-30 — import block structure to follow:
-package ch.ti.gagi.xlseditor.ui;
+package ch.ti.gagi.xsleditor.ui;
 
-import ch.ti.gagi.xlseditor.model.Project;
-import ch.ti.gagi.xlseditor.preview.Preview;
-import ch.ti.gagi.xlseditor.preview.PreviewError;
-import ch.ti.gagi.xlseditor.preview.PreviewManager;
-import ch.ti.gagi.xlseditor.render.RenderOrchestrator;
+import ch.ti.gagi.xsleditor.model.Project;
+import ch.ti.gagi.xsleditor.preview.Preview;
+import ch.ti.gagi.xsleditor.preview.PreviewError;
+import ch.ti.gagi.xsleditor.preview.PreviewManager;
+import ch.ti.gagi.xsleditor.render.RenderOrchestrator;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -485,13 +485,13 @@ private void handleRender() {
 
 ### `RenderControllerTest.java` (new — test)
 
-**Analog:** `src/test/java/ch/ti/gagi/xlseditor/ui/EditorTabTest.java`
+**Analog:** `src/test/java/ch/ti/gagi/xsleditor/ui/EditorTabTest.java`
 
 **Test class skeleton pattern** (EditorTabTest.java lines 1-20):
 
 ```java
 // EditorTabTest.java lines 1-20:
-package ch.ti.gagi.xlseditor.ui;
+package ch.ti.gagi.xsleditor.ui;
 
 import javafx.application.Platform;
 import org.junit.jupiter.api.BeforeAll;
@@ -517,7 +517,7 @@ class EditorTabTest {
 }
 
 // RenderControllerTest follows the exact same structure:
-package ch.ti.gagi.xlseditor.ui;
+package ch.ti.gagi.xsleditor.ui;
 
 import javafx.application.Platform;
 import org.junit.jupiter.api.BeforeAll;
@@ -623,6 +623,6 @@ All Phase 6 files have close analogs in the codebase. No files require falling b
 
 ## Metadata
 
-**Analog search scope:** `src/main/java/ch/ti/gagi/xlseditor/ui/`, `src/test/java/ch/ti/gagi/xlseditor/ui/`, `src/main/java/ch/ti/gagi/xlseditor/preview/`, `src/main/resources/ch/ti/gagi/xlseditor/ui/`
+**Analog search scope:** `src/main/java/ch/ti/gagi/xsleditor/ui/`, `src/test/java/ch/ti/gagi/xsleditor/ui/`, `src/main/java/ch/ti/gagi/xsleditor/preview/`, `src/main/resources/ch/ti/gagi/xsleditor/ui/`
 **Files read:** MainController.java, EditorController.java, FileTreeController.java, main.fxml, EditorTabTest.java, PreviewManager.java, Preview.java, PreviewError.java
 **Pattern extraction date:** 2026-04-19

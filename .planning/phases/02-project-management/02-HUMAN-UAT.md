@@ -17,7 +17,7 @@ expected: File menu items appear in correct order with separators; Set Entrypoin
 result: passed
 
 ### 2. Open Project without config
-expected: Title updates to "XLSEditor — [FolderName]"; 3-second status label appears; log entry written; New File becomes enabled
+expected: Title updates to "XSLEditor — [FolderName]"; 3-second status label appears; log entry written; New File becomes enabled
 result: passed
 
 ### 3. Open Project with config

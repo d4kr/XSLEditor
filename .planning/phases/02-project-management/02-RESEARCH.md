@@ -142,7 +142,7 @@ ProjectContext stores Project (field)
 ### Recommended Project Structure Changes
 
 ```
-src/main/java/ch/ti/gagi/xlseditor/
+src/main/java/ch/ti/gagi/xsleditor/
 ├── model/
 │   ├── ProjectConfig.java       [MODIFY: relax compact constructor, add write()]
 │   ├── Project.java             [unchanged]
@@ -155,7 +155,7 @@ src/main/java/ch/ti/gagi/xlseditor/
 ```
 
 ```
-src/main/resources/ch/ti/gagi/xlseditor/ui/
+src/main/resources/ch/ti/gagi/xsleditor/ui/
 ├── main.fxml     [MODIFY: add MenuItem entries to File menu]
 └── main.css      [MODIFY: add .status-label-success and .menu-item:disabled rules]
 ```
@@ -521,8 +521,8 @@ PROJ-01/02/03 require the JavaFX Application Thread and an OS display — unit t
 
 ### Wave 0 Gaps
 
-- [ ] `src/test/java/ch/ti/gagi/xlseditor/model/ProjectConfigTest.java` — covers PROJ-04, PROJ-05
-- [ ] `src/test/java/ch/ti/gagi/xlseditor/model/ProjectContextTest.java` — covers PROJ-06
+- [ ] `src/test/java/ch/ti/gagi/xsleditor/model/ProjectConfigTest.java` — covers PROJ-04, PROJ-05
+- [ ] `src/test/java/ch/ti/gagi/xsleditor/model/ProjectContextTest.java` — covers PROJ-06
 - [ ] `src/test/resources/` — temp directory fixtures for file I/O tests (use `@TempDir` JUnit annotation)
 
 ---

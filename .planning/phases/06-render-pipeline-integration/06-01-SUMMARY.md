@@ -11,9 +11,9 @@ dependency_graph:
     - EditorController.saveAll() public API
     - RenderControllerTest disabled stubs (REND-02, REND-04, REND-05)
   affects:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java
-    - src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java
-    - src/test/java/ch/ti/gagi/xlseditor/ui/RenderControllerTest.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java
+    - src/test/java/ch/ti/gagi/xsleditor/ui/RenderControllerTest.java
 tech_stack:
   added: []
   patterns:
@@ -23,10 +23,10 @@ tech_stack:
     - "Wave 0 skeleton + @Disabled test stubs = Nyquist compliance before implementation"
 key_files:
   created:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java
-    - src/test/java/ch/ti/gagi/xlseditor/ui/RenderControllerTest.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java
+    - src/test/java/ch/ti/gagi/xsleditor/ui/RenderControllerTest.java
   modified:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/EditorController.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/EditorController.java
 decisions:
   - "RenderController.previewManager eagerly instantiated (field initializer) — simple; no DI needed for desktop tool"
   - "saveAll() throws IOException rather than showing alert — RenderController caller decides error UX (D-09)"
@@ -100,8 +100,8 @@ No new network endpoints, auth paths, or file access patterns introduced. `saveA
 
 ## Self-Check: PASSED
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java` — FOUND
-- `src/test/java/ch/ti/gagi/xlseditor/ui/RenderControllerTest.java` — FOUND
+- `src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java` — FOUND
+- `src/test/java/ch/ti/gagi/xsleditor/ui/RenderControllerTest.java` — FOUND
 - `EditorController.java` contains `saveAll()` — FOUND
 - Commit 562d3d7 — FOUND
 - Commit a11993a — FOUND

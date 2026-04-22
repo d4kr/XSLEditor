@@ -21,7 +21,7 @@
 
 ## Summary
 
-Phase 4 introduces the multi-tab editor — the central UI component of XLSEditor. The editor
+Phase 4 introduces the multi-tab editor — the central UI component of XSLEditor. The editor
 pane (`StackPane editorPane`, fx:id wired in main.fxml) currently holds a placeholder `Label`;
 Phase 4 replaces it with a `TabPane` at runtime (programmatically, not via FXML). Each tab
 holds one `VirtualizedScrollPane<CodeArea>` from RichTextFX 0.11.5, which is already on the
@@ -126,7 +126,7 @@ EditorController.openOrFocusTab(Path)
 
 ### Recommended Project Structure
 ```
-src/main/java/ch/ti/gagi/xlseditor/ui/
+src/main/java/ch/ti/gagi/xsleditor/ui/
   MainController.java          # Phase 1-3 — add wiring call only
   ProjectContext.java          # unchanged
   FileTreeController.java      # unchanged — seam already there
@@ -429,7 +429,7 @@ external services are required.
 - **Phase gate:** All automated tests green + manual UI checklist complete before `/gsd-verify-work`
 
 ### Wave 0 Gaps
-- [ ] `src/test/java/ch/ti/gagi/xlseditor/ui/EditorTabTest.java` — covers EDIT-02 dirty-state logic
+- [ ] `src/test/java/ch/ti/gagi/xsleditor/ui/EditorTabTest.java` — covers EDIT-02 dirty-state logic
   (unit-testable: create `EditorTab`, verify `dirty.get() == false` after load, `true` after edit,
   `false` after `mark()`)
 
@@ -464,8 +464,8 @@ external services are required.
 ### Primary (HIGH confidence)
 - Context7 `/fxmisc/richtextfx` — UndoManager dirty detection, VirtualizedScrollPane, keyboard shortcuts via WellBehavedFX InputMap, CodeArea setup
 - `build.gradle` (project) — verified RichTextFX 0.11.5 already on classpath
-- `src/main/java/ch/ti/gagi/xlseditor/ui/FileTreeController.java` — integration seam `setOnFileOpenRequest` already present
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — `editorPane` StackPane fx:id, `setDirty()` scaffold
+- `src/main/java/ch/ti/gagi/xsleditor/ui/FileTreeController.java` — integration seam `setOnFileOpenRequest` already present
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — `editorPane` StackPane fx:id, `setDirty()` scaffold
 - Maven Central (via WebFetch) — confirmed 0.11.5 is current latest [VERIFIED: Maven Central]
 
 ### Secondary (MEDIUM confidence)

@@ -39,7 +39,7 @@ Requirements in scope: APP-01, APP-02, APP-03, APP-04
 
 ### Window Behavior
 
-- **D-08:** App title: `"XLSEditor"` when no project open, `"XLSEditor — {projectName}"` when project is loaded.
+- **D-08:** App title: `"XSLEditor"` when no project open, `"XSLEditor — {projectName}"` when project is loaded.
 - **D-09:** Close confirmation dialog when unsaved changes exist (scaffold in Phase 1 — actual dirty state is wired up in Phase 4).
 
 ### Claude's Discretion
@@ -63,7 +63,7 @@ Requirements in scope: APP-01, APP-02, APP-03, APP-04
 
 ### Existing codebase
 - `build.gradle` — Current Gradle setup (Java 21 toolchain, existing deps to preserve)
-- `src/main/java/ch/ti/gagi/xlseditor/` — Existing module structure (no UI yet)
+- `src/main/java/ch/ti/gagi/xsleditor/` — Existing module structure (no UI yet)
 
 </canonical_refs>
 
@@ -72,8 +72,8 @@ Requirements in scope: APP-01, APP-02, APP-03, APP-04
 
 ### Reusable Assets
 
-- `PreviewManager` (`src/main/java/ch/ti/gagi/xlseditor/preview/PreviewManager.java`) — Facade that returns a `Preview` DTO with PDF bytes or errors. Phase 1 only scaffolds the preview pane; Phase 6 wires it to this class.
-- `LogManager` (`src/main/java/ch/ti/gagi/xlseditor/log/LogManager.java`) — In-memory log. Phase 1 only scaffolds the log panel; Phase 8 wires it.
+- `PreviewManager` (`src/main/java/ch/ti/gagi/xsleditor/preview/PreviewManager.java`) — Facade that returns a `Preview` DTO with PDF bytes or errors. Phase 1 only scaffolds the preview pane; Phase 6 wires it to this class.
+- `LogManager` (`src/main/java/ch/ti/gagi/xsleditor/log/LogManager.java`) — In-memory log. Phase 1 only scaffolds the log panel; Phase 8 wires it.
 
 ### Established Patterns
 

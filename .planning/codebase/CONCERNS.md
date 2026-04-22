@@ -6,7 +6,7 @@
 
 ### RenderEngine: Expensive Factory Initialization at Instantiation
 - Issue: `RenderEngine` creates a new `Processor` and `FopFactory` instance in its constructor, which are expensive operations that happen every time an instance is created
-- Files: `src/main/java/ch/ti/gagi/xlseditor/render/RenderEngine.java` (lines 21-30)
+- Files: `src/main/java/ch/ti/gagi/xsleditor/render/RenderEngine.java` (lines 21-30)
 - Impact: 
   - Performance degradation: Each render invocation creates expensive XML/XSLT processing infrastructure
   - Memory overhead: Processor and FopFactory are heavyweight objects that should be reused
@@ -19,8 +19,8 @@
 ### Repeated DocumentBuilderFactory Creation
 - Issue: Both `DependencyResolver` and `ValidationEngine` create new `DocumentBuilderFactory` instances every time they parse a file
 - Files: 
-  - `src/main/java/ch/ti/gagi/xlseditor/dependency/DependencyResolver.java` (line 68)
-  - `src/main/java/ch/ti/gagi/xlseditor/validation/ValidationEngine.java` (line 18)
+  - `src/main/java/ch/ti/gagi/xsleditor/dependency/DependencyResolver.java` (line 68)
+  - `src/main/java/ch/ti/gagi/xsleditor/validation/ValidationEngine.java` (line 18)
 - Impact:
   - Performance degradation during dependency resolution and validation phases when multiple files must be parsed
   - Each factory creation triggers object allocation and initialization
@@ -30,7 +30,7 @@
 
 ### Insufficient Error Type Differentiation
 - Issue: `ErrorManager.fromException()` maps exceptions to generic types (XSLT, FOP, IO, UNKNOWN) but loses specific error context
-- Files: `src/main/java/ch/ti/gagi/xlseditor/error/ErrorManager.java` (lines 18-32)
+- Files: `src/main/java/ch/ti/gagi/xsleditor/error/ErrorManager.java` (lines 18-32)
 - Impact:
   - UI cannot differentiate between different XSLT errors (compile vs. runtime)
   - User-facing error messages may be unhelpful for debugging
@@ -42,7 +42,7 @@
 
 ### Error Message Extraction Lacks Robustness
 - Issue: `PreviewManager.toPreviewErrors()` parses error location strings using basic string manipulation with `lastIndexOf(':')`
-- Files: `src/main/java/ch/ti/gagi/xlseditor/preview/PreviewManager.java` (lines 36-48)
+- Files: `src/main/java/ch/ti/gagi/xsleditor/preview/PreviewManager.java` (lines 36-48)
 - Impact:
   - Windows file paths with drive letters (e.g., `C:/path`) will be incorrectly parsed
   - Paths containing colons in filenames will break parsing
@@ -56,7 +56,7 @@
 
 ### LIBRARY Preprocessing May Silently Duplicate Code
 - Issue: `LibraryPreprocessor.mergeLibraries()` replaces directives with file content but doesn't validate for duplicate library includes in the dependency graph
-- Files: `src/main/java/ch/ti/gagi/xlseditor/library/LibraryPreprocessor.java` (lines 33-61)
+- Files: `src/main/java/ch/ti/gagi/xsleditor/library/LibraryPreprocessor.java` (lines 33-61)
 - Impact:
   - If a library is included both via `<?LIBRARY?>` and via `xsl:include`, it will be duplicated in final XSLT
   - Can cause template conflicts or unexpected behavior in XSLT processing
@@ -69,7 +69,7 @@
 
 ### Validation Errors Don't Distinguish Well-Formedness from Schema
 - Issue: `ValidationEngine` only validates XML well-formedness using `DocumentBuilderFactory.parse()` but specs mention "XSL schema" validation without implementation
-- Files: `src/main/java/ch/ti/gagi/xlseditor/validation/ValidationEngine.java` (lines 16-39)
+- Files: `src/main/java/ch/ti/gagi/xsleditor/validation/ValidationEngine.java` (lines 16-39)
 - Impact:
   - Invalid XSL (e.g., unknown elements, bad attributes) aren't caught at validation phase
   - Errors surface later during XSLT compilation, losing location context
@@ -80,7 +80,7 @@
 
 ### Circular Dependency Detection Incomplete
 - Issue: `DependencyResolver.collect()` detects circular dependencies in import/include chains but not in LIBRARY preprocessing
-- Files: `src/main/java/ch/ti/gagi/xlseditor/dependency/DependencyResolver.java` (lines 37-65)
+- Files: `src/main/java/ch/ti/gagi/xsleditor/dependency/DependencyResolver.java` (lines 37-65)
 - Impact:
   - If LIBRARY A includes LIBRARY B, and B includes A (indirectly), this won't be detected until XSLT parse fails
   - User gets cryptic Saxon error instead of early "circular dependency" message
@@ -90,7 +90,7 @@
 
 ### Null Pointer Risk in ProjectConfig
 - Issue: `ProjectConfig.read()` returns null fields if JSON nodes don't exist, then the constructor validates them
-- Files: `src/main/java/ch/ti/gagi/xlseditor/model/ProjectConfig.java` (lines 28-38)
+- Files: `src/main/java/ch/ti/gagi/xsleditor/model/ProjectConfig.java` (lines 28-38)
 - Impact:
   - If `.xslfo-tool.json` is missing required fields, `read()` returns `ProjectConfig(null, null)` triggering constructor exception
   - Exception message says "entryPoint must not be blank" even if key is missing from JSON
@@ -102,7 +102,7 @@
 
 ### Render Pipeline Repeats Dependency Resolution
 - Issue: Both `RenderOrchestrator.render()` and `RenderOrchestrator.renderSafe()` duplicate the entire render pipeline steps (lines 22-46 vs 51-82)
-- Files: `src/main/java/ch/ti/gagi/xlseditor/render/RenderOrchestrator.java`
+- Files: `src/main/java/ch/ti/gagi/xsleditor/render/RenderOrchestrator.java`
 - Impact:
   - Code duplication makes maintenance harder
   - Bug fixes must be applied in two places
@@ -116,7 +116,7 @@
 
 ### Path Traversal Vulnerability in Dependency Resolution
 - Risk: `DependencyResolver.parseHrefs()` resolves href attributes without validating against traversal
-- Files: `src/main/java/ch/ti/gagi/xlseditor/dependency/DependencyResolver.java` (lines 52-54)
+- Files: `src/main/java/ch/ti/gagi/xsleditor/dependency/DependencyResolver.java` (lines 52-54)
 - Current mitigation: Files are resolved relative to rootPath and users are internal developers
 - Recommendations:
   - Validate that resolved paths remain within rootPath using `Path.relativize()` and ensuring no `..` remains
@@ -125,7 +125,7 @@
 
 ### LIBRARY Filepath Not Sanitized
 - Risk: LIBRARY directive accepts arbitrary names; malicious XSLT could reference `../../../etc/passwd.xsl`
-- Files: `src/main/java/ch/ti/gagi/xlseditor/library/LibraryPreprocessor.java` (line 44)
+- Files: `src/main/java/ch/ti/gagi/xsleditor/library/LibraryPreprocessor.java` (line 44)
 - Current mitigation: Tool is for internal developers only; no untrusted XSLT input
 - Recommendations:
   - Validate library names contain only alphanumeric, `_`, `-` characters
@@ -134,8 +134,8 @@
 ### XML External Entity (XXE) Injection
 - Risk: `DocumentBuilderFactory` in `DependencyResolver` and `ValidationEngine` don't disable external entity processing
 - Files:
-  - `src/main/java/ch/ti/gagi/xlseditor/dependency/DependencyResolver.java` (line 68)
-  - `src/main/java/ch/ti/gagi/xlseditor/validation/ValidationEngine.java` (line 18)
+  - `src/main/java/ch/ti/gagi/xsleditor/dependency/DependencyResolver.java` (line 68)
+  - `src/main/java/ch/ti/gagi/xsleditor/validation/ValidationEngine.java` (line 18)
 - Current mitigation: Internal tool with local files only
 - Recommendations:
   - Disable DTD and external entities: `factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)`
@@ -145,7 +145,7 @@
 
 ### Full Validation on Every Render
 - Problem: `RenderOrchestrator.renderSafe()` validates all dependency files even if none are modified (line 55)
-- Files: `src/main/java/ch/ti/gagi/xlseditor/render/RenderOrchestrator.java` (lines 51-82)
+- Files: `src/main/java/ch/ti/gagi/xsleditor/render/RenderOrchestrator.java` (lines 51-82)
 - Cause: `ValidationEngine.validateProject()` parses every file in dependency graph unconditionally
 - Improvement path:
   - Track file modification timestamps in `ProjectFile.isDirty()`
@@ -155,7 +155,7 @@
 
 ### Linear Error Accumulation in Validation
 - Problem: `ValidationEngine.validateAll()` collects errors sequentially without early exit
-- Files: `src/main/java/ch/ti/gagi/xlseditor/validation/ValidationEngine.java` (lines 53-61)
+- Files: `src/main/java/ch/ti/gagi/xsleditor/validation/ValidationEngine.java` (lines 53-61)
 - Impact: Rendering waits for all files to parse even if first file has critical error
 - Improvement path:
   - Add optional `failFast` mode that returns on first error
@@ -172,7 +172,7 @@
 ## Fragile Areas
 
 ### DependencyResolver File Parsing
-- Files: `src/main/java/ch/ti/gagi/xlseditor/dependency/DependencyResolver.java` (lines 67-85)
+- Files: `src/main/java/ch/ti/gagi/xsleditor/dependency/DependencyResolver.java` (lines 67-85)
 - Why fragile:
   - Parses XSLT files without validating they are well-formed XML first
   - Generic `Exception` catch mask real parsing errors
@@ -185,8 +185,8 @@
 
 ### Validation Error to UI Mapping
 - Files:
-  - `src/main/java/ch/ti/gagi/xlseditor/error/ErrorManager.java` (lines 54-61)
-  - `src/main/java/ch/ti/gagi/xlseditor/preview/PreviewManager.java` (lines 30-53)
+  - `src/main/java/ch/ti/gagi/xsleditor/error/ErrorManager.java` (lines 54-61)
+  - `src/main/java/ch/ti/gagi/xsleditor/preview/PreviewManager.java` (lines 30-53)
 - Why fragile:
   - Multiple string-to-object transformations with implicit assumptions
   - "XSLT" type used for validation errors even though source is XML parsing
@@ -198,7 +198,7 @@
 - Test coverage: No visible test files in project
 
 ### RenderEngine Singleton Dependency
-- Files: `src/main/java/ch/ti/gagi/xlseditor/render/RenderEngine.java` (lines 19-30)
+- Files: `src/main/java/ch/ti/gagi/xsleditor/render/RenderEngine.java` (lines 19-30)
 - Why fragile:
   - `PreviewManager` creates `RenderOrchestrator` which uses a single `RenderEngine` instance
   - If `RenderEngine` state is accidentally shared or not properly initialized, affects preview pipeline
@@ -247,7 +247,7 @@
 
 ### No Validation Tests
 - What's not tested: XML/XSLT validation logic
-- Files: `src/main/java/ch/ti/gagi/xlseditor/validation/ValidationEngine.java`
+- Files: `src/main/java/ch/ti/gagi/xsleditor/validation/ValidationEngine.java`
 - Risk:
   - Invalid XSLT structure errors not caught early
   - Validation error location extraction untested

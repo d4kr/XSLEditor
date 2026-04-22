@@ -31,12 +31,12 @@ tech-stack:
 
 key-files:
   created:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/PreviewController.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/PreviewController.java
   modified:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java
-    - src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml
-    - src/main/resources/ch/ti/gagi/xlseditor/ui/main.css
-    - src/test/java/ch/ti/gagi/xlseditor/ui/PreviewControllerTest.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java
+    - src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml
+    - src/main/resources/ch/ti/gagi/xsleditor/ui/main.css
+    - src/test/java/ch/ti/gagi/xsleditor/ui/PreviewControllerTest.java
     - build.gradle
 
 key-decisions:
@@ -86,11 +86,11 @@ completed: 2026-04-20
 
 ## Files Created/Modified
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/PreviewController.java` — PDF display sub-controller with PDFBox rendering, state machine for placeholder/banner
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — added @FXML Label outdatedBannerLabel, previewController field, initialize() wiring
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` — WebView initial hidden state, outdatedBannerLabel as last StackPane child
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css` — .preview-outdated-banner rule
-- `src/test/java/ch/ti/gagi/xlseditor/ui/PreviewControllerTest.java` — 4 enabled unit tests with FX thread pattern
+- `src/main/java/ch/ti/gagi/xsleditor/ui/PreviewController.java` — PDF display sub-controller with PDFBox rendering, state machine for placeholder/banner
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — added @FXML Label outdatedBannerLabel, previewController field, initialize() wiring
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` — WebView initial hidden state, outdatedBannerLabel as last StackPane child
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` — .preview-outdated-banner rule
+- `src/test/java/ch/ti/gagi/xsleditor/ui/PreviewControllerTest.java` — 4 enabled unit tests with FX thread pattern
 - `build.gradle` — added org.apache.pdfbox:pdfbox:2.0.31 dependency
 
 ## Decisions Made
@@ -140,7 +140,7 @@ No new security surface introduced beyond plan's threat register. PDFBox additio
 
 ## Self-Check
 
-- [x] `PreviewController.java` exists at `src/main/java/ch/ti/gagi/xlseditor/ui/PreviewController.java`
+- [x] `PreviewController.java` exists at `src/main/java/ch/ti/gagi/xsleditor/ui/PreviewController.java`
 - [x] Commit `8e389ba` exists (Task 1)
 - [x] Commit `a27ffe2` exists (Task 2)
 - [x] Commit `bb90d3f` exists (Task 3)

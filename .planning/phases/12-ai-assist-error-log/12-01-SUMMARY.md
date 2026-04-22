@@ -29,9 +29,9 @@ tech-stack:
 key-files:
   created: []
   modified:
-    - src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml
-    - src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java
-    - src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java
+    - src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml
+    - src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java
 
 key-decisions:
   - "TableColumn<LogEntry, Void> chosen for action-only column — no cell value needed, only graphic"
@@ -52,7 +52,7 @@ completed: 2026-04-22
 
 # Phase 12 Plan 01: Add AI Assist Column to Error Log Summary
 
-**Per-row chat button in the error log opens ChatGPT pre-filled with an Italian-preamble prompt built from URLEncoder-encoded LogEntry.message(), via XLSEditorApp.hostServices().showDocument()**
+**Per-row chat button in the error log opens ChatGPT pre-filled with an Italian-preamble prompt built from URLEncoder-encoded LogEntry.message(), via XSLEditorApp.hostServices().showDocument()**
 
 ## Performance
 
@@ -79,9 +79,9 @@ Each task was committed atomically:
 
 ## Files Created/Modified
 
-- `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` - Added colAi TableColumn after colMessage
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` - Added @FXML colAi field; passed colAi to logController.initialize()
-- `src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java` - Added colAi parameter, null-check, cell factory with ChatGPT URL logic; added XLSEditorApp import
+- `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` - Added colAi TableColumn after colMessage
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` - Added @FXML colAi field; passed colAi to logController.initialize()
+- `src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java` - Added colAi parameter, null-check, cell factory with ChatGPT URL logic; added XSLEditorApp import
 
 ## Decisions Made
 
@@ -94,11 +94,11 @@ Each task was committed atomically:
 
 ### Auto-fixed Issues
 
-**1. [Rule 3 - Blocking] Added missing XLSEditorApp import to LogController**
+**1. [Rule 3 - Blocking] Added missing XSLEditorApp import to LogController**
 - **Found during:** Task 2 (compile check after implementing cell factory)
-- **Issue:** `XLSEditorApp.hostServices()` used in LogController but the class is in `ch.ti.gagi.xlseditor` package — no import present
-- **Fix:** Added `import ch.ti.gagi.xlseditor.XLSEditorApp;` to LogController imports
-- **Files modified:** src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java
+- **Issue:** `XSLEditorApp.hostServices()` used in LogController but the class is in `ch.ti.gagi.xsleditor` package — no import present
+- **Fix:** Added `import ch.ti.gagi.xsleditor.XSLEditorApp;` to LogController imports
+- **Files modified:** src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java
 - **Verification:** `./gradlew compileJava` exits 0 after fix
 - **Committed in:** fe6324f (Task 2 commit)
 
@@ -109,7 +109,7 @@ Each task was committed atomically:
 
 ## Issues Encountered
 
-- Missing `XLSEditorApp` import in LogController caught at compile time — fixed inline per Rule 3 before committing Task 2.
+- Missing `XSLEditorApp` import in LogController caught at compile time — fixed inline per Rule 3 before committing Task 2.
 
 ## User Setup Required
 

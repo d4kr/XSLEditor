@@ -17,56 +17,56 @@
 
 **Model / Domain Layer:**
 - Purpose: Represents the core business entities of the system
-- Location: `src/main/java/ch/ti/gagi/xlseditor/model/`
+- Location: `src/main/java/ch/ti/gagi/xsleditor/model/`
 - Contains: Project configuration, file metadata, state tracking
 - Depends on: Nothing (leaf layer)
 - Used by: All other layers
 
 **Preprocessing Layer:**
 - Purpose: Transforms and prepares files before core pipeline execution
-- Location: `src/main/java/ch/ti/gagi/xlseditor/library/`
+- Location: `src/main/java/ch/ti/gagi/xsleditor/library/`
 - Contains: Custom directive expansion (<?LIBRARY ...?>)
 - Depends on: Filesystem I/O
 - Used by: RenderOrchestrator
 
 **Dependency Resolution Layer:**
 - Purpose: Analyzes XSLT include/import declarations and builds dependency graph
-- Location: `src/main/java/ch/ti/gagi/xlseditor/dependency/`
+- Location: `src/main/java/ch/ti/gagi/xsleditor/dependency/`
 - Contains: Graph traversal with circular dependency detection
 - Depends on: XML parsing, filesystem
 - Used by: RenderOrchestrator, ValidationEngine
 
 **Validation Layer:**
 - Purpose: Ensures all project files are well-formed XML/XSLT before processing
-- Location: `src/main/java/ch/ti/gagi/xlseditor/validation/`
+- Location: `src/main/java/ch/ti/gagi/xsleditor/validation/`
 - Contains: XML schema validation, error collection
 - Depends on: Filesystem, dependency graph
 - Used by: RenderOrchestrator
 
 **Rendering Layer:**
 - Purpose: Executes the core pipeline (XSLT → XSL-FO → PDF)
-- Location: `src/main/java/ch/ti/gagi/xlseditor/render/`
+- Location: `src/main/java/ch/ti/gagi/xsleditor/render/`
 - Contains: Saxon XSLT engine, Apache FOP renderer, orchestration
 - Depends on: saxon-he, fop libraries
 - Used by: PreviewManager
 
 **Error Management Layer:**
 - Purpose: Translates exceptions from different pipeline stages into unified RenderError format
-- Location: `src/main/java/ch/ti/gagi/xlseditor/error/`
+- Location: `src/main/java/ch/ti/gagi/xsleditor/error/`
 - Contains: Exception classification (XSLT/FOP/IO/UNKNOWN), location extraction
 - Depends on: ValidationError, RenderError
 - Used by: RenderOrchestrator, PreviewManager
 
 **Preview / Output Layer:**
 - Purpose: Marshals render results (PDF bytes or error list) for consumption by UI
-- Location: `src/main/java/ch/ti/gagi/xlseditor/preview/`
+- Location: `src/main/java/ch/ti/gagi/xsleditor/preview/`
 - Contains: Preview DTO, error adaptation, orchestration facade
 - Depends on: RenderOrchestrator, RenderError
 - Used by: UI components (not shown in current codebase)
 
 **Logging Layer:**
 - Purpose: Collects structured log entries for debugging and UI display
-- Location: `src/main/java/ch/ti/gagi/xlseditor/log/`
+- Location: `src/main/java/ch/ti/gagi/xsleditor/log/`
 - Contains: In-memory log storage, level-based filtering
 - Depends on: Nothing
 - Used by: Future integration with RenderOrchestrator and UI
@@ -116,53 +116,53 @@ At any stage where an exception occurs:
 
 **Project:**
 - Purpose: Represents a project context (rootPath, entryPoint XSLT, xmlInput)
-- Examples: `src/main/java/ch/ti/gagi/xlseditor/model/Project.java`
+- Examples: `src/main/java/ch/ti/gagi/xsleditor/model/Project.java`
 - Pattern: Immutable value object with accessor methods
 - Use: Pass to render pipeline to identify what to render and where
 
 **DependencyGraph:**
 - Purpose: Represents XSLT file dependencies as a directed acyclic graph
-- Examples: `src/main/java/ch/ti/gagi/xlseditor/dependency/DependencyGraph.java`
+- Examples: `src/main/java/ch/ti/gagi/xsleditor/dependency/DependencyGraph.java`
 - Pattern: Map of Path → List<Path> (edges), with query method dependenciesOf()
 - Use: Determine which files to validate before rendering
 
 **ValidationError / RenderError / PreviewError:**
 - Purpose: Type-safe error representation across pipeline stages
-- Examples: `src/main/java/ch/ti/gagi/xlseditor/validation/ValidationError.java`, `src/main/java/ch/ti/gagi/xlseditor/render/RenderError.java`, `src/main/java/ch/ti/gagi/xlseditor/preview/PreviewError.java`
+- Examples: `src/main/java/ch/ti/gagi/xsleditor/validation/ValidationError.java`, `src/main/java/ch/ti/gagi/xsleditor/render/RenderError.java`, `src/main/java/ch/ti/gagi/xsleditor/preview/PreviewError.java`
 - Pattern: Record types (immutable), progressively enriched as they flow through error handling
 - Use: Maintain error context (file, line, message, type) without losing precision
 
 **RenderResult / Preview:**
 - Purpose: Type-safe wrapper for success (PDF bytes) or failure (error list)
-- Examples: `src/main/java/ch/ti/gagi/xlseditor/render/RenderResult.java`, `src/main/java/ch/ti/gagi/xlseditor/preview/Preview.java`
+- Examples: `src/main/java/ch/ti/gagi/xsleditor/render/RenderResult.java`, `src/main/java/ch/ti/gagi/xsleditor/preview/Preview.java`
 - Pattern: Sealed union (either success() or failure()), accessed via boolean success() + getters
 - Use: Prevent null references; force explicit handling of both success and error cases
 
 **ProjectFile:**
 - Purpose: Represents an in-memory editor buffer with dirty/clean tracking
-- Examples: `src/main/java/ch/ti/gagi/xlseditor/model/ProjectFile.java`
+- Examples: `src/main/java/ch/ti/gagi/xsleditor/model/ProjectFile.java`
 - Pattern: Mutable state container with explicit markClean/markDirty/setOpen methods
 - Use: Track which files have unsaved changes; coordinate save-before-render
 
 ## Entry Points
 
 **RenderOrchestrator.renderSafe():**
-- Location: `src/main/java/ch/ti/gagi/xlseditor/render/RenderOrchestrator.java`
+- Location: `src/main/java/ch/ti/gagi/xsleditor/render/RenderOrchestrator.java`
 - Triggers: Render button click (or equivalent UI action)
 - Responsibilities: Execute full pipeline with exception handling, return RenderResult
 
 **ProjectManager.loadProject():**
-- Location: `src/main/java/ch/ti/gagi/xlseditor/model/ProjectManager.java`
+- Location: `src/main/java/ch/ti/gagi/xsleditor/model/ProjectManager.java`
 - Triggers: Open project action in UI
 - Responsibilities: Load .xslfo-tool.json config, instantiate Project
 
 **ProjectFileManager.load() / save():**
-- Location: `src/main/java/ch/ti/gagi/xlseditor/model/ProjectFileManager.java`
+- Location: `src/main/java/ch/ti/gagi/xsleditor/model/ProjectFileManager.java`
 - Triggers: Open file editor tab, save file action
 - Responsibilities: Read/write file content from/to disk
 
 **PreviewManager.generatePreview():**
-- Location: `src/main/java/ch/ti/gagi/xlseditor/preview/PreviewManager.java`
+- Location: `src/main/java/ch/ti/gagi/xsleditor/preview/PreviewManager.java`
 - Triggers: Render button (from UI)
 - Responsibilities: Orchestrate RenderOrchestrator, adapt result to Preview DTO for UI consumption
 

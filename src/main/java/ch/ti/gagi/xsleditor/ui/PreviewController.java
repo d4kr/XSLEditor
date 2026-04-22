@@ -46,7 +46,7 @@ public final class PreviewController {
         this.previewPlaceholderLabel = Objects.requireNonNull(previewPlaceholderLabel, "previewPlaceholderLabel");
         this.outdatedBannerLabel     = Objects.requireNonNull(outdatedBannerLabel,     "outdatedBannerLabel");
         try {
-            this.tempFile = Files.createTempFile("xlseditor-preview", ".pdf");
+            this.tempFile = Files.createTempFile("xsleditor-preview", ".pdf");
         } catch (IOException e) {
             System.err.println("[PreviewController] Failed to create temp file: " + e.getMessage());
         }

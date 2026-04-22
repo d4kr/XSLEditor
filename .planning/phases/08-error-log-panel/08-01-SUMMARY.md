@@ -12,11 +12,11 @@ tech_stack:
   patterns: [FilteredList, ToggleGroup, TableCell-cell-factory, sub-controller-lifecycle]
 key_files:
   created:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java
   modified:
-    - src/main/java/ch/ti/gagi/xlseditor/log/LogEntry.java
-    - src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml
-    - src/main/resources/ch/ti/gagi/xlseditor/ui/main.css
+    - src/main/java/ch/ti/gagi/xsleditor/log/LogEntry.java
+    - src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml
+    - src/main/resources/ch/ti/gagi/xsleditor/ui/main.css
 decisions:
   - "D-01/D-02: TableView with four columns; Level column uses CSS class cell factory for severity color"
   - "D-03/D-04: LogEntry extended with nullable type/file/Integer line; backwards-compatible 3-arg constructor delegates to 6-arg"
@@ -92,10 +92,10 @@ All three tasks verified:
 ## Self-Check: PASSED
 
 Files verified:
-- FOUND: src/main/java/ch/ti/gagi/xlseditor/log/LogEntry.java
-- FOUND: src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java
-- FOUND: src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml
-- FOUND: src/main/resources/ch/ti/gagi/xlseditor/ui/main.css
+- FOUND: src/main/java/ch/ti/gagi/xsleditor/log/LogEntry.java
+- FOUND: src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java
+- FOUND: src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml
+- FOUND: src/main/resources/ch/ti/gagi/xsleditor/ui/main.css
 
 Commits verified:
 - FOUND: c711061 (feat(08-01): extend LogEntry)

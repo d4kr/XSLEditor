@@ -8,26 +8,26 @@
 
 | New/Modified File | Role | Data Flow | Closest Analog | Match Quality |
 |---|---|---|---|---|
-| `src/main/java/ch/ti/gagi/xlseditor/log/LogEntry.java` | model | transform | `src/main/java/ch/ti/gagi/xlseditor/preview/PreviewError.java` | exact |
-| `src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java` | controller | event-driven | `src/main/java/ch/ti/gagi/xlseditor/ui/PreviewController.java` | exact |
-| `src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java` | controller | request-response | self (modify existing) | self |
-| `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` | controller | request-response | self (modify existing) | self |
-| `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` | config | request-response | self (modify existing) | self |
-| `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css` | config | N/A | self (modify existing) | self |
+| `src/main/java/ch/ti/gagi/xsleditor/log/LogEntry.java` | model | transform | `src/main/java/ch/ti/gagi/xsleditor/preview/PreviewError.java` | exact |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java` | controller | event-driven | `src/main/java/ch/ti/gagi/xsleditor/ui/PreviewController.java` | exact |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java` | controller | request-response | self (modify existing) | self |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` | controller | request-response | self (modify existing) | self |
+| `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` | config | request-response | self (modify existing) | self |
+| `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` | config | N/A | self (modify existing) | self |
 
 ---
 
 ## Pattern Assignments
 
-### `src/main/java/ch/ti/gagi/xlseditor/log/LogEntry.java` (model, transform)
+### `src/main/java/ch/ti/gagi/xsleditor/log/LogEntry.java` (model, transform)
 
-**Analog:** `src/main/java/ch/ti/gagi/xlseditor/preview/PreviewError.java`
+**Analog:** `src/main/java/ch/ti/gagi/xsleditor/preview/PreviewError.java`
 
 The existing `LogEntry` is a plain final class with three fields. The three optional fields (`type`, `file`, `line`) being added exactly match the field set already present in `PreviewError`. Use `PreviewError` as the field-shape template for the extension.
 
-**Current LogEntry shape** (`src/main/java/ch/ti/gagi/xlseditor/log/LogEntry.java` lines 1-18):
+**Current LogEntry shape** (`src/main/java/ch/ti/gagi/xsleditor/log/LogEntry.java` lines 1-18):
 ```java
-package ch.ti.gagi.xlseditor.log;
+package ch.ti.gagi.xsleditor.log;
 
 public final class LogEntry {
 
@@ -47,7 +47,7 @@ public final class LogEntry {
 }
 ```
 
-**Field shape to copy from PreviewError** (`src/main/java/ch/ti/gagi/xlseditor/preview/PreviewError.java` lines 1-21):
+**Field shape to copy from PreviewError** (`src/main/java/ch/ti/gagi/xsleditor/preview/PreviewError.java` lines 1-21):
 ```java
 // These three nullable fields are the ones being added to LogEntry
 private final String type;
@@ -79,19 +79,19 @@ public LogEntry(String message, String level, long timestamp) {
 }
 ```
 
-**Secondary analog for optional-field pattern:** `src/main/java/ch/ti/gagi/xlseditor/validation/ValidationError.java` (a record with nullable `line`/`column` Integer fields) confirms the project convention: optional numeric fields use `Integer` (boxed), not `int`.
+**Secondary analog for optional-field pattern:** `src/main/java/ch/ti/gagi/xsleditor/validation/ValidationError.java` (a record with nullable `line`/`column` Integer fields) confirms the project convention: optional numeric fields use `Integer` (boxed), not `int`.
 
 ---
 
-### `src/main/java/ch/ti/gagi/xlseditor/ui/LogController.java` (controller, event-driven) — NEW
+### `src/main/java/ch/ti/gagi/xsleditor/ui/LogController.java` (controller, event-driven) — NEW
 
-**Analog:** `src/main/java/ch/ti/gagi/xlseditor/ui/PreviewController.java`
+**Analog:** `src/main/java/ch/ti/gagi/xsleditor/ui/PreviewController.java`
 
 This is a brand-new sub-controller. The entire structural pattern (class declaration, state fields, `initialize()` signature with `Objects.requireNonNull`, Javadoc lifecycle comment) is copied from `PreviewController`.
 
 **Class header and Javadoc pattern** (`PreviewController.java` lines 1-30):
 ```java
-package ch.ti.gagi.xlseditor.ui;
+package ch.ti.gagi.xsleditor.ui;
 
 import ...;
 import java.util.Objects;
@@ -203,9 +203,9 @@ public void addInfo(String message) {
 
 ---
 
-### `src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java` (controller, request-response) — MODIFY
+### `src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java` (controller, request-response) — MODIFY
 
-**Current file:** `src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java`
+**Current file:** `src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java`
 
 The modification replaces the `ListView<String> logListView` parameter in `initialize()` with two `Consumer` callbacks and updates the body to use them instead of `logListView.getItems()`.
 
@@ -262,9 +262,9 @@ infoCallback.accept("Unexpected render error: " + (ex != null ? ex.getMessage() 
 
 ---
 
-### `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` (controller, request-response) — MODIFY
+### `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` (controller, request-response) — MODIFY
 
-**Current file:** `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java`
+**Current file:** `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java`
 
 Three changes: add `logController` field, update FXML injections, rewire `renderController.initialize()`.
 
@@ -318,9 +318,9 @@ logController.addInfo("Loaded entrypoint: ...");
 
 ---
 
-### `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` (config) — MODIFY
+### `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` (config) — MODIFY
 
-**Current file:** `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml`
+**Current file:** `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml`
 
 Replace lines 95-97 (inner content of `logPane`) only. The `TitledPane` element itself is unchanged.
 
@@ -365,9 +365,9 @@ Import to add at top of FXML (following existing `<?import ...?>` block pattern 
 
 ---
 
-### `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css` (config) — MODIFY
+### `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` (config) — MODIFY
 
-**Current file:** `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css`
+**Current file:** `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css`
 
 **Phase comment convention pattern** (lines 92-93, 105-106) — every new CSS block opens with a phase comment:
 ```css
@@ -437,7 +437,7 @@ Import to add at top of FXML (following existing `<?import ...?>` block pattern 
 ## Shared Patterns
 
 ### Sub-controller lifecycle (apply to LogController)
-**Source:** `src/main/java/ch/ti/gagi/xlseditor/ui/PreviewController.java` lines 1-53
+**Source:** `src/main/java/ch/ti/gagi/xsleditor/ui/PreviewController.java` lines 1-53
 - Class is `public final`
 - Not an `@FXML` controller
 - All UI node fields are private, set only in `initialize()`
@@ -445,19 +445,19 @@ Import to add at top of FXML (following existing `<?import ...?>` block pattern 
 - Javadoc on the class names the phase requirements (e.g. `Phase 8 / ERR-01..ERR-05`)
 
 ### Consumer callback wiring (apply to RenderController/MainController changes)
-**Source:** `src/main/java/ch/ti/gagi/xlseditor/ui/RenderController.java` lines 34-37 and `MainController.java` lines 116-117
+**Source:** `src/main/java/ch/ti/gagi/xsleditor/ui/RenderController.java` lines 34-37 and `MainController.java` lines 116-117
 - Callbacks stored as `Consumer<T>` fields, never as direct node references across controller boundaries
 - Wired in `MainController.initialize()` using method references: `controller::method`
 - D-07 pattern: `renderController.initialize(..., logController::setErrors, logController::addInfo, ...)`
 
 ### CSS class toggle for state-based styling (apply to Level column cell factory)
-**Source:** `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` lines 328-329 and `main.css` lines 34-37
+**Source:** `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` lines 328-329 and `main.css` lines 34-37
 - CSS classes added/removed programmatically via `getStyleClass().removeAll(...) / .add(...)`
 - Never set styles inline (`setStyle(...)`) when a CSS class exists
 - Pattern: `node.getStyleClass().removeAll("cls-a", "cls-b"); node.getStyleClass().add("cls-x");`
 
 ### Phase-scoped CSS comments
-**Source:** `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css` lines 92, 105
+**Source:** `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` lines 92, 105
 - Every new CSS section opens with `/* Phase N: description */`
 - Colors follow VS Code dark theme palette (established in Phase 5 comment lines 91-93)
 
@@ -471,6 +471,6 @@ All files have sufficient analogs. No files require falling back to RESEARCH.md 
 
 ## Metadata
 
-**Analog search scope:** `src/main/java/ch/ti/gagi/xlseditor/ui/`, `src/main/java/ch/ti/gagi/xlseditor/log/`, `src/main/java/ch/ti/gagi/xlseditor/preview/`, `src/main/java/ch/ti/gagi/xlseditor/validation/`, `src/main/resources/ch/ti/gagi/xlseditor/ui/`
+**Analog search scope:** `src/main/java/ch/ti/gagi/xsleditor/ui/`, `src/main/java/ch/ti/gagi/xsleditor/log/`, `src/main/java/ch/ti/gagi/xsleditor/preview/`, `src/main/java/ch/ti/gagi/xsleditor/validation/`, `src/main/resources/ch/ti/gagi/xsleditor/ui/`
 **Files scanned:** 12 source files
 **Pattern extraction date:** 2026-04-20

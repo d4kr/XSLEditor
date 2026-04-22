@@ -27,16 +27,16 @@ tech_stack:
     - @TempDir fixture: used in HrefExtractorTest and SearchTaskTest for file system isolation
 key_files:
   created:
-    - src/test/java/ch/ti/gagi/xlseditor/ui/XmlSyntaxHighlighterTest.java
-    - src/test/java/ch/ti/gagi/xlseditor/ui/AutocompleteProviderTest.java
-    - src/test/java/ch/ti/gagi/xlseditor/ui/OccurrenceHighlighterTest.java
-    - src/test/java/ch/ti/gagi/xlseditor/ui/HrefExtractorTest.java
-    - src/test/java/ch/ti/gagi/xlseditor/ui/SearchTaskTest.java
-    - src/main/java/ch/ti/gagi/xlseditor/ui/XmlSyntaxHighlighter.java
-    - src/main/java/ch/ti/gagi/xlseditor/ui/AutocompleteProvider.java
-    - src/main/java/ch/ti/gagi/xlseditor/ui/OccurrenceHighlighter.java
-    - src/main/java/ch/ti/gagi/xlseditor/ui/HrefExtractor.java
-    - src/main/java/ch/ti/gagi/xlseditor/ui/SearchDialog.java
+    - src/test/java/ch/ti/gagi/xsleditor/ui/XmlSyntaxHighlighterTest.java
+    - src/test/java/ch/ti/gagi/xsleditor/ui/AutocompleteProviderTest.java
+    - src/test/java/ch/ti/gagi/xsleditor/ui/OccurrenceHighlighterTest.java
+    - src/test/java/ch/ti/gagi/xsleditor/ui/HrefExtractorTest.java
+    - src/test/java/ch/ti/gagi/xsleditor/ui/SearchTaskTest.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/XmlSyntaxHighlighter.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/AutocompleteProvider.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/OccurrenceHighlighter.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/HrefExtractor.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/SearchDialog.java
   modified: []
 decisions:
   - Skeleton production classes created in Wave 0 so test stubs compile: @Disabled prevents execution but not compilation; skeletons have correct method signatures with no-op bodies to be replaced in Wave 1/2
@@ -69,7 +69,7 @@ metrics:
 ## Verification Results
 
 - `./gradlew test` exits 0 — all five @Disabled stubs compile but do not execute
-- All five test files exist in `src/test/java/ch/ti/gagi/xlseditor/ui/`
+- All five test files exist in `src/test/java/ch/ti/gagi/xsleditor/ui/`
 - `totalSpanLengthEqualsInputLength` present in XmlSyntaxHighlighterTest
 - `getMatchesReturnsSubsetMatchingPrefix` present in AutocompleteProviderTest
 - `findOccurrencesReturnsEmptyForBlankToken` present in OccurrenceHighlighterTest
@@ -95,11 +95,11 @@ metrics:
 
 | Stub | File | Reason |
 |------|------|--------|
-| XmlSyntaxHighlighter.computeHighlighting returns single unstyled span | src/main/java/ch/ti/gagi/xlseditor/ui/XmlSyntaxHighlighter.java | Skeleton only — Wave 1 replaces with regex-based XML highlighter |
-| AutocompleteProvider.getMatches always returns empty list | src/main/java/ch/ti/gagi/xlseditor/ui/AutocompleteProvider.java | Skeleton only — Wave 1 replaces with full keyword list and filter |
-| OccurrenceHighlighter.findOccurrences always returns empty list | src/main/java/ch/ti/gagi/xlseditor/ui/OccurrenceHighlighter.java | Skeleton only — Wave 1 implements scan |
-| HrefExtractor.extractHref always returns Optional.empty() | src/main/java/ch/ti/gagi/xlseditor/ui/HrefExtractor.java | Skeleton only — Wave 1 implements href parsing and path resolution |
-| SearchDialog.search always returns empty list | src/main/java/ch/ti/gagi/xlseditor/ui/SearchDialog.java | Skeleton only — Wave 2 implements Files.walk file scanner |
+| XmlSyntaxHighlighter.computeHighlighting returns single unstyled span | src/main/java/ch/ti/gagi/xsleditor/ui/XmlSyntaxHighlighter.java | Skeleton only — Wave 1 replaces with regex-based XML highlighter |
+| AutocompleteProvider.getMatches always returns empty list | src/main/java/ch/ti/gagi/xsleditor/ui/AutocompleteProvider.java | Skeleton only — Wave 1 replaces with full keyword list and filter |
+| OccurrenceHighlighter.findOccurrences always returns empty list | src/main/java/ch/ti/gagi/xsleditor/ui/OccurrenceHighlighter.java | Skeleton only — Wave 1 implements scan |
+| HrefExtractor.extractHref always returns Optional.empty() | src/main/java/ch/ti/gagi/xsleditor/ui/HrefExtractor.java | Skeleton only — Wave 1 implements href parsing and path resolution |
+| SearchDialog.search always returns empty list | src/main/java/ch/ti/gagi/xsleditor/ui/SearchDialog.java | Skeleton only — Wave 2 implements Files.walk file scanner |
 
 These stubs are intentional Wave 0 artifacts. They are replaced by Wave 1 (plans 05-02 through 05-04) and Wave 2 (plan 05-05). The test @Disabled annotations will be removed once each production class is implemented.
 
@@ -109,23 +109,23 @@ These stubs are intentional Wave 0 artifacts. They are replaced by Wave 1 (plans
 
 | Flag | File | Description |
 |------|------|-------------|
-| threat_flag: path-traversal | src/main/java/ch/ti/gagi/xlseditor/ui/HrefExtractor.java | HrefExtractor.extractHref() will resolve filesystem paths from user-controlled href values; the skeleton returns Optional.empty() (safe default). Wave 1 must implement the traversal guard confirmed by the pathTraversalIsRejected test. |
+| threat_flag: path-traversal | src/main/java/ch/ti/gagi/xsleditor/ui/HrefExtractor.java | HrefExtractor.extractHref() will resolve filesystem paths from user-controlled href values; the skeleton returns Optional.empty() (safe default). Wave 1 must implement the traversal guard confirmed by the pathTraversalIsRejected test. |
 
 ---
 
 ## Self-Check: PASSED
 
 All created files exist on disk:
-- src/test/java/ch/ti/gagi/xlseditor/ui/XmlSyntaxHighlighterTest.java - FOUND
-- src/test/java/ch/ti/gagi/xlseditor/ui/AutocompleteProviderTest.java - FOUND
-- src/test/java/ch/ti/gagi/xlseditor/ui/OccurrenceHighlighterTest.java - FOUND
-- src/test/java/ch/ti/gagi/xlseditor/ui/HrefExtractorTest.java - FOUND
-- src/test/java/ch/ti/gagi/xlseditor/ui/SearchTaskTest.java - FOUND
-- src/main/java/ch/ti/gagi/xlseditor/ui/XmlSyntaxHighlighter.java - FOUND
-- src/main/java/ch/ti/gagi/xlseditor/ui/AutocompleteProvider.java - FOUND
-- src/main/java/ch/ti/gagi/xlseditor/ui/OccurrenceHighlighter.java - FOUND
-- src/main/java/ch/ti/gagi/xlseditor/ui/HrefExtractor.java - FOUND
-- src/main/java/ch/ti/gagi/xlseditor/ui/SearchDialog.java - FOUND
+- src/test/java/ch/ti/gagi/xsleditor/ui/XmlSyntaxHighlighterTest.java - FOUND
+- src/test/java/ch/ti/gagi/xsleditor/ui/AutocompleteProviderTest.java - FOUND
+- src/test/java/ch/ti/gagi/xsleditor/ui/OccurrenceHighlighterTest.java - FOUND
+- src/test/java/ch/ti/gagi/xsleditor/ui/HrefExtractorTest.java - FOUND
+- src/test/java/ch/ti/gagi/xsleditor/ui/SearchTaskTest.java - FOUND
+- src/main/java/ch/ti/gagi/xsleditor/ui/XmlSyntaxHighlighter.java - FOUND
+- src/main/java/ch/ti/gagi/xsleditor/ui/AutocompleteProvider.java - FOUND
+- src/main/java/ch/ti/gagi/xsleditor/ui/OccurrenceHighlighter.java - FOUND
+- src/main/java/ch/ti/gagi/xsleditor/ui/HrefExtractor.java - FOUND
+- src/main/java/ch/ti/gagi/xsleditor/ui/SearchDialog.java - FOUND
 
 Commits verified:
 - 67151bd - FOUND

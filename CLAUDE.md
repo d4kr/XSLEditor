@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-XLSEditor is a local desktop developer tool for editing multi-file XSLT/XSL-FO templates, generating PDFs on demand, and doing advanced debugging. It is strictly for internal developers; no auth, no multi-user, no external backend dependencies.
+XSLEditor is a local desktop developer tool for editing multi-file XSLT/XSL-FO templates, generating PDFs on demand, and doing advanced debugging. It is strictly for internal developers; no auth, no multi-user, no external backend dependencies.
 
 Core pipeline: **XML → XSLT → XSL-FO → PDF**
 

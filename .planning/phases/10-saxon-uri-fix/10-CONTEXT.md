@@ -36,11 +36,11 @@ Fix URI-decode bug in `PreviewManager.toPreviewErrors()` so click-to-navigate wo
 - `.planning/REQUIREMENTS.md` §ERR-04 — URI-decode requirement spec
 
 ### Source files (read before planning)
-- `src/main/java/ch/ti/gagi/xlseditor/preview/PreviewManager.java` — contains the partial fix already in working tree (uncommitted diff: `resolveFilePath()` added, used in `toPreviewErrors()`)
-- `src/main/java/ch/ti/gagi/xlseditor/error/ErrorManager.java` — where Saxon `systemId` is extracted and passed into `RenderError.location`
+- `src/main/java/ch/ti/gagi/xsleditor/preview/PreviewManager.java` — contains the partial fix already in working tree (uncommitted diff: `resolveFilePath()` added, used in `toPreviewErrors()`)
+- `src/main/java/ch/ti/gagi/xsleditor/error/ErrorManager.java` — where Saxon `systemId` is extracted and passed into `RenderError.location`
 
 ### Existing tests
-- `src/test/java/ch/ti/gagi/xlseditor/preview/PreviewManagerIntegrationTest.java` — integration test for PreviewManager; does not cover URI-decode path
+- `src/test/java/ch/ti/gagi/xsleditor/preview/PreviewManagerIntegrationTest.java` — integration test for PreviewManager; does not cover URI-decode path
 
 </canonical_refs>
 
@@ -52,7 +52,7 @@ Fix URI-decode bug in `PreviewManager.toPreviewErrors()` so click-to-navigate wo
 - `PreviewError` record — target type; has `file` and `line` fields
 
 ### Established Patterns
-- Test package mirrors source package (`ch.ti.gagi.xlseditor.preview`) — package-private access works without reflection
+- Test package mirrors source package (`ch.ti.gagi.xsleditor.preview`) — package-private access works without reflection
 - `try/catch` with `ignored` local variable already used in `toPreviewErrors()` for `NumberFormatException` — consistent exception-handling style
 
 ### Integration Points

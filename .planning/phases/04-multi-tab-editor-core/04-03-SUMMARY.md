@@ -29,7 +29,7 @@ tech-stack:
 key-files:
   created: []
   modified:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java
 
 key-decisions:
   - "editorController.initialize() called after fileTreeController.initialize() to guarantee seam exists before hookup (T-04-12 mitigation)"
@@ -72,7 +72,7 @@ completed: 2026-04-18
 
 ## Files Created/Modified
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` - Added EditorController field, initialize call, and seam hookup (9 insertions)
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` - Added EditorController field, initialize call, and seam hookup (9 insertions)
 
 ## Decisions Made
 
@@ -99,7 +99,7 @@ None - plan executed exactly as written.
 | `fileTreeController.setOnFileOpenRequest(editorController::openOrFocusTab)` count = 1 | PASS |
 | `this::setDirty` count = 1 | PASS |
 | `() -> primaryStage` count >= 2 | PASS (2) |
-| No `import ch.ti.gagi.xlseditor.ui.EditorController` (same package) | PASS (0) |
+| No `import ch.ti.gagi.xsleditor.ui.EditorController` (same package) | PASS (0) |
 | No `new TabPane` in MainController | PASS (0) |
 | No `setOnKeyPressed` in MainController | PASS (0) |
 | Ordering: fileTreeController.initialize → editorController.initialize → setOnFileOpenRequest | PASS |
@@ -143,7 +143,7 @@ None.
 
 ## Self-Check: PASSED
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` — modified file exists
+- `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` — modified file exists
 - Commit `c9d095d` — confirmed in git log
 - Human verification — approved (all 6 scenarios)
 

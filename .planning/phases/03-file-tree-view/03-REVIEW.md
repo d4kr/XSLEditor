@@ -4,13 +4,13 @@ reviewed: 2026-04-17T00:00:00Z
 depth: standard
 files_reviewed: 7
 files_reviewed_list:
-  - src/main/java/ch/ti/gagi/xlseditor/ui/FileItem.java
-  - src/main/java/ch/ti/gagi/xlseditor/ui/FileItemTreeCell.java
-  - src/main/java/ch/ti/gagi/xlseditor/ui/FileTreeController.java
-  - src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java
-  - src/main/java/ch/ti/gagi/xlseditor/ui/ProjectContext.java
-  - src/main/resources/ch/ti/gagi/xlseditor/ui/main.css
-  - src/test/java/ch/ti/gagi/xlseditor/model/ProjectContextTest.java
+  - src/main/java/ch/ti/gagi/xsleditor/ui/FileItem.java
+  - src/main/java/ch/ti/gagi/xsleditor/ui/FileItemTreeCell.java
+  - src/main/java/ch/ti/gagi/xsleditor/ui/FileTreeController.java
+  - src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java
+  - src/main/java/ch/ti/gagi/xsleditor/ui/ProjectContext.java
+  - src/main/resources/ch/ti/gagi/xsleditor/ui/main.css
+  - src/test/java/ch/ti/gagi/xsleditor/model/ProjectContextTest.java
 findings:
   critical: 0
   warning: 3
@@ -53,7 +53,7 @@ No critical (security or data-loss) issues were found.
 
 ### WR-01: `createFile` breaks the lexicographic sort invariant
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/ui/ProjectContext.java:112`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/ui/ProjectContext.java:112`
 
 **Issue:** `openProject` / `refreshProjectFiles` populates `projectFiles` in
 lexicographic order (guaranteed by the `sorted()` step at line 73). However,
@@ -98,7 +98,7 @@ void createFileInsertsInSortedOrder(@TempDir Path tempDir) throws IOException {
 
 ### WR-02: Fragile positional cast in `mountTree`
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/ui/FileTreeController.java:266`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/ui/FileTreeController.java:266`
 
 **Issue:** `mountTree` retrieves the header label by index:
 
@@ -135,7 +135,7 @@ treeHeader.setText(project.rootPath().getFileName() + "/");
 
 ### WR-03: Potential `NullPointerException` in `handleOpenProject` via `user.home`
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java:134`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java:134`
 
 **Issue:** `System.getProperty("user.home")` can return `null` on certain JVM
 configurations (custom security managers, stripped-down container images). When
@@ -159,7 +159,7 @@ if (home != null) {
 
 ### IN-01: `FileItemTreeCell.updateItem` missing `setGraphic(null)` in empty branch
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/ui/FileItemTreeCell.java:48-52`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/ui/FileItemTreeCell.java:48-52`
 
 **Issue:** The JavaFX `TreeCell` contract requires that the empty/null branch
 resets ALL display properties of a recycled cell. `setText(null)` is present,
@@ -184,7 +184,7 @@ if (empty || item == null) {
 
 ### IN-02: `validateSimpleFilename` rejects valid filenames containing `".."`
 
-**File:** `src/main/java/ch/ti/gagi/xlseditor/ui/ProjectContext.java:194`
+**File:** `src/main/java/ch/ti/gagi/xsleditor/ui/ProjectContext.java:194`
 
 **Issue:** The traversal guard uses `filename.contains("..")`, which is
 intentionally conservative but rejects legitimate filenames such as

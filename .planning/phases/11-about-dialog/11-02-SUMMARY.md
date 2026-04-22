@@ -6,9 +6,9 @@ tags: [javafx, dialog, about, dark-theme, version, runtime-stack]
 
 # Dependency graph
 requires:
-  - "11-01: version.properties at classpath root and XLSEditorApp.hostServices() accessor"
+  - "11-01: version.properties at classpath root and XSLEditorApp.hostServices() accessor"
 provides:
-  - "src/main/java/ch/ti/gagi/xlseditor/ui/AboutDialog.java — Dialog<Void> with full UI-SPEC layout"
+  - "src/main/java/ch/ti/gagi/xsleditor/ui/AboutDialog.java — Dialog<Void> with full UI-SPEC layout"
   - "public AboutDialog(Stage ownerStage, HostServices hostServices) — constructor signature for Plan 03 wiring"
 affects:
   - 11-03-about-dialog-wiring
@@ -24,7 +24,7 @@ tech-stack:
 
 key-files:
   created:
-    - src/main/java/ch/ti/gagi/xlseditor/ui/AboutDialog.java
+    - src/main/java/ch/ti/gagi/xsleditor/ui/AboutDialog.java
   modified: []
 
 key-decisions:
@@ -57,9 +57,9 @@ completed: "2026-04-22"
 
 ## Accomplishments
 
-- Created `src/main/java/ch/ti/gagi/xlseditor/ui/AboutDialog.java` as `Dialog<Void>` following SearchDialog pattern
+- Created `src/main/java/ch/ti/gagi/xsleditor/ui/AboutDialog.java` as `Dialog<Void>` following SearchDialog pattern
 - 360px DialogPane with #2b2b2b background and Insets(24,16,16,16) padding
-- App title "XLSEditor  v{version}" (two spaces) in System Bold 18 #cccccc, version loaded from `/version.properties`
+- App title "XSLEditor  v{version}" (two spaces) in System Bold 18 #cccccc, version loaded from `/version.properties`
 - Two #444444 Separators with Insets(4,0,4,0) VBox margins
 - "Runtime Stack" section header in System Bold 12 #888888
 - GridPane (hgap=16, vgap=4) with 4 rows: Monospaced 13 #888888 labels, System 13 #cccccc values
@@ -76,7 +76,7 @@ completed: "2026-04-22"
 
 ## Files Created/Modified
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/AboutDialog.java` — New file; 163 lines, full programmatic layout
+- `src/main/java/ch/ti/gagi/xsleditor/ui/AboutDialog.java` — New file; 163 lines, full programmatic layout
 
 ## Decisions Made
 
@@ -100,7 +100,7 @@ None — no new network endpoints, auth paths, file access patterns, or schema c
 
 ## Self-Check: PASSED
 
-- `src/main/java/ch/ti/gagi/xlseditor/ui/AboutDialog.java` — FOUND
+- `src/main/java/ch/ti/gagi/xsleditor/ui/AboutDialog.java` — FOUND
 - Commit `c9b5021` — FOUND
 
 ---

@@ -9,7 +9,7 @@ human_verification:
     expected: "Five menu items in that exact order with correct separators; Set Entrypoint, Set XML Input, and New File... are all grayed on launch."
     why_human: "JavaFX menu rendering cannot be verified without TestFX or Monocle headless toolkit."
   - test: "Click 'Open Project...'. Select a directory containing no .xslfo-tool.json. Observe title bar, status label, and log panel."
-    expected: "Title updates to 'XLSEditor — {dirname}'. Status label shows 'Project opened: {dirname}' for ~3 seconds then disappears. Log panel entry: 'No .xslfo-tool.json found — entrypoint and XML input not set'. New File... becomes enabled."
+    expected: "Title updates to 'XSLEditor — {dirname}'. Status label shows 'Project opened: {dirname}' for ~3 seconds then disappears. Log panel entry: 'No .xslfo-tool.json found — entrypoint and XML input not set'. New File... becomes enabled."
     why_human: "DirectoryChooser interaction, PauseTransition timing, and reactive MenuItem binding require a running JavaFX stage."
   - test: "Open a directory containing a valid .xslfo-tool.json with entryPoint and xmlInput set."
     expected: "Title updates. Log panel shows 'Loaded entrypoint: {file} · XML input: {file}'. Status label shows success message for 3 seconds."
@@ -71,19 +71,19 @@ None — all Phase 2 deliverables are implemented. PROJ-02 (Set Entrypoint) and 
 
 | Artifact | Expected | Status | Details |
 |----------|----------|--------|---------|
-| `src/main/java/ch/ti/gagi/xlseditor/model/ProjectConfig.java` | Relaxed record with null-tolerant constructor, null-safe read(), new write(Path) | VERIFIED | Contains `public void write(`, null guards in constructor, `!ep.isNull()` in read(). gsd-tools: passed. |
-| `src/main/java/ch/ti/gagi/xlseditor/model/ProjectManager.java` | loadProject() that handles missing config (D-01) | VERIFIED | Contains `Files.exists(configPath)` and `new Project(rootPath, null, null)`. gsd-tools: passed. |
-| `src/main/java/ch/ti/gagi/xlseditor/ui/ProjectContext.java` | Project state service with BooleanProperty and createFile() | VERIFIED | Contains `SimpleBooleanProperty`, `openProject`, `createFile`, `validateSimpleFilename`. gsd-tools: passed. |
-| `src/test/java/ch/ti/gagi/xlseditor/model/ProjectConfigTest.java` | Unit tests for write + partial read (PROJ-04, PROJ-05) | VERIFIED | 7 @Test methods covering write, null-field omission, partial read, explicit-null read, absolute path rejection, both-null acceptance. gsd-tools: passed. |
-| `src/test/java/ch/ti/gagi/xlseditor/model/ProjectContextTest.java` | Unit tests for createFile + path traversal guard (PROJ-06) | VERIFIED | 7 @Test methods covering all createFile scenarios including three traversal vectors. gsd-tools: passed. |
+| `src/main/java/ch/ti/gagi/xsleditor/model/ProjectConfig.java` | Relaxed record with null-tolerant constructor, null-safe read(), new write(Path) | VERIFIED | Contains `public void write(`, null guards in constructor, `!ep.isNull()` in read(). gsd-tools: passed. |
+| `src/main/java/ch/ti/gagi/xsleditor/model/ProjectManager.java` | loadProject() that handles missing config (D-01) | VERIFIED | Contains `Files.exists(configPath)` and `new Project(rootPath, null, null)`. gsd-tools: passed. |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/ProjectContext.java` | Project state service with BooleanProperty and createFile() | VERIFIED | Contains `SimpleBooleanProperty`, `openProject`, `createFile`, `validateSimpleFilename`. gsd-tools: passed. |
+| `src/test/java/ch/ti/gagi/xsleditor/model/ProjectConfigTest.java` | Unit tests for write + partial read (PROJ-04, PROJ-05) | VERIFIED | 7 @Test methods covering write, null-field omission, partial read, explicit-null read, absolute path rejection, both-null acceptance. gsd-tools: passed. |
+| `src/test/java/ch/ti/gagi/xsleditor/model/ProjectContextTest.java` | Unit tests for createFile + path traversal guard (PROJ-06) | VERIFIED | 7 @Test methods covering all createFile scenarios including three traversal vectors. gsd-tools: passed. |
 
 #### Plan 02 Artifacts
 
 | Artifact | Expected | Status | Details |
 |----------|----------|--------|---------|
-| `src/main/resources/ch/ti/gagi/xlseditor/ui/main.fxml` | File menu items with fx:id, status label in fileTreePane | VERIFIED | Contains `fx:id="menuItemOpenProject"`, `fx:id="statusLabel"`, all required items. gsd-tools: passed. |
-| `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css` | .status-label-success style, .menu-item:disabled style | VERIFIED | Both rules present with correct colors. gsd-tools: passed. |
-| `src/main/java/ch/ti/gagi/xlseditor/ui/MainController.java` | ProjectContext wiring, handleOpenProject, handleNewFile, disable bindings, transient status label | VERIFIED | All required methods and bindings present. gsd-tools: passed. |
+| `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` | File menu items with fx:id, status label in fileTreePane | VERIFIED | Contains `fx:id="menuItemOpenProject"`, `fx:id="statusLabel"`, all required items. gsd-tools: passed. |
+| `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` | .status-label-success style, .menu-item:disabled style | VERIFIED | Both rules present with correct colors. gsd-tools: passed. |
+| `src/main/java/ch/ti/gagi/xsleditor/ui/MainController.java` | ProjectContext wiring, handleOpenProject, handleNewFile, disable bindings, transient status label | VERIFIED | All required methods and bindings present. gsd-tools: passed. |
 
 ---
 
@@ -150,7 +150,7 @@ Data-flow tracing is not applicable for this phase. The phase delivers a state s
 
 | File | Line | Pattern | Severity | Impact |
 |------|------|---------|----------|--------|
-| `src/main/java/ch/ti/gagi/xlseditor/render/RenderOrchestrator.java` | 22-23 | `// Phase 2 D-03: project.entryPoint() may be null` TODO | Info | Intentional marker per plan requirement — caller must ensure entryPoint is set before render. Documented in Plan 01 summary as part of caller audit. Not a stub; serves as an explicit guard reminder for Phase 6. |
+| `src/main/java/ch/ti/gagi/xsleditor/render/RenderOrchestrator.java` | 22-23 | `// Phase 2 D-03: project.entryPoint() may be null` TODO | Info | Intentional marker per plan requirement — caller must ensure entryPoint is set before render. Documented in Plan 01 summary as part of caller audit. Not a stub; serves as an explicit guard reminder for Phase 6. |
 
 No blocking anti-patterns found. No empty implementations, placeholder returns, or hardcoded stub data in any Phase 2 deliverable.
 
@@ -169,7 +169,7 @@ The following behaviors require a running JavaFX application to verify. Use `./g
 #### 2. Open Project — No Config File
 
 **Test:** Click "Open Project...". Select any directory that does not contain `.xslfo-tool.json`.
-**Expected:** Window title changes to "XLSEditor — {dirname}". Status label shows "Project opened: {dirname}" for approximately 3 seconds, then disappears. Log panel entry: "No .xslfo-tool.json found — entrypoint and XML input not set". "New File..." becomes enabled. "Set Entrypoint" / "Set XML Input" remain grayed.
+**Expected:** Window title changes to "XSLEditor — {dirname}". Status label shows "Project opened: {dirname}" for approximately 3 seconds, then disappears. Log panel entry: "No .xslfo-tool.json found — entrypoint and XML input not set". "New File..." becomes enabled. "Set Entrypoint" / "Set XML Input" remain grayed.
 **Why human:** DirectoryChooser is a native OS dialog, PauseTransition timing and reactive binding state change require a running FX stage.
 
 #### 3. Open Project — Config File Present

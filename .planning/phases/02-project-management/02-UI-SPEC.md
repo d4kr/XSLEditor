@@ -27,7 +27,7 @@ created: 2026-04-15
 | Icon library | none in Phase 2 — text labels only for menu items and toolbar actions |
 | Font | System default (unset) for menus and dialogs; `Monospaced` for code-adjacent labels |
 
-Source: detected from `src/main/resources/ch/ti/gagi/xlseditor/ui/main.css` and `MainController.java` (Phase 1 artifacts).
+Source: detected from `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` and `MainController.java` (Phase 1 artifacts).
 
 ---
 
@@ -146,8 +146,8 @@ All copy in English (CLAUDE.md convention).
 | Primary CTA — set entrypoint | `Set Entrypoint` (no ellipsis — acts immediately on selected file) |
 | Primary CTA — set XML input | `Set XML Input` (no ellipsis — acts immediately on selected file) |
 | Primary CTA — new file | `New File...` (menu item; ellipsis signals a dialog follows) |
-| Window title — project loaded | `XLSEditor — {projectName}` (em dash U+2014, already implemented in `updateTitle()`) |
-| Window title — no project | `XLSEditor` |
+| Window title — project loaded | `XSLEditor — {projectName}` (em dash U+2014, already implemented in `updateTitle()`) |
+| Window title — no project | `XSLEditor` |
 | Status feedback — project loaded | `Project opened: {projectName}` (transient label or log entry, 3-second auto-hide) |
 | Status feedback — config restored | `Loaded entrypoint: {filename} · XML input: {filename}` (info-level log entry) |
 | Status feedback — no config found | `No .xslfo-tool.json found — entrypoint and XML input not set` (info-level log entry; not an error) |
