@@ -93,7 +93,9 @@ Plans:
   1. Log panel TableView expands horizontally to fill 100% of its container width — no empty space at the right edge
   2. No phantom empty column appears at the right side of the log table
   3. Time, Level, and Action columns retain a readable minimum width even when the window is at its minimum size; Message column absorbs remaining width
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [x] 16-01-PLAN.md — Set CONSTRAINED_RESIZE_POLICY + minWidth/maxWidth on all five log table columns
 **UI hint**: yes
 
 ### Phase 17: Encoding Investigation & Fix
