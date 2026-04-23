@@ -1,10 +1,16 @@
 # XSLEditor
 
-## Current State: v0.2.1 Planning 2026-04-22
+## Current Milestone: v0.3.0 Polish & Usability
 
-**v0.2.1 — XSLEditor Full Rename** — 1 phase, 3 plans (est).
-Full rebrand from XSLEditor to XSLEditor including packages, classes, and config files.
-Next milestone: **v0.3.0** (scope TBD).
+**Goal:** Migliorare leggibilità UI, correggere encoding, aggiornare documentazione e sistemare la versione About.
+
+**Target features:**
+- README aggiornato — più completo e dettagliato con icona app
+- Icona app — spostata in posizione corretta, inclusa nel README
+- Versione About — aggiornamento automatico da build (non hardcoded)
+- Tema UI dark — colori leggibili per editor, tree e log panel
+- Log panel — larghezza piena, colonna in eccesso rimossa
+- Encoding — correzione problema caratteri nel rendering/display
 
 ## What This Is
 
@@ -32,7 +38,7 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 - ✓ ABOUT-01..05: About dialog — version, runtime stack, author, license — v0.2.0
 - ✓ ERR-06: ChatGPT button per error log row — opens pre-filled query in browser — v0.2.0
 
-### Active (v0.2.1 / v0.3.0 candidates)
+### Active (v0.3.0)
 
 - [ ] **RENAME-01..10**: Full project rename (XSLEditor -> XSLEditor) — v0.2.1
 - [ ] **EDIT-06 edge cases**: Occurrence highlighting across element boundaries — deferred, low priority
@@ -111,4 +117,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-22 after v0.2.0 milestone*
+*Last updated: 2026-04-23 — Milestone v0.3.0 started*

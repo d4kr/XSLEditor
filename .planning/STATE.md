@@ -1,35 +1,33 @@
 ---
 gsd_state_version: 1.0
-milestone: v0.2.1
-milestone_name: XSLEditor Full Rename
-status: in_progress
-last_updated: "2026-04-22T21:05:00Z"
+milestone: v0.3.0
+milestone_name: Polish & Usability
+status: defining_requirements
+last_updated: "2026-04-23T00:00:00Z"
 progress:
-  total_phases: 1
+  total_phases: 0
   completed_phases: 0
-  total_plans: 3
-  completed_plans: 2
+  total_plans: 0
+  completed_plans: 0
 ---
 
 # Project State: XSLEditor
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-22)
+See: .planning/PROJECT.md (updated 2026-04-23)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** v0.2.1 — Full project rename (XSLEditor -> XSLEditor)
+**Current focus:** v0.3.0 — Polish & Usability
 
 ---
 
 ## Current Position
 
-Phase: 13 of 13 (Full Project Rename)
-Plans: 2/3 complete
-Status: Milestone v0.2.1 in progress
-Last activity: 2026-04-22 — Completed 13-02-PLAN.md
-
-Progress: [======    ] 66%
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-04-23 — Milestone v0.3.0 started
 
 ---
 
@@ -44,6 +42,7 @@ Progress: [======    ] 66%
 - **Phase 07** — PDF Preview Panel — 2026-04-20
 - **Phase 08** — Error & Log Panel — 2026-04-20
 - **Phase 09** — Testing — 2026-04-21
+- **Phase 13** — Full Project Rename — 2026-04-22
 
 ---
 
@@ -59,9 +58,10 @@ See .planning/PROJECT.md Key Decisions table for full log.
 ## Accumulated Context
 
 - v1.0 shipped 2026-04-21: 9 phases, 24 plans, 3,435 Java LOC, 96 tests green
-- Tech debt carried into v1.1: ERR-04 (Saxon file:// URI), EDIT-06 partial, EDIT-07 unverified
-- v1.1 scope: ERR-04 fix + About dialog + ChatGPT error-log link (3 phases, 7 requirements)
-- Phase 11 (About Dialog) has UI hint — consider /gsd-ui-phase
+- v0.2.0 shipped 2026-04-22: 3 phases, ERR-04 fix, About dialog, ChatGPT error-log link
+- v0.2.1 rename completed 2026-04-22: full rebrand XSLEditor → XSLEditor (packages, classes, config)
+- v0.3.0 focus: UI polish (dark theme readability), encoding fix, documentation, About version auto-update, log panel layout
+- Tech debt carried: EDIT-06 partial, EDIT-07 unverified, no automated tests for About dialog
 
 ---
 
