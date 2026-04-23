@@ -104,8 +104,8 @@
                     <ToggleButton fx:id="filterInfoButton"  text="Info"                    styleClass="log-filter-btn"/>
                 </HBox>
                 <TableView fx:id="logTableView"
-                           columnResizePolicy="CONSTRAINED_RESIZE_POLICY"
                            prefHeight="120" VBox.vgrow="ALWAYS">
+                    <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
                     <columns>
                         <TableColumn fx:id="colTime"    text="Time"    prefWidth="65"  minWidth="65"  maxWidth="65"  sortable="false"/>
                         <TableColumn fx:id="colLevel"   text="Level"   prefWidth="60"  minWidth="60"  maxWidth="60"  sortable="false"/>

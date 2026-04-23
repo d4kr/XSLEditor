@@ -125,7 +125,7 @@ Plans:
 | 1–13 | v0.1.0–v0.2.1 | 32/32 | Complete | 2026-04-22 |
 | 14. Version & Icon Housekeeping | v0.3.0 | 2/2 | Complete | 2026-04-23 |
 | 15. Dark Theme CSS Fixes | v0.3.0 | 0/1 | Planned | - |
-| 16. Log Panel Layout | v0.3.0 | 0/? | Not started | - |
+| 16. Log Panel Layout | v0.3.0 | 1/1 | Complete | 2026-04-23 |
 | 17. Encoding Investigation & Fix | v0.3.0 | 0/? | Not started | - |
 | 18. README Rewrite | v0.3.0 | 0/? | Not started | - |
 
