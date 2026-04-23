@@ -9,7 +9,9 @@ import ch.ti.gagi.xsleditor.validation.ValidationEngine;
 import ch.ti.gagi.xsleditor.validation.ValidationError;
 import net.sf.saxon.s9api.XsltExecutable;
 
-import java.nio.charset.StandardCharsets;
+import ch.ti.gagi.xsleditor.util.XmlCharsetDetector;
+
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -66,7 +68,8 @@ public final class RenderOrchestrator {
             throw new IllegalStateException("No XSLT entrypoint configured for this project");
         }
         Path entryPath = rootPath.resolve(project.entryPoint()).normalize();
-        String xsltContent = Files.readString(entryPath, StandardCharsets.UTF_8);
+        Charset xsltCs = XmlCharsetDetector.detect(entryPath);
+        String xsltContent = Files.readString(entryPath, xsltCs);
 
         // 4. Apply library preprocessor
         String processed = LibraryPreprocessor.mergeLibraries(rootPath, xsltContent);

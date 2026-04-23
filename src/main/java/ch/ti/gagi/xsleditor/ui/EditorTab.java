@@ -5,6 +5,7 @@ import javafx.beans.binding.BooleanBinding;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.undo.UndoManager;
 
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Objects;
 
@@ -25,6 +26,9 @@ public final class EditorTab {
 
     /** Absolute, normalized path of the file backing this tab. Never {@code null}. */
     public final Path path;
+
+    /** Charset used to read (and write) this file. Never {@code null}. */
+    public final Charset charset;
 
     /** The RichTextFX code area holding the file content. Never {@code null}. */
     public final CodeArea codeArea;
@@ -49,8 +53,9 @@ public final class EditorTab {
      * @param path    absolute path of the file; must not be {@code null}
      * @param content initial text content; {@code null} is treated as empty string
      */
-    public EditorTab(Path path, String content) {
-        this.path     = Objects.requireNonNull(path, "path");
+    public EditorTab(Path path, String content, Charset charset) {
+        this.path    = Objects.requireNonNull(path, "path");
+        this.charset = Objects.requireNonNull(charset, "charset");
         this.codeArea = new CodeArea();
 
         // Step 1: load content FIRST — before setting the saved baseline

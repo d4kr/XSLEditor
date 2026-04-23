@@ -18,8 +18,10 @@ import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.wellbehaved.event.Nodes;
 import org.reactfx.Subscription;
 
+import ch.ti.gagi.xsleditor.util.XmlCharsetDetector;
+
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -133,8 +135,9 @@ public final class EditorController {
             return;
         }
         try {
-            String content = Files.readString(key, StandardCharsets.UTF_8);
-            EditorTab editorTab = new EditorTab(key, content);
+            Charset cs = XmlCharsetDetector.detect(key);
+            String content = Files.readString(key, cs);
+            EditorTab editorTab = new EditorTab(key, content, cs);
             Tab tab = buildTab(key, editorTab);
             registry.put(key, tab);
             tabPane.getTabs().add(tab);
@@ -298,7 +301,7 @@ public final class EditorController {
 
     private void saveTab(EditorTab editorTab) {
         try {
-            Files.writeString(editorTab.path, editorTab.codeArea.getText(), StandardCharsets.UTF_8);
+            Files.writeString(editorTab.path, editorTab.codeArea.getText(), editorTab.charset);
             editorTab.codeArea.getUndoManager().mark();
             updateAppDirtyState();
         } catch (IOException ex) {
@@ -316,7 +319,7 @@ public final class EditorController {
     public void saveAll() throws IOException {
         for (Tab tab : registry.values()) {
             if (tab.getUserData() instanceof EditorTab et && et.dirty.get()) {
-                Files.writeString(et.path, et.codeArea.getText(), StandardCharsets.UTF_8);
+                Files.writeString(et.path, et.codeArea.getText(), et.charset);
                 et.codeArea.getUndoManager().mark();
             }
         }

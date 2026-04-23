@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,20 +22,20 @@ class EditorTabTest {
 
     @Test
     void newTabIsNotDirtyAfterLoad() {
-        EditorTab tab = new EditorTab(Path.of("dummy.xsl"), "<xsl:stylesheet/>");
+        EditorTab tab = new EditorTab(Path.of("dummy.xsl"), "<xsl:stylesheet/>", StandardCharsets.UTF_8);
         assertFalse(tab.dirty.get(), "tab must be clean immediately after load (EDIT-02)");
     }
 
     @Test
     void tabBecomesDirtyAfterEdit() {
-        EditorTab tab = new EditorTab(Path.of("dummy.xsl"), "<xsl:stylesheet/>");
+        EditorTab tab = new EditorTab(Path.of("dummy.xsl"), "<xsl:stylesheet/>", StandardCharsets.UTF_8);
         tab.codeArea.appendText(" ");
         assertTrue(tab.dirty.get(), "tab must be dirty after any text change (EDIT-02)");
     }
 
     @Test
     void tabBecomesCleanAfterMarkCall() {
-        EditorTab tab = new EditorTab(Path.of("dummy.xsl"), "<xsl:stylesheet/>");
+        EditorTab tab = new EditorTab(Path.of("dummy.xsl"), "<xsl:stylesheet/>", StandardCharsets.UTF_8);
         tab.codeArea.appendText(" ");
         assertTrue(tab.dirty.get(), "tab must be dirty after edit (EDIT-02)");
         tab.codeArea.getUndoManager().mark(); // simulates what saveTab() does
@@ -43,7 +44,7 @@ class EditorTabTest {
 
     @Test
     void undoHistoryClearedAfterLoad() {
-        EditorTab tab = new EditorTab(Path.of("dummy.xsl"), "<xsl:stylesheet/>");
+        EditorTab tab = new EditorTab(Path.of("dummy.xsl"), "<xsl:stylesheet/>", StandardCharsets.UTF_8);
         assertFalse(tab.codeArea.getUndoManager().isUndoAvailable(),
             "undo history must be empty immediately after load — forgetHistory() was called (EDIT-02)");
     }

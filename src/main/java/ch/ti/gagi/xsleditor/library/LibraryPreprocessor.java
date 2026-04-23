@@ -1,7 +1,9 @@
 package ch.ti.gagi.xsleditor.library;
 
+import ch.ti.gagi.xsleditor.util.XmlCharsetDetector;
+
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -46,7 +48,8 @@ public final class LibraryPreprocessor {
                     throw new LibraryProcessingException("Library file not found: " + file);
                 }
                 try {
-                    cache.put(name, Files.readString(file, StandardCharsets.UTF_8));
+                    Charset libCs = XmlCharsetDetector.detect(file);
+                    cache.put(name, Files.readString(file, libCs));
                 } catch (IOException e) {
                     throw new LibraryProcessingException("Failed to read library file: " + file, e);
                 }
