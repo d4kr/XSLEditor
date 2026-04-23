@@ -138,7 +138,11 @@
 .log-table-view .column-header,
 .log-table-view .column-header-background {
     -fx-background-color: #252526;
-    -fx-text-fill: #888888;
+    -fx-font-size: 11px;
+}
+
+.log-table-view .column-header .label {
+    -fx-text-fill: #aaaaaa;
     -fx-font-size: 11px;
 }
 
@@ -161,4 +165,105 @@
     -fx-background-color: #094771;
     -fx-text-fill: #ffffff;
     -fx-border-color: #007acc;
+}
+
+/* Phase 15: Dark theme CSS fixes — CodeArea, TreeView selected, TableView selected */
+
+/* 15.1 CodeArea (RichTextFX) — dark background and visible caret/selection */
+.code-area {
+    -fx-background-color: #2b2b2b;
+}
+
+.code-area .content {
+    -fx-background-color: #2b2b2b;
+}
+
+/* RichTextFX renders text via .text sub-nodes — -fx-fill, not -fx-text-fill */
+.code-area .text {
+    -fx-fill: #cccccc;
+}
+
+/* Syntax classes re-scoped to .code-area to beat .code-area .text specificity (0,2,0 vs 0,1,0) */
+.code-area .xml-comment   { -fx-fill: #6a9955; }
+.code-area .xml-cdata     { -fx-fill: #ce9178; }
+.code-area .xml-pi        { -fx-fill: #c586c0; }
+.code-area .xml-tagmark   { -fx-fill: #808080; }
+.code-area .xml-element   { -fx-fill: #4ec9b0; }
+.code-area .xml-attribute { -fx-fill: #9cdcfe; }
+.code-area .xml-avalue    { -fx-fill: #ce9178; }
+
+.code-area .caret {
+    -fx-stroke: #cccccc;
+}
+
+.code-area .selection {
+    -fx-fill: rgba(9, 71, 113, 0.6);
+}
+
+/* 15.2 TreeView cells — selected and selected+focused states */
+.file-tree-view .tree-cell:selected {
+    -fx-background-color: #094771;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #555555;
+    -fx-border-width: 0 0 0 2;
+}
+
+.file-tree-view .tree-cell:selected:focused {
+    -fx-background-color: #094771;
+    -fx-text-fill: #ffffff;
+}
+
+/* Entrypoint and xml-input colored cells must show white text when selected */
+.file-tree-view .tree-cell.entrypoint:selected {
+    -fx-text-fill: #ffffff;
+}
+
+.file-tree-view .tree-cell.xml-input:selected {
+    -fx-text-fill: #ffffff;
+}
+
+/* 15.3 TableView rows (log panel) — row-level selection highlight */
+.log-table-view .table-row-cell {
+    -fx-background-color: #1e1e1e;
+}
+
+.log-table-view .table-row-cell:odd {
+    -fx-background-color: #252526;
+}
+
+.log-table-view .table-row-cell:hover {
+    -fx-background-color: #2d2d2d;
+}
+
+.log-table-view .table-row-cell:selected {
+    -fx-background-color: #094771;
+}
+
+.log-table-view .table-row-cell:selected:focused {
+    -fx-background-color: #094771;
+}
+
+.log-table-view .table-row-cell:selected .table-cell {
+    -fx-text-fill: #ffffff;
+}
+
+.log-table-view .table-row-cell:selected:focused .table-cell {
+    -fx-text-fill: #ffffff;
+}
+
+/* Severity colors must not override selection text */
+.log-table-view .table-row-cell:selected .log-error {
+    -fx-text-fill: #ffffff;
+}
+
+.log-table-view .table-row-cell:selected .log-warn {
+    -fx-text-fill: #ffffff;
+}
+
+.log-table-view .table-row-cell:selected:focused .log-error {
+    -fx-text-fill: #ffffff;
+}
+
+.log-table-view .table-row-cell:selected:focused .log-warn {
+    -fx-text-fill: #ffffff;
 }

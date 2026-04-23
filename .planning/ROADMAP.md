@@ -80,7 +80,9 @@ Plans:
   2. File tree cells show readable text in default, hover, and selected states — no dark-on-dark inversion
   3. Log panel rows show readable text for all severity levels (INFO, WARNING, ERROR) in default and selected states
   4. Selected rows in both TreeView and TableView show a visible highlight with readable (not invisible) text
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [x] 15-01-PLAN.md — Append Phase 15 CSS block: CodeArea dark bg, TreeView/TableView selected state fixes
 **UI hint**: yes
 
 ### Phase 16: Log Panel Layout
@@ -120,7 +122,7 @@ Plans:
 |-------|-----------|----------------|--------|-----------|
 | 1–13 | v0.1.0–v0.2.1 | 32/32 | Complete | 2026-04-22 |
 | 14. Version & Icon Housekeeping | v0.3.0 | 2/2 | Complete | 2026-04-23 |
-| 15. Dark Theme CSS Fixes | v0.3.0 | 0/? | Not started | - |
+| 15. Dark Theme CSS Fixes | v0.3.0 | 0/1 | Planned | - |
 | 16. Log Panel Layout | v0.3.0 | 0/? | Not started | - |
 | 17. Encoding Investigation & Fix | v0.3.0 | 0/? | Not started | - |
 | 18. README Rewrite | v0.3.0 | 0/? | Not started | - |
