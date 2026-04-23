@@ -49,9 +49,9 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
 **Milestone Goal:** Improve UI readability in dark theme, fix encoding issues, wire app icon correctly, auto-source the About version from the build, and rewrite the README to reflect the current state of the project.
 
 - [x] **Phase 14: Version & Icon Housekeeping** — Bump version to 0.3.0, move icon to resources, wire icon in app and About dialog — completed 2026-04-23
-- [ ] **Phase 15: Dark Theme CSS Fixes** — Make editor, file tree, and log panel text fully readable on dark backgrounds
+- [x] **Phase 15: Dark Theme CSS Fixes** — Make editor, file tree, and log panel text fully readable on dark backgrounds
 - [ ] **Phase 16: Log Panel Layout** — Full-width table, no phantom column, no squashed columns at narrow widths
-- [ ] **Phase 17: Encoding Investigation & Fix** — Diagnose root cause of non-ASCII character issues, fix at the confirmed layer
+- [x] **Phase 17: Encoding Investigation & Fix** — Diagnose root cause of non-ASCII character issues, fix at the confirmed layer
 - [ ] **Phase 18: README Rewrite** — Complete README with correct version, icon, screenshot, and build instructions
 
 ## Phase Details
@@ -106,7 +106,9 @@ Plans:
   1. The root cause of the encoding issue is documented (BOM artifact, Saxon `xsl:output` declaration mismatch, or FOP font substitution for PDF glyphs)
   2. Opening a UTF-8 file with non-ASCII characters in the editor shows those characters correctly — no BOM character prepended, no replacement glyphs
   3. Log panel messages containing non-ASCII characters (e.g., error messages referencing Italian filenames or XSLT values) display correctly
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [x] 17-01-PLAN.md — New XmlCharsetDetector utility; fix EditorTab/EditorController read+write, RenderOrchestrator, LibraryPreprocessor to respect declared XML encoding
 
 ### Phase 18: README Rewrite
 **Goal**: The README accurately describes XSLEditor as it exists after v0.3.0 — with correct version, build instructions, visible app icon, and a screenshot of the working UI
@@ -126,7 +128,7 @@ Plans:
 | 14. Version & Icon Housekeeping | v0.3.0 | 2/2 | Complete | 2026-04-23 |
 | 15. Dark Theme CSS Fixes | v0.3.0 | 0/1 | Planned | - |
 | 16. Log Panel Layout | v0.3.0 | 1/1 | Complete | 2026-04-23 |
-| 17. Encoding Investigation & Fix | v0.3.0 | 0/? | Not started | - |
+| 17. Encoding Investigation & Fix | v0.3.0 | 1/1 | Complete | 2026-04-23 |
 | 18. README Rewrite | v0.3.0 | 0/? | Not started | - |
 
 ---
