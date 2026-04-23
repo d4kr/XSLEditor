@@ -65,7 +65,10 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
   2. App icon is visible in the macOS window title bar (wired before `primaryStage.show()`)
   3. About dialog shows the app icon alongside the version information
   4. Icon file lives at `src/main/resources/` (not project root), and a missing/misplaced icon logs a warning rather than crashing silently
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 14-01-PLAN.md — Bump version to 0.3.0 and move icon.png to resources tree
+- [ ] 14-02-PLAN.md — Wire icon in XSLEditorApp stage and About dialog ImageView
 **UI hint**: yes
 
 ### Phase 15: Dark Theme CSS Fixes
@@ -116,7 +119,7 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 1–13 | v0.1.0–v0.2.1 | 32/32 | Complete | 2026-04-22 |
-| 14. Version & Icon Housekeeping | v0.3.0 | 0/? | Not started | - |
+| 14. Version & Icon Housekeeping | v0.3.0 | 0/2 | Planned | - |
 | 15. Dark Theme CSS Fixes | v0.3.0 | 0/? | Not started | - |
 | 16. Log Panel Layout | v0.3.0 | 0/? | Not started | - |
 | 17. Encoding Investigation & Fix | v0.3.0 | 0/? | Not started | - |
