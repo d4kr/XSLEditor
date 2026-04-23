@@ -9,6 +9,8 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -111,10 +113,35 @@ public class AboutDialog extends Dialog<Void> {
         HBox licenseBox = new HBox(8, licenseLabel, viewLink);
         licenseBox.setAlignment(Pos.CENTER_LEFT);
 
-        // 10. Assemble root VBox
-        VBox content = new VBox(8,
-            titleLabel, sep1, stackHeader, grid,
-            sep2, authorLabel, licenseBox);
+        // 10a. Optional app icon — fail-silent if resource missing (D-04)
+        ImageView iconView = null;
+        try (InputStream iconStream =
+                getClass().getResourceAsStream("/ch/ti/gagi/xsleditor/icon.png")) {
+            if (iconStream != null) {
+                Image img = new Image(iconStream);
+                if (!img.isError()) {
+                    iconView = new ImageView(img);
+                    iconView.setFitWidth(64);
+                    iconView.setFitHeight(64);
+                    iconView.setPreserveRatio(true);
+                }
+            }
+        } catch (Exception ignored) {
+            // Dialog must not crash if icon is absent
+        }
+
+        // 10b. Assemble root VBox — prepend icon when available
+        VBox content;
+        if (iconView != null) {
+            content = new VBox(8,
+                iconView, titleLabel, sep1, stackHeader, grid,
+                sep2, authorLabel, licenseBox);
+            content.setAlignment(Pos.CENTER);
+        } else {
+            content = new VBox(8,
+                titleLabel, sep1, stackHeader, grid,
+                sep2, authorLabel, licenseBox);
+        }
 
         // 11. Wire DialogPane
         getDialogPane().setContent(content);
