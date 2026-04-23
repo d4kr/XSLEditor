@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v0.3.0
 milestone_name: Polish & Usability
 status: ready_to_plan
-last_updated: "2026-04-23T00:00:00Z"
+last_updated: "2026-04-23T12:00:00Z"
 progress:
   total_phases: 5
   completed_phases: 0
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-04-23)
 Phase: 14 of 18 (Version & Icon Housekeeping)
 Plan: — (not yet planned)
 Status: Ready to plan
-Last activity: 2026-04-23 — Roadmap created for v0.3.0 (Phases 14–18)
+Last activity: 2026-04-23 — Phase 14 context gathered (icon asset + About layout decided)
 
 Progress: [░░░░░░░░░░] 0% (v0.3.0)
 
