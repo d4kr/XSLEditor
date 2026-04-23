@@ -94,12 +94,23 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| UI-01..04 | TBD | — |
-| LOG-01..03 | TBD | — |
-| VER-01..02 | TBD | — |
-| ICON-01..02 | TBD | — |
-| ENC-01..03 | TBD | — |
-| DOC-01..03 | TBD | — |
+| VER-01 | Phase 14 | Pending |
+| VER-02 | Phase 14 | Pending |
+| ICON-01 | Phase 14 | Pending |
+| ICON-02 | Phase 14 | Pending |
+| UI-01 | Phase 15 | Pending |
+| UI-02 | Phase 15 | Pending |
+| UI-03 | Phase 15 | Pending |
+| UI-04 | Phase 15 | Pending |
+| LOG-01 | Phase 16 | Pending |
+| LOG-02 | Phase 16 | Pending |
+| LOG-03 | Phase 16 | Pending |
+| ENC-01 | Phase 17 | Pending |
+| ENC-02 | Phase 17 | Pending |
+| ENC-03 | Phase 17 | Pending |
+| DOC-01 | Phase 18 | Pending |
+| DOC-02 | Phase 18 | Pending |
+| DOC-03 | Phase 18 | Pending |
 
 ---
 
