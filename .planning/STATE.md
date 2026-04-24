@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v0.3.0
 milestone_name: Polish & Usability
 status: in_progress
-last_updated: "2026-04-23T22:00:00Z"
+last_updated: "2026-04-24T00:00:00Z"
 progress:
   total_phases: 5
-  completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  completed_phases: 4
+  total_plans: 1
+  completed_plans: 0
 ---
 
 # Project State: XSLEditor
@@ -18,17 +18,17 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-23)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** v0.3.0 — Phase 14: Version & Icon Housekeeping
+**Current focus:** v0.3.0 — Phase 18: README Rewrite (planned, ready to execute)
 
 ---
 
 ## Current Position
 
-Phase: 15 of 18 (Dark Theme CSS Fixes)
-Status: Complete — ready for UAT
-Last activity: 2026-04-23 — Phase 15 executed (15-01-PLAN.md: CSS appended, compile clean)
+Phase: 18 of 18 (README Rewrite)
+Status: Planned — ready to execute (18-01-PLAN.md)
+Last activity: 2026-04-24 — Phase 18 planned (1 plan, 1 wave; human checkpoint for screenshot)
 
-Progress: [██░░░░░░░░] 20% (v0.3.0)
+Progress: [████████░░] 80% (v0.3.0)
 
 ---
 
@@ -40,6 +40,9 @@ Progress: [██░░░░░░░░] 20% (v0.3.0)
 - Phase 12 — AI Assist in Error Log — 2026-04-22
 - Phase 13 — Full Project Rename — 2026-04-22
 - Phase 14 — Version & Icon Housekeeping — 2026-04-23
+- Phase 15 — Dark Theme CSS Fixes — 2026-04-23
+- Phase 16 — Log Panel Layout — 2026-04-23
+- Phase 17 — Encoding Investigation & Fix — 2026-04-23
 
 ---
 
