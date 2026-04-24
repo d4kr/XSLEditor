@@ -118,7 +118,9 @@ Plans:
   1. README includes project overview, prerequisites (Java 21), build command, and run command — sufficient for a developer to build and run without prior context
   2. README includes the app icon image and a screenshot of the main window showing the editor, file tree, and PDF preview
   3. README states the correct version (0.3.0) and lists the current tech stack (Java 21, Saxon-HE 12.4, Apache FOP 2.9, JavaFX, RichTextFX)
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 18-01-PLAN.md — Write complete README.md, build shadow JAR, capture screenshot via human checkpoint
 
 ## Progress
 
@@ -129,7 +131,7 @@ Plans:
 | 15. Dark Theme CSS Fixes | v0.3.0 | 0/1 | Planned | - |
 | 16. Log Panel Layout | v0.3.0 | 1/1 | Complete | 2026-04-23 |
 | 17. Encoding Investigation & Fix | v0.3.0 | 1/1 | Complete | 2026-04-23 |
-| 18. README Rewrite | v0.3.0 | 0/? | Not started | - |
+| 18. README Rewrite | v0.3.0 | 0/1 | Planned | - |
 
 ---
-*Roadmap updated: 2026-04-23*
+*Roadmap updated: 2026-04-24*
