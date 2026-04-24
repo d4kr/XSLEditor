@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v0.3.0
 milestone_name: Polish & Usability
-status: in_progress
-last_updated: "2026-04-24T00:00:00Z"
+status: complete
+last_updated: "2026-04-24T13:50:00Z"
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 1
-  completed_plans: 0
+  completed_plans: 1
 ---
 
 # Project State: XSLEditor
@@ -18,17 +18,17 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-23)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** v0.3.0 — Phase 18: README Rewrite (planned, ready to execute)
+**Current focus:** v0.3.0 — complete. All 5 phases shipped.
 
 ---
 
 ## Current Position
 
 Phase: 18 of 18 (README Rewrite)
-Status: Planned — ready to execute (18-01-PLAN.md)
-Last activity: 2026-04-24 — Phase 18 planned (1 plan, 1 wave; human checkpoint for screenshot)
+Status: Complete
+Last activity: 2026-04-24 — Phase 18 complete (README rewritten, screenshot captured, v0.3.0 milestone closed)
 
-Progress: [████████░░] 80% (v0.3.0)
+Progress: [██████████] 100% (v0.3.0) ✓ COMPLETE
 
 ---
 
