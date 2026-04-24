@@ -1,34 +1,35 @@
 ---
 gsd_state_version: 1.0
-milestone: v0.3.0
-milestone_name: Polish & Usability
-status: complete
-last_updated: "2026-04-24T13:50:00Z"
+milestone: v0.4.0
+milestone_name: GitHub Releases & Distribution
+status: defining requirements
+last_updated: "2026-04-24T00:00:00Z"
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 1
-  completed_plans: 1
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
 ---
 
 # Project State: XSLEditor
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-23)
+See: .planning/PROJECT.md (updated 2026-04-24)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** v0.3.0 — complete. All 5 phases shipped.
+**Current focus:** v0.4.0 — GitHub Releases & Distribution (requirements + roadmap phase)
 
 ---
 
 ## Current Position
 
-Phase: 18 of 18 (README Rewrite)
-Status: Complete
-Last activity: 2026-04-24 — Phase 18 complete (README rewritten, screenshot captured, v0.3.0 milestone closed)
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-04-24 — Milestone v0.4.0 started
 
-Progress: [██████████] 100% (v0.3.0) ✓ COMPLETE
+Progress: [__________] 0% (v0.4.0)
 
 ---
 
@@ -43,14 +44,16 @@ Progress: [██████████] 100% (v0.3.0) ✓ COMPLETE
 - Phase 15 — Dark Theme CSS Fixes — 2026-04-23
 - Phase 16 — Log Panel Layout — 2026-04-23
 - Phase 17 — Encoding Investigation & Fix — 2026-04-23
+- Phase 18 — README Rewrite — 2026-04-24
 
 ---
 
 ## Key Decisions
 
-- v0.3.0 ordering: version+icon first (unblocks README accuracy), CSS second (highest impact, lowest risk), log panel third (after CSS so cells are visible), encoding fourth (investigation-first), README last (documents final state)
-- Encoding fix is investigation-first: Java pipeline confirmed clean UTF-8; root cause must be reproduced before any code is touched
-- Icon load: always check `icon.isError()` after load; wire before `primaryStage.show()`
+- v0.4.0 goal: CI/CD + distribution pipeline via GitHub Actions, jpackage, signing
+- macOS signing requires Apple Developer ID certificate stored as GitHub secret (p12 + password)
+- Windows build cross-compiles on Windows runner (jpackage is platform-native)
+- Release notes auto-generated from git log between tags
 
 See .planning/PROJECT.md Key Decisions table for full log.
 
@@ -58,11 +61,11 @@ See .planning/PROJECT.md Key Decisions table for full log.
 
 ## Accumulated Context
 
-- v0.2.1 rename completed 2026-04-22: full rebrand XSLEditor → XSLEditor (packages, classes, config)
-- v0.3.0 phase structure: 5 phases (14–18), 16 requirements, all mapped
-- Research confidence HIGH; encoding root cause is the only unknown (three candidates: BOM, Saxon xsl:output, FOP font)
-- CSS dark theme requires targeting sub-nodes: `.code-area .content` not `.code-area`; Modena `:selected:focused` must be explicitly overridden
+- v0.3.0 shipped 2026-04-24: 5 phases (14–18), UI polish, encoding fix, README
 - Tech debt carried: EDIT-06 partial, EDIT-07 unverified, no automated tests for About dialog
+- Fat JAR build already works via Gradle shadowJar (com.gradleup.shadow 9.0.0-beta12)
+- jpackage requires JDK 14+; Java 21 already in use — compatible
+- macOS signing: requires Developer ID Application cert; notarization optional for v0.4.0
 
 ---
 

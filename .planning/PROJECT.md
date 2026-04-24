@@ -1,16 +1,16 @@
 # XSLEditor
 
-## Current Milestone: v0.3.0 Polish & Usability
+## Current Milestone: v0.4.0 GitHub Releases & Distribution
 
-**Goal:** Migliorare leggibilità UI, correggere encoding, aggiornare documentazione e sistemare la versione About.
+**Goal:** Automatizzare la build e la pubblicazione dell'app su GitHub Releases — JAR + macOS app firmata + Windows installer — attivata da un nuovo tag git, con release notes generate automaticamente dalla cronologia git.
 
 **Target features:**
-- README aggiornato — più completo e dettagliato con icona app
-- Icona app — spostata in posizione corretta, inclusa nel README
-- Versione About — aggiornamento automatico da build (non hardcoded)
-- Tema UI dark — colori leggibili per editor, tree e log panel
-- Log panel — larghezza piena, colonna in eccesso rimossa
-- Encoding — correzione problema caratteri nel rendering/display
+- GitHub Actions workflow: build e release automatica al push di un tag `v*`
+- Build macOS `.app` bundle — jpackage con JRE embedded, firmato con Apple Developer ID
+- Build Windows `.exe`/`.msi` — jpackage con JRE embedded
+- Build fat JAR (shadowJar) incluso nella release
+- Release notes auto-generate da git log (tag-to-tag diff)
+- Guida per configurare i secrets di firma macOS nel repo (certificato p12 + password)
 
 ## What This Is
 
@@ -38,12 +38,13 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 - ✓ ABOUT-01..05: About dialog — version, runtime stack, author, license — v0.2.0
 - ✓ ERR-06: ChatGPT button per error log row — opens pre-filled query in browser — v0.2.0
 
-### Active (v0.3.0)
+### Active (v0.4.0)
 
-- [ ] **RENAME-01..10**: Full project rename (XSLEditor -> XSLEditor) — v0.2.1
-- [ ] **EDIT-06 edge cases**: Occurrence highlighting across element boundaries — deferred, low priority
-- [ ] **EDIT-07 human verify**: Confirm Ctrl+Click go-to-definition with xsl:include files — pending manual test
-- [ ] **Test coverage Phase 11**: About dialog has no automated tests — manual-only gap
+- [ ] **CI-01..**: GitHub Actions workflow — build JAR + macOS app + Windows installer on tag push
+- [ ] **DIST-01..**: jpackage macOS bundle — signed with Apple Developer ID, JRE embedded
+- [ ] **DIST-02..**: jpackage Windows bundle — exe/msi, JRE embedded
+- [ ] **REL-01..**: GitHub Releases auto-publish — assets attached, release notes from git log
+- [ ] **SIGN-01..**: Signing guide — macOS Developer ID secrets setup for repo contributors
 
 ### Out of Scope
 
@@ -117,4 +118,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-23 — Milestone v0.3.0 started*
+*Last updated: 2026-04-24 — Milestone v0.4.0 started*
