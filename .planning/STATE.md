@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v0.4.0
 milestone_name: GitHub Releases & Distribution
 status: roadmap ready
-last_updated: "2026-04-24T00:00:00Z"
+last_updated: "2026-04-25T00:00:00Z"
 progress:
   total_phases: 5
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 2
+  completed_plans: 2
 ---
 
 # Project State: XSLEditor
@@ -24,12 +24,12 @@ See: .planning/PROJECT.md (updated 2026-04-24)
 
 ## Current Position
 
-Phase: 19 — Launcher Shim & Local Build (not started)
-Plan: —
-Status: Roadmap ready, awaiting first plan
-Last activity: 2026-04-24 — v0.4.0 roadmap created (Phases 19–23)
+Phase: 19 — Launcher Shim & Local Build (in progress)
+Plan: 19-02 complete
+Status: Phase 19 plans 01 and 02 complete
+Last activity: 2026-04-25 — 19-02 jpackage bundle with icon.icns
 
-Progress: [__________] 0% (v0.4.0 — 0/5 phases)
+Progress: [__________] 0% (v0.4.0 — 0/5 phases, Phase 19 2/2 plans done)
 
 ---
 
