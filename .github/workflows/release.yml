@@ -55,19 +55,24 @@ jobs:
           name: fat-jar
           path: dist/
 
+      - name: Strip pre-release suffix for --app-version
+        run: |
+          VERSION_CLEAN=$(echo "$APP_VERSION" | sed 's/-.*//')
+          echo "VERSION_CLEAN=$VERSION_CLEAN" >> $GITHUB_ENV
+
       - name: jpackage DMG (arm64)
         run: |
           mkdir -p output
           jpackage \
             --type dmg \
             --name XSLEditor \
-            --app-version "$APP_VERSION" \
+            --app-version "$VERSION_CLEAN" \
             --input dist/ \
             --main-jar "xsleditor-${APP_VERSION}.jar" \
             --main-class ch.ti.gagi.xsleditor.Launcher \
             --icon src/main/resources/ch/ti/gagi/xsleditor/icon.icns \
             --dest output/
-          mv "output/XSLEditor-${APP_VERSION}.dmg" "output/XSLEditor-${APP_VERSION}-arm64.dmg"
+          mv "output/XSLEditor-${VERSION_CLEAN}.dmg" "output/XSLEditor-${APP_VERSION}-arm64.dmg"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -93,19 +98,24 @@ jobs:
           name: fat-jar
           path: dist/
 
+      - name: Strip pre-release suffix for --app-version
+        run: |
+          VERSION_CLEAN=$(echo "$APP_VERSION" | sed 's/-.*//')
+          echo "VERSION_CLEAN=$VERSION_CLEAN" >> $GITHUB_ENV
+
       - name: jpackage DMG (x64)
         run: |
           mkdir -p output
           jpackage \
             --type dmg \
             --name XSLEditor \
-            --app-version "$APP_VERSION" \
+            --app-version "$VERSION_CLEAN" \
             --input dist/ \
             --main-jar "xsleditor-${APP_VERSION}.jar" \
             --main-class ch.ti.gagi.xsleditor.Launcher \
             --icon src/main/resources/ch/ti/gagi/xsleditor/icon.icns \
             --dest output/
-          mv "output/XSLEditor-${APP_VERSION}.dmg" "output/XSLEditor-${APP_VERSION}-x64.dmg"
+          mv "output/XSLEditor-${VERSION_CLEAN}.dmg" "output/XSLEditor-${APP_VERSION}-x64.dmg"
 
       - uses: actions/upload-artifact@v4
         with:
