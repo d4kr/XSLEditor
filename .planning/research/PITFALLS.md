@@ -1,448 +1,649 @@
-# Domain Pitfalls — v0.3.0 Polish & Usability
+# Domain Pitfalls — v0.4.0 GitHub Actions CI/CD Distribution
 
 **Project:** XSLEditor
-**Researched:** 2026-04-23
-**Scope:** JavaFX dark theme CSS, RichTextFX CodeArea styling, TableView layout,
-encoding, version.properties loading, app icon wiring.
+**Researched:** 2026-04-24
+**Scope:** GitHub Actions workflow, jpackage, macOS codesigning/notarization,
+Windows MSI via WiX, fat JAR (shadowJar) compatibility, release automation.
+
+**Project facts that affect every pitfall:**
+- Build: Gradle 9 + `com.gradleup.shadow` 9.0.0-beta12 (fat JAR)
+- Main class: `ch.ti.gagi.xsleditor.XSLEditorApp` (extends `javafx.application.Application`)
+- JavaFX modules used: `javafx.controls`, `javafx.fxml`, `javafx.web`
+- Target: macOS `.app` + Windows `.msi`/`.exe`, both with embedded JRE via jpackage
 
 ---
 
-## 1. Dark Theme CSS — RichTextFX CodeArea
+## Critical Pitfalls
 
-### Pitfall 1.1: CodeArea background stays white despite CSS rules on `.code-area`
-**What goes wrong:** You apply `-fx-background-color` to `.code-area` in the
-stylesheet. The editor background stays white. The rule is correct but targets
-the wrong node.
+Mistakes that block the release or produce a broken installer.
 
-**Why it happens:** RichTextFX `CodeArea` is a compound control. Its visible
-background is rendered by an inner `VirtualFlow` (or `.content` sub-node), not
-the CodeArea node itself. JavaFX CSS specificity rules mean the default Caspian
-or Modena style for those sub-nodes wins over a rule on `.code-area`.
+---
 
-**Prevention:** Target the internal sub-structure explicitly:
-```css
-.code-area .content {
-    -fx-background-color: #1e1e1e;
-}
+### Pitfall C-01: jpackage rejects a fat JAR containing JavaFX when the main class extends `Application`
+
+**Severity:** BLOCKS RELEASE
+
+**What goes wrong:** jpackage is invoked with `--main-jar xsleditor.jar` (the
+shadowJar fat JAR). The produced bundle launches, but the JVM immediately
+aborts with:
+
 ```
-Also set the `VirtualizedScrollPane` background, because scrolling exposes
-its viewport:
-```css
-.virtualized-scroll-pane {
-    -fx-background-color: #1e1e1e;
-}
-.virtualized-scroll-pane > .scroll-pane {
-    -fx-background-color: #1e1e1e;
-}
+Error: JavaFX runtime components are missing, and are required to run
+this application
 ```
 
-**Detection:** Right-click → Inspect (Scenic View, or log `scene.lookup()`)
-to find which node is actually painted white.
+**Why it happens:** Since Java 11 the JVM startup check inspects whether the
+main class extends `javafx.application.Application`. If it does, the check
+requires `javafx.graphics` to be a *named module* on the module path — not a
+plain class on the classpath. A shadowJar merges JavaFX JARs into an
+anonymous uber-JAR; the merged JAR is on the classpath, not the module path,
+so the named-module check fails.
 
----
+**This project's exact exposure:** `XSLEditorApp extends Application` and the
+fat JAR is the artifact that jpackage would receive if wired naively.
 
-### Pitfall 1.2: Caret and selected-text colors remain from Modena (invisible or
-wrong)
-**What goes wrong:** Text is dark, caret is dark, selection highlight is dark
-— the user cannot see the cursor or selected text.
+**Prevention — two viable strategies:**
 
-**Why it happens:** JavaFX Modena sets caret and text selection colors on
-`.text-input` and `.text-area`. RichTextFX does not inherit these rules
-automatically.
+**Option A (Launcher class — minimal change):** Create a thin
+`ch.ti.gagi.xsleditor.Launcher` class whose `main()` simply calls
+`XSLEditorApp.main(args)`. `Launcher` does *not* extend `Application`, so the
+startup check is skipped. Point both the fat JAR manifest and jpackage at
+`Launcher`. This is the lowest-friction fix for an existing project.
 
-**Prevention:** Add explicit caret and selection rules:
-```css
-.code-area .caret {
-    -fx-stroke: #aeafad;
-}
-.code-area .selection {
-    -fx-fill: rgba(14, 99, 156, 0.6);
-}
-```
-
----
-
-### Pitfall 1.3: RichTextFX syntax-highlight spans use `-fx-fill`, not
-`-fx-text-fill`
-**What goes wrong:** You add `.xml-element { -fx-text-fill: #4ec9b0; }` and
-the color does not apply.
-
-**Why it happens:** RichTextFX `StyleSpans` render each span as a `Text` node.
-`Text` inherits from `Shape`, not from `Control`, so the CSS property for color
-is `-fx-fill`, not `-fx-text-fill`. The current `main.css` already uses
-`-fx-fill` correctly (line 94+), but any new span classes added during this
-milestone must follow the same pattern.
-
-**Prevention:** Always use `-fx-fill` for span classes. Never use
-`-fx-text-fill` on RichTextFX span selectors.
-
----
-
-### Pitfall 1.4: TreeView text becomes invisible when `.tree-cell:selected` lacks
-explicit `-fx-text-fill`
-**What goes wrong:** A selected tree cell shows black text on a dark background
-after a CSS change — the item disappears visually.
-
-**Why it happens:** JavaFX Modena sets selected cell text to a light color
-only when `-fx-accent` is in play. When you override the selected state
-background without also overriding text fill, Modena's default black text
-bleeds through.
-
-**Current code risk:** `main.css` line 76-79 sets background for
-`.file-tree-view .tree-cell:selected` but the rule does not override
-`-fx-text-fill`. If Modena's selected-text override fires differently on a
-target machine, text may go dark.
-
-**Prevention:** Always pair a selected-state background override with an
-explicit `-fx-text-fill`:
-```css
-.file-tree-view .tree-cell:selected {
-    -fx-background-color: #1e1e1e;
-    -fx-text-fill: #cccccc;   /* <- must be present */
-    -fx-border-color: #555555;
-    -fx-border-width: 0 0 0 2;
-}
-```
-
----
-
-### Pitfall 1.5: TableView header text invisible against dark header background
-**What goes wrong:** `.log-table-view .column-header` has a dark background,
-but the column header text is black (default Modena) so it is invisible.
-
-**Why it happens:** The `.column-header .label` sub-node needs its own
-`-fx-text-fill` rule; the parent `.column-header` rule does not cascade text
-color into the label child.
-
-**Current code risk:** `main.css` lines 138-143 set `-fx-text-fill` on
-`.column-header` but NOT on `.column-header .label`. Some JavaFX versions
-apply this to the label; others do not.
-
-**Prevention:** Be explicit — target both nodes:
-```css
-.log-table-view .column-header .label {
-    -fx-text-fill: #888888;
-    -fx-font-size: 11px;
-}
-```
-
----
-
-### Pitfall 1.6: Applying `getStylesheets().add()` after the scene is shown
-does not retroactively fix previously rendered controls
-**What goes wrong:** CSS added at runtime refreshes current node styles but
-already-constructed cells (pooled by VirtualFlow) retain old paint state until
-they cycle.
-
-**Why it happens:** JavaFX cell virtualization reuses cells. Programmatic CSS
-refresh (`Node.applyCss()`) is needed to force re-evaluation of pooled cells.
-
-**Prevention:** Load the stylesheet at scene construction time in FXML
-(already done via `stylesheets="@main.css"` in `main.fxml`). Do not add dark
-theme rules via `getStylesheets().add()` at runtime — embed them in the
-existing `main.css`.
-
----
-
-## 2. TableView Column Width — Log Panel
-
-### Pitfall 2.1: `CONSTRAINED_RESIZE_POLICY` hides content when a column uses
-`prefWidth` without `minWidth`
-**What goes wrong:** You switch the `logTableView` to
-`TableView.CONSTRAINED_RESIZE_POLICY`. The Message column shrinks below
-readable width. Or: the columns do not add up to 100%, leaving an empty
-filler column at the right.
-
-**Why it happens:** `CONSTRAINED_RESIZE_POLICY` distributes available space
-proportionally, but if columns specify `prefWidth` without `minWidth`, the
-policy can squeeze them to zero. The filler column is JavaFX's own artifact
-when total column width < table width; it appears as an empty header cell.
-
-**Current code risk:** `main.fxml` lines 108-113 specify fixed `prefWidth`
-values (65, 60, 100, 400, 40) with no `minWidth`. If the table is narrower
-than 665 px, `CONSTRAINED_RESIZE_POLICY` will compress all columns equally,
-causing the Time/Level columns to disappear.
-
-**Prevention:** Set `minWidth` per column (e.g. 40 for Time, 50 for Level,
-60 for Type, 100 for Message, 36 for AI). Use
-`TableView.CONSTRAINED_RESIZE_POLICY` only when you intend all columns to
-share space. For a "fill width, remove trailing filler" requirement, the
-correct policy is `TableView.CONSTRAINED_RESIZE_POLICY` combined with
-explicit `minWidth` guards — or keep `prefWidth`-based sizing and set the
-`columnResizePolicy` only on the Message column to expand via `HBox.hgrow`.
-
-**Alternative — explicit column binding in Java:**
 ```java
-colMessage.prefWidthProperty().bind(
-    logTableView.widthProperty()
-        .subtract(colTime.getWidth())
-        .subtract(colLevel.getWidth())
-        .subtract(colType.getWidth())
-        .subtract(colAi.getWidth())
-        .subtract(2) // border
-);
-```
-This is fragile when the table is resized before layout completes. Prefer
-`CONSTRAINED_RESIZE_POLICY` + `minWidth` instead.
-
----
-
-### Pitfall 2.2: The "extra blank column" is the JavaFX filler column, not a
-real column
-**What goes wrong:** A blank column appears at the right of the TableView with
-no header and no data. Attempts to remove it by changing column definitions
-have no effect.
-
-**Why it happens:** JavaFX automatically adds a filler `TableColumn` when the
-declared columns do not fill the table's full width. It is not in the FXML
-columns list and cannot be targeted by normal column removal.
-
-**Prevention:** Use `TableView.CONSTRAINED_RESIZE_POLICY` so JavaFX expands
-declared columns to fill available width, eliminating the filler. There is no
-direct CSS class for the filler column; the only reliable fix is the resize
-policy.
-
----
-
-### Pitfall 2.3: Changing `columnResizePolicy` in FXML vs. Java — ordering
-matters
-**What goes wrong:** Setting `columnResizePolicy` in FXML before columns are
-fully initialized produces a layout glitch on first render. Column widths flash
-and then settle.
-
-**Prevention:** Set the policy in the controller's `initialize()` method after
-the FXML injection is complete, not in the FXML file.
-
----
-
-## 3. Encoding
-
-### Pitfall 3.1: `Files.readString` without explicit charset on non-UTF-8 files
-**What goes wrong:** A file saved on Windows with UTF-16 or Latin-1 encoding is
-read by `Files.readString(path, StandardCharsets.UTF_8)` and produces garbled
-characters or throws `MalformedInputException`.
-
-**Why it happens:** `StandardCharsets.UTF_8` decoding fails on non-UTF-8 bytes
-rather than substituting replacement characters (unlike e.g. `ISO-8859-1`).
-The current codebase always specifies UTF-8 (EditorController line 136,
-ProjectFileManager line 12, LibraryPreprocessor line 49) — this is correct for
-files created by the tool, but may fail for files imported from external
-sources.
-
-**Prevention:** The tool's own pipeline consistently writes UTF-8 (`Files.writeString` with UTF-8,
-`StandardCharsets.UTF_8` in `RenderEngine`). For the encoding fix in v0.3.0,
-identify where characters are *displayed* incorrectly — not just read. The most
-likely sources are:
-
-1. **Saxon XSLT output:** `RenderEngine.transformToString` already sets
-   `Serializer.Property.ENCODING` to `UTF-8`. If the XSL-FO output contains a
-   declaration like `<?xml version="1.0" encoding="ISO-8859-1"?>`, Saxon will
-   re-encode to the declared charset, producing bytes that `StringWriter`
-   interprets wrongly. Prevention: strip or override the encoding declaration,
-   or read the `Serializer` output as bytes and then decode explicitly.
-
-2. **FOP rendering pass:** `RenderEngine.renderFoToPdf` converts the FO string
-   to bytes with `getBytes(StandardCharsets.UTF_8)` and feeds them into a
-   `ByteArrayInputStream`. If the XSL-FO string was produced with non-UTF-8
-   content (e.g. Windows-1252 entities like `&#x92;`) and the PDF font does not
-   embed those glyphs, the rendered PDF will show boxes or wrong characters.
-   This is a font embedding issue, not a Java encoding bug.
-
-3. **File read before display in editor:** `EditorController.openOrFocusTab`
-   calls `Files.readString(key, StandardCharsets.UTF_8)`. If the file has a
-   BOM (Byte Order Mark, 0xEF 0xBB 0xBF), `Files.readString` with UTF-8 does
-   NOT strip the BOM — the BOM character (`﻿`) appears as the first
-   character in the editor. Prevention: strip the BOM after reading.
-
-**Detection:** Print `bytes[0], bytes[1], bytes[2]` of the raw file read to
-detect a UTF-8 BOM (EF BB BF). Log `foContent.substring(0, 80)` before FOP
-to detect encoding mismatches at the FO boundary.
-
----
-
-### Pitfall 3.2: Hardcoded byte conversion loses encoding consistency
-**What goes wrong:** Calling `string.getBytes()` without a charset argument
-uses the JVM default charset, which is platform-dependent and may differ between
-macOS (UTF-8) and Windows (Cp1252).
-
-**Current code risk:** None found — the codebase consistently uses
-`StandardCharsets.UTF_8`. But any new code added in this milestone that calls
-`.getBytes()` without a charset argument reintroduces the bug.
-
-**Prevention:** In code review, treat bare `.getBytes()` as a compile-error
-equivalent. Always write `.getBytes(StandardCharsets.UTF_8)`.
-
----
-
-## 4. About Dialog — Version Loading
-
-### Pitfall 4.1: `getResourceAsStream("/version.properties")` returns null in
-the fat JAR if the resource is not at the classpath root
-**What goes wrong:** The dialog shows "unknown" for the version despite
-`version.properties` existing.
-
-**Why it happens:** The `processResources` block in `build.gradle` expands
-`version.properties` into `build/resources/main/`, making it available at
-the classpath root in dev mode. In the fat JAR (shadow plugin), it is included
-at `/version.properties`. The current `AboutDialog.loadVersion()` uses
-`getClass().getResourceAsStream("/version.properties")` with a leading slash
-— this is the correct form for classpath-root resources and works in both
-dev and fat-JAR modes.
-
-**Risk remaining:** If the Gradle `version` property is updated in `build.gradle`
-but a stale `build/` directory is not cleaned, the expanded file may contain the
-old version string. `./gradlew clean shadowJar` is required after any version
-bump.
-
-**Prevention:** Confirm the expanded value by running:
-```
-jar tf build/libs/xsleditor-*.jar | grep version.properties
-jar xf build/libs/xsleditor-*.jar version.properties && cat version.properties
-```
-Add a note in the project's build instructions: "always run `clean` before
-release builds."
-
----
-
-### Pitfall 4.2: `build.gradle` version string not propagated to the JAR filename
-**What goes wrong:** `build.gradle` line 13 declares `version = '0.1.0'` but
-this value has not been updated to `0.3.0` for this milestone. The fat JAR
-will embed the old version string.
-
-**Why it happens:** The `processResources` block injects `${version}` from
-`project.version`, which reads the `version` property in `build.gradle`. No
-other mechanism updates this value.
-
-**Prevention:** At the start of the v0.3.0 milestone, update `version` in
-`build.gradle` to `'0.3.0'`. This is the single source of truth. Do not
-hardcode the version string in any Java source file.
-
----
-
-## 5. App Icon — Resource Loading
-
-### Pitfall 5.1: `Image` constructed from a resource URL silently fails if the
-resource path is wrong
-**What goes wrong:** The stage shows the default OS window icon instead of the
-app icon. No exception is thrown. The app runs normally.
-
-**Why it happens:** `new Image(url)` with `backgroundLoading=false` (the
-default for the string constructor) does not throw on a 404 — it creates an
-`Image` in an error state. `stage.getIcons().add(errorStateImage)` adds it
-silently; JavaFX falls back to the default icon.
-
-**Prevention:** After loading the image, check for errors:
-```java
-URL iconUrl = getClass().getResource("/icon.png");
-if (iconUrl != null) {
-    Image icon = new Image(iconUrl.toExternalForm());
-    if (!icon.isError()) {
-        primaryStage.getIcons().add(icon);
-    } else {
-        System.err.println("[XSLEditorApp] icon.png failed to load");
+// src/main/java/ch/ti/gagi/xsleditor/Launcher.java
+public class Launcher {
+    public static void main(String[] args) {
+        XSLEditorApp.main(args);
     }
 }
 ```
-Always log the failure path so it is visible during testing.
+
+In `build.gradle`, update `mainClass` and the `shadowJar` manifest to
+`ch.ti.gagi.xsleditor.Launcher`.
+
+**Option B (JDK+FX distribution):** In the GitHub Actions workflow, install a
+JDK that bundles JavaFX (e.g. Liberica JDK with `java-package: jdk+fx` in
+`actions/setup-java`). JavaFX modules then live on the module path of the
+embedded JRE that jpackage bundles, and the named-module requirement is met
+without a launcher shim.
+
+Option B requires a JavaFX-bundled JDK on *every* OS runner, which is a
+harder dependency to pin and maintain. Option A is recommended.
+
+**Detection:** Run the produced `.app` / `.exe` from a terminal; the JVM abort
+message appears on stderr before any window opens.
+
+**Phase:** Must be resolved in the first CI/CD phase before any distribution
+artifact is tested.
 
 ---
 
-### Pitfall 5.2: Icon placed in the wrong resource directory is not found in
-the fat JAR
-**What goes wrong:** `icon.png` placed under
-`src/main/resources/ch/ti/gagi/xsleditor/ui/` is accessible via
-`getClass().getResource("icon.png")` (relative) but NOT via
-`getClass().getResource("/icon.png")` (classpath root). Conversely, if the
-intent is to load it from the class root, it must be in
-`src/main/resources/` directly.
+### Pitfall C-02: jpackage does not bundle native JavaFX WebKit libraries (`javafx.web`)
 
-**Why it happens:** The leading `/` in `getResource("/icon.png")` means
-"relative to the classpath root". Without the slash, it is relative to the
-calling class's package. These resolve to different paths.
+**Severity:** BLOCKS RELEASE (app crashes at runtime on user machines)
 
-**Prevention:** Decide on one convention:
-- Place `icon.png` at `src/main/resources/icon.png` and load with
-  `getClass().getResource("/icon.png")`.
-- Or place it at `src/main/resources/ch/ti/gagi/xsleditor/ui/icon.png` and
-  load with `getClass().getResource("icon.png")` (no leading slash) from
-  `XSLEditorApp`.
+**What goes wrong:** The app launches but crashes when the `WebView` PDF
+preview tab is opened. Stacktrace contains
+`java.lang.UnsatisfiedLinkError: libjfxwebkit.dylib` (macOS) or a similar
+native library error on Windows.
 
-The milestone context says "icon.png → src/main/resources/" — this matches
-the first convention. Use `getClass().getResource("/icon.png")` in
-`XSLEditorApp.start()`.
+**Why it happens:** `javafx.web` depends on a native library (`libjfxwebkit`)
+that is NOT included in a standard OpenJDK JRE. jpackage copies the JRE that
+is installed on the build runner. If that JRE is vanilla OpenJDK (no JavaFX),
+the native library is absent from the embedded runtime.
+
+The same issue affects `javafx.media` if it were used.
+
+**Prevention:** The GitHub Actions workflow must install a JDK distribution
+that ships JavaFX native libraries. Specifically:
+
+- **Liberica JDK:** `distribution: 'liberica'`, `java-package: 'jdk+fx'` in
+  `actions/setup-java`. This is the most reliable option in CI.
+- **Azul Zulu JDK+FX:** `distribution: 'zulu'`, `java-package: 'jdk+fx'`.
+
+Both distributions include the `libjfxwebkit` native library in the JRE.
+jpackage will then copy it into the bundle automatically.
+
+Do NOT use `temurin` (Eclipse Adoptium), `corretto`, or `microsoft`
+distributions — they do not bundle JavaFX native libraries.
+
+**Detection:** After producing the bundle, inspect its contents:
+- macOS: `find XSLEditor.app -name "libjfxwebkit*"` — must return a result.
+- Windows: `dir /s libjfxwebkit.dll` inside the install directory.
+
+**Phase:** Workflow JDK setup step (Phase 1 of CI/CD). Must be verified before
+moving to signing.
 
 ---
 
-### Pitfall 5.3: `stage.getIcons()` must be populated before `stage.show()`
-**What goes wrong:** Icon is added after `primaryStage.show()`. On macOS,
-the Dock icon updates mid-launch with a visible flicker. On Windows, the
-taskbar icon may not update until the window is repainted.
+### Pitfall C-03: macOS codesign fails silently or prompts for password in headless CI
 
-**Prevention:** Add the icon to `primaryStage.getIcons()` before the
-`primaryStage.show()` call. The current `XSLEditorApp.start()` calls
-`primaryStage.show()` at line 49 — icon wiring must precede this line.
+**Severity:** BLOCKS RELEASE
 
----
+**What goes wrong:** The signing step in GitHub Actions exits with code 0 but
+the resulting `.app` or `.dmg` is not signed. Or the step hangs indefinitely
+waiting for a keychain password prompt that never appears.
 
-## 6. General JavaFX Dark Theme Pitfalls
+**Why it happens (two sub-issues):**
 
-### Pitfall 6.1: `Alert` and `Dialog` panes do not inherit the scene stylesheet
-**What goes wrong:** All app dialogs look dark, but any new `Alert` created in
-the fix shows with Modena light theme.
+*Sub-issue A — missing partition list:* Since macOS 10.12.5, a keychain item
+requires its signing identity to be in the keychain's partition list (ACL) for
+`/usr/bin/codesign` to access it without a UI password prompt. If
+`security set-key-partition-list` is not called after the certificate import,
+`codesign` blocks on a UI dialogue that never resolves in headless CI.
 
-**Why it happens:** `Alert` and `Dialog` open in their own sub-stage with their
-own scene. The parent scene's stylesheet is not inherited.
+*Sub-issue B — process substitution broken in newer macOS runners:* GitHub
+Actions macOS runners changed behavior around August 2023. Using process
+substitution (`security import <(base64 --decode <<< "$CERT")`) to pipe the
+decoded certificate fails silently. The import command exits 0 but the
+certificate is not actually imported.
 
-**Current code risk:** `AboutDialog` uses inline `.setStyle()` calls for
-individual nodes (lines 49, 55, etc.) — correct approach, no inheritance
-assumed. But any `Alert` dialogs opened by `EditorController.showError()`
-(line 103) or by new code in this milestone will use Modena light by default.
+**Prevention (complete keychain setup sequence):**
 
-**Prevention:** To style `Alert` dialogs, add the stylesheet programmatically:
-```java
-alert.getDialogPane().getStylesheets().add(
-    getClass().getResource("/ch/ti/gagi/xsleditor/ui/main.css").toExternalForm()
-);
+```yaml
+- name: Import signing certificate
+  env:
+    MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
+    MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+  run: |
+    # Write cert to a real file — process substitution is broken on new runners
+    echo "$MACOS_CERTIFICATE" | base64 --decode > /tmp/certificate.p12
+
+    # Create a dedicated temporary keychain
+    security create-keychain -p "ci-keychain-password" build.keychain
+    security default-keychain -s build.keychain
+    security unlock-keychain -p "ci-keychain-password" build.keychain
+
+    # Import certificate
+    security import /tmp/certificate.p12 \
+      -k build.keychain \
+      -P "$MACOS_CERTIFICATE_PWD" \
+      -T /usr/bin/codesign \
+      -T /usr/bin/productbuild
+
+    # Critical: set partition list so codesign can access without UI prompt
+    security set-key-partition-list \
+      -S apple-tool:,apple: \
+      -s \
+      -k "ci-keychain-password" \
+      build.keychain
+
+    # Clean up cert file
+    rm /tmp/certificate.p12
 ```
-Or use inline styles for critical elements.
+
+**Detection:** After the signing step, verify with:
+```bash
+codesign --verify --deep --strict --verbose=2 XSLEditor.app
+spctl --assess --type exec XSLEditor.app
+```
+Any output containing "code object is not signed" or "CSSMERR_TP_NOT_TRUSTED"
+means the signing did not take effect.
+
+**Phase:** macOS signing phase. The partition-list step is mandatory — omitting
+it is the single most common CI signing failure.
 
 ---
 
-### Pitfall 6.2: CSS pseudo-class specificity overrides application styles
-**What goes wrong:** You add a dark-background rule to `.table-row-cell` but
-selected rows or focused rows revert to Modena blue because the Modena
-`:selected:focused` rule has higher specificity.
+### Pitfall C-04: macOS notarization requires `xcrun notarytool`, not `altool`
 
-**Prevention:** Always add `:selected` and `:focused` pseudo-class rules
-alongside any row/cell background change:
-```css
-.log-table-view .table-row-cell:selected,
-.log-table-view .table-row-cell:selected:focused {
-    -fx-background-color: #094771;
-}
-.log-table-view .table-row-cell:selected .table-cell {
-    -fx-text-fill: #ffffff;
-}
+**Severity:** BLOCKS RELEASE
+
+**What goes wrong:** The workflow uses `xcrun altool --notarize-app ...` and
+fails with an error about the tool being discontinued.
+
+**Why it happens:** Apple deprecated `altool` for notarization in November
+2023. It no longer accepts submission requests. All new workflows must use
+`xcrun notarytool`.
+
+**Prevention:**
+
+```yaml
+- name: Notarize app
+  env:
+    APPLE_ID: ${{ secrets.APPLE_ID }}
+    APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+    APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+  run: |
+    xcrun notarytool submit XSLEditor.dmg \
+      --apple-id "$APPLE_ID" \
+      --team-id "$APPLE_TEAM_ID" \
+      --password "$APPLE_APP_SPECIFIC_PASSWORD" \
+      --wait
+    xcrun stapler staple XSLEditor.dmg
 ```
+
+The `--wait` flag polls until Apple's notarization service responds. Without
+`stapler staple`, the notarization ticket is not attached to the artifact;
+users on machines without internet access cannot open the app.
+
+**Required GitHub Actions secrets:**
+- `MACOS_CERTIFICATE_P12_BASE64` — base64-encoded `.p12` file
+- `MACOS_CERTIFICATE_PASSWORD` — `.p12` export password
+- `MACOS_CERTIFICATE_NAME` — full identity string, e.g.
+  `"Developer ID Application: Your Name (XXXXXXXXXX)"`
+- `APPLE_ID` — Apple Developer account email
+- `APPLE_TEAM_ID` — 10-character Team ID from Apple Developer portal
+- `APPLE_APP_SPECIFIC_PASSWORD` — app-specific password from appleid.apple.com
+
+**Phase:** macOS signing/notarization phase. Never use `altool` in new workflows.
+
+---
+
+### Pitfall C-05: jpackage + JavaFX requires hardened runtime entitlements for notarization
+
+**Severity:** BLOCKS RELEASE (notarization rejection)
+
+**What goes wrong:** Notarization is submitted but Apple rejects it with an
+error about hardened runtime not being enabled, or the app crashes at launch
+with a code signing error because JVM memory tricks are blocked.
+
+**Why it happens:** Apple requires the hardened runtime for notarized apps.
+However, the JVM requires several entitlements that the hardened runtime
+disables by default:
+- JIT compilation (`cs.allow-jit`)
+- Unsigned executable memory (`cs.allow-unsigned-executable-memory`)
+- DYLD environment variables (`cs.allow-dyld-environment-variables`)
+- Library validation bypass (`cs.disable-library-validation`) — required for
+  JavaFX native libraries loaded at runtime
+
+Without `cs.disable-library-validation`, JavaFX's dynamic loading of
+`libjfxwebkit.dylib` is blocked by hardened runtime library validation.
+
+**Prevention:** Provide an entitlements file and pass it to jpackage:
+
+```xml
+<!-- entitlements.plist -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>com.apple.security.cs.allow-jit</key>              <true/>
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key> <true/>
+    <key>com.apple.security.cs.allow-dyld-environment-variables</key> <true/>
+    <key>com.apple.security.cs.disable-library-validation</key>       <true/>
+</dict>
+</plist>
+```
+
+Pass to jpackage:
+```
+--mac-entitlements entitlements.plist
+--mac-sign
+--mac-signing-key-user-name "Developer ID Application: Your Name (XXXXXXXXXX)"
+```
+
+**Detection:** Submit the app to notarization and check the log with
+`xcrun notarytool log <submission-id>`. Library validation failures appear as
+explicit rejection reasons.
+
+**Phase:** macOS signing phase. Create the entitlements file before invoking
+jpackage.
+
+---
+
+### Pitfall C-06: WiX version mismatch blocks jpackage MSI creation on Windows runner
+
+**Severity:** BLOCKS RELEASE (Windows artifacts cannot be produced)
+
+**What goes wrong:** The GitHub Actions Windows runner step that calls jpackage
+fails with a WiX-related error such as:
+```
+WiX 3.x is required to create a Windows installer
+```
+or the step succeeds with WiX but produces no MSI file.
+
+**Why it happens:** jpackage requires WiX 3.x (specifically WiX 3.0+) to
+build MSI installers. The GitHub Actions `windows-latest` runner ships with
+WiX pre-installed, but the version on the runner may drift, and there is a
+known incompatibility between jpackage and WiX 4/5 — jpackage on JDK 21 does
+not support WiX 4 or 5.
+
+**Prevention:**
+
+1. Pin the runner image: use `windows-2022` instead of `windows-latest` to
+   reduce runner image drift.
+2. Add a step to verify the WiX version before jpackage:
+   ```yaml
+   - name: Verify WiX
+     run: |
+       & "C:\Program Files (x86)\WiX Toolset v3.11\bin\candle.exe" -?
+   ```
+3. If WiX 3.x is absent, install it explicitly:
+   ```yaml
+   - name: Install WiX 3
+     run: choco install wixtoolset --version=3.11.2 -y
+   ```
+4. After installation, ensure WiX is on `PATH`:
+   ```yaml
+   - name: Add WiX to PATH
+     run: |
+       echo "C:\Program Files (x86)\WiX Toolset v3.11\bin" | Out-File -Append -FilePath $env:GITHUB_PATH
+   ```
+
+**Detection:** jpackage's stderr will mention WiX explicitly if the failure
+is WiX-related. If the step exits 0 but no MSI is created, check for a missing
+WiX candle/light in the PATH.
+
+**Phase:** Windows packaging phase.
+
+---
+
+## Moderate Pitfalls
+
+Mistakes that cause incorrect behavior but can be worked around without a
+full rewrite.
+
+---
+
+### Pitfall M-01: Cross-platform builds must run on their native OS runner
+
+**Severity:** CAUSES INCORRECT ARTIFACTS
+
+**What goes wrong:** A single Linux or macOS runner is used to produce both
+the macOS `.app` and the Windows `.msi`. jpackage produces an artifact that
+looks correct but either will not install or will not run on the target OS.
+
+**Why it happens:** jpackage does NOT support cross-compilation. A macOS
+jpackage invocation can only produce macOS artifacts; a Windows invocation can
+only produce Windows artifacts. The JRE embedded by jpackage is the one
+installed on the build runner — an x86_64 Linux JRE embedded into a Windows
+installer produces a non-functional installer.
+
+**Prevention:** The workflow matrix must specify separate jobs:
+
+```yaml
+jobs:
+  build-macos:
+    runs-on: macos-14          # Apple Silicon runner (arm64)
+    steps: [...]               # produces .dmg
+
+  build-windows:
+    runs-on: windows-2022
+    steps: [...]               # produces .msi
+
+  publish:
+    needs: [build-macos, build-windows]
+    runs-on: ubuntu-latest
+    steps: [upload all artifacts to GitHub Release]
+```
+
+**Note on macOS runner architecture:** `macos-14` is arm64 (Apple Silicon).
+`macos-13` is x86_64 (Intel). If only one architecture is targeted, pick the
+one matching most of your users. There is no jpackage universal binary support;
+a separate job would be needed for the other architecture.
+
+**Phase:** Workflow design phase (Phase 1). Get the matrix right before any
+signing work.
+
+---
+
+### Pitfall M-02: `shadowJar mergeServiceFiles()` may silently drop Saxon or FOP service registrations
+
+**Severity:** CAUSES RUNTIME ERRORS IN PRODUCTION BUILD
+
+**What goes wrong:** The shadow fat JAR works correctly in development
+(`./gradlew run`) but the jpackage-bundled app fails to find Saxon's
+`TransformerFactory` or FOP's `DocumentBuilderFactory` at runtime. Error
+messages resemble:
+```
+javax.xml.transform.TransformerFactoryConfigurationError:
+  Provider net.sf.saxon.TransformerFactoryImpl not found
+```
+
+**Why it happens:** Saxon and Apache FOP both use Java's `ServiceLoader`
+mechanism, registering implementations in `META-INF/services/` files. When
+multiple JARs contribute to the same service file, `mergeServiceFiles()` in
+shadow concatenates them. However, if `DuplicatesStrategy.EXCLUDE` is active
+elsewhere in the build, service files may be dropped instead of merged.
+
+The project's `build.gradle` already calls `mergeServiceFiles()`, which is
+correct, but this must be verified to cover all service files from Saxon 12.4
+and FOP 2.9.
+
+**Prevention:**
+1. After building the fat JAR, verify that key service files are present and
+   correctly merged:
+   ```bash
+   jar tf build/libs/xsleditor-*.jar | grep META-INF/services
+   jar xf build/libs/xsleditor-*.jar META-INF/services/javax.xml.transform.TransformerFactory
+   cat META-INF/services/javax.xml.transform.TransformerFactory
+   # must contain: net.sf.saxon.TransformerFactoryImpl
+   ```
+2. Do not set `duplicatesStrategy = DuplicatesStrategy.EXCLUDE` on the
+   `shadowJar` task — this overrides `mergeServiceFiles()`.
+
+**Detection:** Run a render cycle from the jpackage-produced bundle against a
+known-good project. If the render fails with a provider error, this pitfall is
+the cause.
+
+**Phase:** JAR build verification step. Check before submitting the JAR to
+jpackage.
+
+---
+
+### Pitfall M-03: Git tag format assumptions break release notes generation
+
+**Severity:** CAUSES EMPTY OR INCORRECT RELEASE NOTES
+
+**What goes wrong:** The workflow uses `git log v0.3.0..v0.4.0 --oneline` to
+generate release notes, but:
+- No previous tag `v0.3.0` exists (first CI-automated release after manual
+  tagging history), so git log produces all commits since the beginning.
+- The tag name contains a non-semver suffix (e.g. `v0.4.0-rc1`) that the
+  release notes script does not handle.
+- `${{ github.ref_name }}` strips `refs/tags/` automatically (correct), but
+  the script that derives the *previous* tag uses `git describe --abbrev=0
+  --tags HEAD^` which may land on a non-release tag or annotation-vs-lightweight
+  tag mismatch.
+
+**Prevention:**
+1. Use `git tag --sort=-version:refname` to list tags and derive the previous
+   semver tag programmatically.
+2. Guard for the "no previous tag" case (first release):
+   ```bash
+   PREV_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+' | sed -n '2p')
+   if [ -z "$PREV_TAG" ]; then
+     git log --oneline > release-notes.txt
+   else
+     git log "${PREV_TAG}..HEAD" --oneline > release-notes.txt
+   fi
+   ```
+3. Use `github.ref_name` (not `github.ref`) for the current tag — GitHub
+   Actions strips the `refs/tags/` prefix automatically.
+
+**Phase:** Release publish step.
+
+---
+
+### Pitfall M-04: Multiline `git log` output breaks `GITHUB_OUTPUT` variable assignment
+
+**Severity:** CAUSES BROKEN RELEASE NOTES IN GITHUB UI
+
+**What goes wrong:** A workflow step assigns release notes to a GitHub Actions
+output variable using the old `::set-output` syntax, or uses a single-line
+`echo "notes=$(git log ...)"` assignment. Multi-line commit messages or commit
+messages containing special characters (`%`, `\n`, `:`) corrupt the variable.
+
+**Why it happens:** `GITHUB_OUTPUT` requires multi-line values to use the
+heredoc delimiter syntax. The old `::set-output` mechanism was deprecated and
+removed.
+
+**Prevention:** Use the heredoc form for any multi-line output:
+
+```yaml
+- name: Generate release notes
+  id: notes
+  run: |
+    NOTES=$(git log "${PREV_TAG}..HEAD" --pretty=format:"- %s")
+    echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+    echo "$NOTES" >> $GITHUB_OUTPUT
+    echo "EOF" >> $GITHUB_OUTPUT
+```
+
+Alternatively, write the notes to a file and pass `--notes-file` to
+`gh release create`, which avoids the environment variable entirely.
+
+**Phase:** Release publish step. Use file-based approach as the safer default.
+
+---
+
+### Pitfall M-05: `actions/setup-java` with `distribution: liberica` requires `java-package` to be set explicitly
+
+**Severity:** CAUSES MISSING JAVAFX NATIVE LIBRARIES (leads to C-02)
+
+**What goes wrong:** The workflow uses `distribution: 'liberica'` but omits
+`java-package`, defaulting to `jdk` (no JavaFX). The JDK installed is the
+standard Liberica JDK without bundled JavaFX native libraries. jpackage bundles
+this JRE, and the app crashes when `WebView` is initialized.
+
+**Prevention:** Always specify both fields together:
+
+```yaml
+- uses: actions/setup-java@v4
+  with:
+    distribution: 'liberica'
+    java-version: '21'
+    java-package: 'jdk+fx'    # critical — without this, JavaFX natives are absent
+```
+
+**Detection:** Same as Pitfall C-02 — inspect the bundle for
+`libjfxwebkit.dylib` / `libjfxwebkit.dll`.
+
+**Phase:** Workflow JDK setup step (all OS runners).
+
+---
+
+## Minor Pitfalls
+
+Issues that cause friction but can be fixed quickly once discovered.
+
+---
+
+### Pitfall N-01: `build.gradle` version not bumped before tagging
+
+**What goes wrong:** The GitHub Release says `v0.4.0` but the embedded
+`version.properties` and the JAR filename still read `0.3.0` because
+`build.gradle`'s `version` property was not updated before the tag was pushed.
+
+**Prevention:** The release workflow should fail fast if the build version does
+not match the tag. Add a verification step:
+
+```yaml
+- name: Verify version matches tag
+  run: |
+    BUILD_VERSION=$(./gradlew properties -q | grep "^version:" | awk '{print $2}')
+    TAG_VERSION="${{ github.ref_name }}"  # e.g. v0.4.0
+    if [ "v$BUILD_VERSION" != "$TAG_VERSION" ]; then
+      echo "ERROR: build.gradle version '$BUILD_VERSION' != tag '$TAG_VERSION'"
+      exit 1
+    fi
+```
+
+**Phase:** Pre-build gate step. Runs before any compilation or packaging.
+
+---
+
+### Pitfall N-02: macOS `.app` without a DMG is awkward for users to install
+
+**What goes wrong:** jpackage's `--type app-image` produces a `.app` directory,
+not a file. GitHub Releases requires a single file upload; uploading a directory
+fails. Even if zipped, users do not know to drag it to `/Applications`.
+
+**Prevention:** Use `--type dmg` for macOS distribution. jpackage handles DMG
+creation natively and produces a single distributable file. The DMG includes a
+drag-to-Applications UI by default.
+
+**Phase:** jpackage invocation step.
+
+---
+
+### Pitfall N-03: Release artifacts uploaded by separate jobs need a coordinating publish job
+
+**What goes wrong:** Both the macOS and Windows jobs call `gh release create`
+independently. One job creates the release with only its artifact; the other
+job's `gh release create` fails because the release already exists.
+
+**Prevention:** Use a two-stage approach:
+1. macOS and Windows jobs each upload their artifact as a workflow artifact
+   (`actions/upload-artifact`).
+2. A final `publish` job with `needs: [build-macos, build-windows]` downloads
+   all artifacts and creates the GitHub Release in a single step using
+   `gh release create` or `softprops/action-gh-release`.
+
+**Phase:** Release publish step. Design this into the workflow from the start.
+
+---
+
+### Pitfall N-04: GitHub Actions `contents: write` permission required for release creation
+
+**What goes wrong:** The `gh release create` step fails with `403 Resource not
+accessible by integration`.
+
+**Why it happens:** The default `GITHUB_TOKEN` permissions for a workflow do
+not include write access to contents (releases). This must be explicitly granted.
+
+**Prevention:** Add permissions at the job level:
+
+```yaml
+jobs:
+  publish:
+    permissions:
+      contents: write
+```
+
+**Phase:** Release publish job setup.
+
+---
+
+### Pitfall N-05: jpackage app name and identifier must be consistent across signing, notarization, and the bundle
+
+**What goes wrong:** The app is signed with one name (`--name XSLEditor`) but
+the notarization submission refers to a different bundle identifier, causing
+Apple to reject the notarization or staple to fail.
+
+**Prevention:** Set `--name`, `--app-version`, and `--mac-package-identifier`
+consistently in every jpackage invocation. Keep a single source of truth (the
+Gradle `version` property for the version; a fixed string for the identifier,
+e.g. `ch.ti.gagi.xsleditor`).
+
+**Phase:** jpackage invocation step.
 
 ---
 
 ## Phase-Specific Warnings
 
-| Milestone Task | Pitfall to Watch | Mitigation |
-|----------------|-----------------|------------|
-| Dark theme CSS for CodeArea | Background targets wrong sub-node (1.1) | Target `.code-area .content`, not `.code-area` |
-| Dark theme CSS for CodeArea | Caret/selection invisible (1.2) | Add explicit `.caret` and `.selection` rules |
-| Dark theme CSS for CodeArea | New span classes use wrong property (1.3) | Use `-fx-fill`, not `-fx-text-fill` |
-| Dark theme CSS for TreeView | Selected cell text invisible (1.4) | Add `-fx-text-fill` to every selected-state rule |
-| Dark theme CSS for TableView | Column header text invisible (1.5) | Target `.column-header .label` explicitly |
-| Log panel column width fix | Filler column appears (2.2) | Use `CONSTRAINED_RESIZE_POLICY` |
-| Log panel column width fix | Columns compress below readable width (2.1) | Set `minWidth` per column |
-| Encoding fix | BOM character appears in editor (3.1) | Strip `﻿` after `Files.readString` |
-| Encoding fix | Saxon encoding declaration mismatch (3.1) | Override or strip XSL-FO encoding declaration |
-| About dialog version | Stale build cache shows old version (4.1) | Run `clean` before release |
-| About dialog version | `version` in `build.gradle` not updated (4.2) | Bump `version` property before building |
-| App icon | Silent load failure, no icon shown (5.1) | Check `icon.isError()` after construction |
-| App icon | Wrong resource path convention (5.2) | Confirm leading-slash rule matches placement |
-| App icon | Added after `show()`, causes flicker (5.3) | Wire icon before `primaryStage.show()` |
-| Any new Alert/Dialog | Light theme bleeds in (6.1) | Add stylesheet to `getDialogPane()` explicitly |
+| CI/CD Phase | Likely Pitfall | Mitigation |
+|-------------|---------------|------------|
+| Workflow design | Cross-platform jobs share a single runner (M-01) | Use OS matrix with native runners |
+| JDK setup (all runners) | Missing JavaFX natives (C-02, M-05) | Use `liberica` + `jdk+fx` |
+| Fat JAR preparation | Launcher shim missing, app aborts with module error (C-01) | Add `Launcher` class; point manifest at it |
+| Fat JAR preparation | Service file merge incomplete (M-02) | Verify `META-INF/services` after build |
+| macOS jpackage | Entitlements file missing (C-05) | Create `entitlements.plist` before jpackage |
+| macOS signing | Keychain partition list not set — codesign hangs (C-03) | Run `security set-key-partition-list` |
+| macOS notarization | altool used instead of notarytool (C-04) | Use `xcrun notarytool submit` |
+| macOS notarization | Staple step omitted (C-04) | Always run `xcrun stapler staple` after submit |
+| Windows packaging | WiX version mismatch (C-06) | Pin `windows-2022`; verify WiX 3.x on PATH |
+| Release publish | Multiple jobs both try `gh release create` (N-03) | Use dedicated `publish` job with `needs:` |
+| Release publish | Missing `contents: write` permission (N-04) | Add `permissions: contents: write` |
+| Release publish | Multiline notes break `GITHUB_OUTPUT` (M-04) | Use heredoc or `--notes-file` |
+| Pre-build gate | Version mismatch between tag and build.gradle (N-01) | Add version-check step before compilation |
+
+---
+
+## Sources
+
+- Apple documentation on notarization workflow: https://developer.apple.com/documentation/security/customizing-the-notarization-workflow
+- OpenJDK bug — jpackage macOS architecture tagging: https://bugs.openjdk.org/browse/JDK-8266179
+- GitHub discussion — macOS security import broken with process substitution: https://github.com/orgs/community/discussions/63731
+- GitHub discussion — WiX path setup in Windows runner: https://github.com/orgs/community/discussions/27149
+- adoptium-support — WiX 5 incompatibility with jpackage: https://github.com/adoptium/adoptium-support/issues/1262
+- shadow plugin mergeServiceFiles issue — DuplicatesStrategy interaction: https://github.com/GradleUp/shadow/issues/1348
+- GradleUp shadow plugin — mergeServiceFiles regression in 9.0.0: https://github.com/GradleUp/shadow/issues/1599
+- actions/setup-java — java-package options including jdk+fx: https://github.com/actions/setup-java
+- Apple-Actions/import-codesign-certs — multiple cert import limitation: https://github.com/Apple-Actions/import-codesign-certs
+- macOS signing keychain partition list guide: https://localazy.com/blog/how-to-automatically-sign-macos-apps-using-github-actions
+- macOS jpackage signing issues JDK bug: https://bugs.openjdk.org/browse/JDK-8358723
+- Eden Coding — JavaFX runtime components missing root cause: https://edencoding.com/runtime-components-error/

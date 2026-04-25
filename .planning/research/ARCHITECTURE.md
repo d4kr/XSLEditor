@@ -1,239 +1,469 @@
-# Architecture Integration: v0.3.0 Polish & Usability
+# Architecture: GitHub Actions CI/CD Distribution Pipeline
 
-**Project:** XSLEditor
-**Milestone:** v0.3.0 Polish & Usability
-**Researched:** 2026-04-23
-**Confidence:** HIGH — all integration points verified directly in source
-
----
-
-## System Map (Relevant Components)
-
-```
-XSLEditorApp.start()
-  └── loads main.fxml → MainController.initialize()
-        ├── FileTreeController  (TreeView in fileTreePane StackPane)
-        ├── EditorController    (TabPane + CodeArea in editorPane StackPane)
-        ├── LogController       (TableView in FXML logTableView)
-        ├── RenderController    (render pipeline trigger)
-        └── PreviewController   (WebView PDF display)
-
-Resources (classpath):
-  src/main/resources/
-    ch/ti/gagi/xsleditor/ui/main.fxml     ← stylesheet ref: @main.css
-    ch/ti/gagi/xsleditor/ui/main.css      ← single stylesheet for entire app
-    version.properties                    ← injected by Gradle processResources
-
-Build:
-  build.gradle processResources block     ← expand(version: project.version)
-  version in build.gradle line 14:        version = '0.1.0'  (stale — needs bump)
-```
+**Project:** XSLEditor — Java 21 + JavaFX desktop app
+**Milestone:** v0.4.0 — GitHub Releases & Distribution
+**Researched:** 2026-04-24
+**Overall confidence:** HIGH
 
 ---
 
-## Feature 1: Dark Theme CSS Fix
+## Decision: Single Workflow File
 
-**What:** Fix text colors for TreeView, CodeArea, and TableView in the dark theme.
+Use **one workflow file** — `.github/workflows/release.yml` — triggered by `push` on tags matching `v*`.
 
-**Integration point:** Single file — `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css`.
+Rationale: The three build artifacts (macOS arm64, macOS x64, Windows x64) are built in parallel and then collected by a single release job. A single file keeps all dependencies in one place, makes secret usage auditable, and avoids cross-workflow artifact sharing (which requires additional `github-token` complexity and has a shorter retention window).
 
-**Current state analysis:**
-- TreeView (`file-tree-view .tree-cell`) — CSS rule exists and sets `-fx-text-fill: #cccccc`. However, JavaFX default Modena stylesheet sets `.tree-cell:selected` with a system blue that overrides custom rules unless specificity is matched. The existing rule targets `.tree-cell:selected` only for border; text-fill is missing from the `:selected` state.
-- CodeArea (RichTextFX) — RichTextFX CodeArea renders text via its own internal `.styled-text-area` CSS class. The existing `main.css` has no rules for `.styled-text-area` or `.text-flow`. Modena defaults give white background and black text. Background is implicitly dark because the surrounding `editorPane` StackPane has `.placeholder-pane` (-fx-background-color: #2b2b2b), but the CodeArea itself paints its own viewport white unless styled directly.
-- TableView (log panel) — `.log-table-view .table-cell` sets text-fill correctly. However `.table-row-cell:selected .table-cell` and `.table-row-cell:focused` states are not overridden, so selected rows revert to Modena system-blue background with potentially unreadable text.
-
-**Required CSS additions — all in `main.css`:**
-```
-.styled-text-area            /* CodeArea background + text base color */
-.styled-text-area .text      /* actual text node fill */
-.file-tree-view .tree-cell:selected   /* add -fx-text-fill to selected state */
-.log-table-view .table-row-cell:selected .table-cell   /* selected row text */
-.log-table-view .table-row-cell:selected               /* selected row bg */
-```
-
-**Dependencies:** None. CSS changes are hot-reloadable during dev; no Java changes required.
-
-**Risk:** RichTextFX `.styled-text-area` CSS class names must be confirmed against RichTextFX 0.11.5. The class name is documented in the RichTextFX source and has been stable since 0.9.x (HIGH confidence). The `.text` pseudo-element inside it controls fill for unstyled text.
+A separate `ci.yml` for test-only runs on PRs is appropriate but is out of scope for this milestone.
 
 ---
 
-## Feature 2: Log Panel TableView — Column Width Fix
+## Job Structure
 
-**What:** Make columns fill the TableView container; remove any phantom extra column.
+```
+release.yml (on: push tags v*)
+│
+├── job: build-jar          (ubuntu-latest)
+│   └── outputs: fat JAR via ./gradlew shadowJar
+│   └── uploads artifact: xsleditor-jar
+│
+├── job: build-macos-arm64  (macos-15)          ← needs: build-jar
+│   └── downloads: xsleditor-jar
+│   └── sets up keychain with Developer ID cert
+│   └── runs jpackage --type dmg --mac-sign
+│   └── notarizes + staples DMG
+│   └── uploads artifact: xsleditor-macos-arm64
+│
+├── job: build-macos-x64    (macos-15-intel)    ← needs: build-jar
+│   └── downloads: xsleditor-jar
+│   └── sets up keychain with Developer ID cert
+│   └── runs jpackage --type dmg --mac-sign
+│   └── notarizes + staples DMG
+│   └── uploads artifact: xsleditor-macos-x64
+│
+├── job: build-windows      (windows-latest)    ← needs: build-jar
+│   └── downloads: xsleditor-jar
+│   └── runs jpackage --type msi
+│   └── uploads artifact: xsleditor-windows
+│
+└── job: release            (ubuntu-latest)     ← needs: [build-macos-arm64, build-macos-x64, build-windows]
+    └── downloads: all 4 artifacts (pattern xsleditor-*)
+    └── creates GitHub Release via softprops/action-gh-release@v2
+    └── attaches: .dmg (arm64), .dmg (x64), .msi, .jar
+    └── release notes auto-generated from git log
+```
 
-**Integration points:**
+### Why build-jar runs on Linux
 
-1. **`main.fxml`** — `TableView` definition with explicit `prefWidth` on each `TableColumn`:
-   - `colTime`: 65, `colLevel`: 60, `colType`: 100, `colMessage`: 400, `colAi`: 40
-   - Total fixed widths: 665 px. No column has `fx:id` equivalent of `maxWidth="Infinity"` or a resize policy set. JavaFX default resize policy is `UNCONSTRAINED_RESIZE_POLICY`, which leaves the remaining space as an empty phantom column.
+The fat JAR produced by `shadowJar` is platform-independent bytecode. Building on `ubuntu-latest` costs x1 GitHub Actions minutes (macOS = x10, Windows = x2). All three platform jobs download this single artifact rather than each running a redundant Gradle build. This is the primary cost optimization.
 
-2. **`LogController.initialize()`** — `logTableView.setEditable(false)` is called but no `columnResizePolicy` is set.
+### Why two separate macOS jobs instead of a matrix
 
-**Two-part fix required:**
+macOS arm64 (`macos-15`) and macOS x64 (`macos-15-intel`) require different physical runners — jpackage produces a native `.app` bundle that must run on the same CPU architecture as the build machine. Cross-compilation is not possible. A `matrix:` strategy over `[macos-15, macos-15-intel]` is functionally equivalent but harder to read when only two variants exist; explicit named jobs are preferred.
 
-Part A (Java — `LogController.initialize()`): Add one line after the `logTableView` setup:
+Runner label notes:
+- `macos-15` — Apple Silicon (arm64), available now
+- `macos-15-intel` — Intel x64, available until August 2027
+- `macos-13` — retired December 2025, do not use
+- `macos-latest` — currently resolves to arm64 (`macos-15`); do not rely on this for architecture-specific builds
+
+---
+
+## jpackage Integration Strategy
+
+### Run jpackage as a shell step, not inside Gradle
+
+Do not create a Gradle task for jpackage. Reasons:
+
+1. The `org.beryx.jpackage` Gradle plugin is unmaintained and incompatible with Gradle 9.
+2. The fat JAR already exists on disk after `shadowJar` — jpackage only needs to read it as `--main-jar`.
+3. Shell steps are easier to debug in CI logs than opaque Gradle task failures.
+4. jpackage is bundled with JDK 14+ — no additional dependency needed.
+
+### jpackage command structure (macOS)
+
+```bash
+APP_VERSION="${GITHUB_REF_NAME#v}"   # strip leading "v" — jpackage rejects "v0.4.0"
+
+jpackage \
+  --type dmg \
+  --input build/libs \
+  --main-jar "XSLEditor-${APP_VERSION}.jar" \
+  --main-class ch.ti.gagi.xsleditor.Launcher \
+  --name XSLEditor \
+  --app-version "$APP_VERSION" \
+  --vendor "TI GAGI" \
+  --mac-package-identifier ch.ti.gagi.xsleditor \
+  --mac-signing-key-user-name "$MACOS_SIGNING_IDENTITY" \
+  --mac-sign \
+  --dest dist/
+```
+
+Key flags:
+- `--input build/libs` — directory containing the fat JAR (shadowJar writes to `build/libs/`)
+- `--main-jar` — references the fat JAR; uses `--main-jar` not `--module` because the app is non-modular
+- `--mac-sign` — instructs jpackage to invoke `codesign` internally on all bundled native libs and the .app
+- `--mac-signing-key-user-name` — must match the keychain identity name exactly (see Secrets section)
+
+jpackage auto-generates the embedded JRE via jlink using the JDK on the runner. No `--runtime-image` pre-building step is needed.
+
+### jpackage command structure (Windows)
+
+```powershell
+$APP_VERSION = $env:GITHUB_REF_NAME -replace '^v', ''
+
+jpackage `
+  --type msi `
+  --input build\libs `
+  --main-jar "XSLEditor-$APP_VERSION.jar" `
+  --main-class ch.ti.gagi.xsleditor.Launcher `
+  --name XSLEditor `
+  --app-version $APP_VERSION `
+  --vendor "TI GAGI" `
+  --win-dir-chooser `
+  --win-menu `
+  --win-shortcut `
+  --dest dist\
+```
+
+No code signing on Windows for v0.4.0. Windows SmartScreen warnings are acceptable for an internal developer tool. Authenticode signing can be added in a future milestone.
+
+---
+
+## Critical Prerequisite: JavaFX Launcher Class
+
+**This is a mandatory code change before jpackage will produce a working installer.**
+
+JavaFX raises "JavaFX runtime components are missing" when the `Main-Class` in the fat JAR manifest extends `javafx.application.Application`. This happens because the Java launcher's module system detects that JavaFX is being launched outside its module context.
+
+The current `build.gradle` sets `Main-Class: ch.ti.gagi.xsleditor.XSLEditorApp`, which extends `Application`. This must be changed for the fat JAR (the `application` plugin's run task is unaffected).
+
+**Fix — create `src/main/java/ch/ti/gagi/xsleditor/Launcher.java`:**
+
 ```java
-logTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-```
-This eliminates the phantom column and distributes extra width across columns.
-
-Part B (FXML — `main.fxml`): With `CONSTRAINED_RESIZE_POLICY`, `prefWidth` values become initial weights rather than hard sizes. The `colMessage` column should be given a larger `prefWidth` relative to others so it absorbs the majority of available width after constraint distribution. Alternatively, individual column `minWidth` constraints can lock narrow columns (Time, Level, AI) while letting Message grow.
-
-**Alternative:** Set `colMessage` to have no `maxWidth` constraint and explicitly set `minWidth` on the narrow columns; leave `prefWidth` as hints. Both approaches are valid — CONSTRAINED_RESIZE_POLICY is the simpler one-line fix.
-
-**Dependencies:** None from other features in this milestone.
-
----
-
-## Feature 3: Encoding Fix
-
-**What:** Identify and fix character encoding issues in the render/display pipeline.
-
-**Integration point analysis — all pipeline stages read with explicit UTF-8:**
-
-| Stage | Location | Encoding |
-|-------|----------|----------|
-| File read into editor | `EditorController.java:136` | `Files.readString(key, StandardCharsets.UTF_8)` — correct |
-| File save from editor | `EditorController.java:301,319` | `Files.writeString(..., StandardCharsets.UTF_8)` — correct |
-| XSLT entrypoint load | `RenderOrchestrator.java:69` | `Files.readString(entryPath, StandardCharsets.UTF_8)` — correct |
-| Library preprocessor | `LibraryPreprocessor.java:49` | `Files.readString(file, StandardCharsets.UTF_8)` — correct |
-| FO → PDF render | `RenderEngine.java:72` | `foContent.getBytes(StandardCharsets.UTF_8)` — correct |
-| XSLT transform output | `RenderEngine.java:48-49` | `Serializer.Property.ENCODING = "UTF-8"` — correct |
-
-**Most likely root cause:** Saxon's XSLT serializer writes the FO result to a `StringWriter`. The `StringWriter` is Java's in-memory Unicode writer — no encoding loss there. However, if the XSLT stylesheet contains `<xsl:output encoding="..."/>` that differs from UTF-8, Saxon will attempt to honor it in the byte output path. In the current code the output goes to a `StringWriter` (character stream), so encoding directives are irrelevant.
-
-**Second candidate:** `FopFactory.newInstance(new java.net.URI("."))` uses the JVM default `user.dir` as base URI. If FOP resolves any external font or image resources, the resolved path may differ from the project root. This can cause FOP to fail silently, producing garbled characters or substitution glyphs in the PDF.
-
-**Third candidate:** XML input file encoding declaration. If an XML file declares `<?xml version="1.0" encoding="ISO-8859-1"?>` but is read as UTF-8 (or vice versa), Saxon will throw a parse error or silently misinterpret characters. Saxon reads via `StreamSource(xmlFile.toFile())` without an explicit charset — Saxon respects the XML declaration in this case (correct behavior), but a mismatch between the file's actual bytes and its declared encoding would cause a problem.
-
-**Investigation path for the phase:**
-1. Reproduce with a concrete example (what characters, what file, at what pipeline stage does corruption appear?).
-2. Check the XML input file's declared encoding vs its actual byte encoding on disk.
-3. If display corruption only (not PDF), check `RenderEngine.transformToString()` — `StringWriter` output fed into `PreviewController` which renders as HTML in WebView. If that HTML is not served with a charset header, WebView may misinterpret the bytes.
-4. If PDF corruption, check FOP font substitution logs.
-
-**Files to investigate (no changes yet):**
-- `RenderEngine.java` — transform output path
-- `PreviewController.java` — how FO/HTML is passed to WebView (base64 encoding bypasses charset issues, but the HTML wrapper must declare `charset=UTF-8`)
-
-**Dependencies:** Independent of all other features. This is an investigation task first.
-
----
-
-## Feature 4: About Version Auto-Update
-
-**What:** Ensure the version shown in AboutDialog matches the build version in `build.gradle`, without hardcoding.
-
-**Integration point analysis:**
-
-The mechanism already exists and is correctly wired end-to-end:
-
-1. `build.gradle` line 14: `version = '0.1.0'`
-2. `build.gradle` lines 66–70: `processResources` block expands `${version}` in `version.properties`
-3. `src/main/resources/version.properties` contains: `version=${version}` (the template literal)
-4. `AboutDialog.loadVersion()` reads `/version.properties` from classpath and returns `p.getProperty("version", "unknown")`
-
-**The version mechanism works correctly when running from the built JAR or via `./gradlew run`.** The version will show as the literal string `${version}` only when running from an IDE that does not trigger `processResources` before launching. This is a dev-environment issue, not a production bug.
-
-**The real fix needed:** The version in `build.gradle` is `0.1.0` but the milestone is `v0.3.0`. The version property has never been bumped. The task is to update `build.gradle` line 14 to `version = '0.3.0'` (or whatever the correct current version is). Everything downstream — `version.properties`, `AboutDialog` — will reflect this automatically after the next build.
-
-**Single-file change:** `build.gradle`, line 14.
-
-**No Java changes required.** `AboutDialog.loadVersion()` is correct as-is.
-
-**Dependencies:** None from other features.
-
----
-
-## Feature 5: App Icon
-
-**What:** Move `icon.png` from project root to `src/main/resources/`, wire into the JavaFX Stage.
-
-**Current state:** `icon.png` exists at `/Users/kraehend/Developer/XSLEditor/icon.png` (project root — not on classpath, not in JAR).
-
-**Integration points:**
-
-1. **Resource placement:** Move to `src/main/resources/ch/ti/gagi/xsleditor/icon.png` (alongside `ui/` directory) or to `src/main/resources/icon.png` (classpath root). Either works; the `ch/ti/gagi/xsleditor/` path is more organized.
-
-2. **`XSLEditorApp.start()`:** This is the only place the primary Stage is configured before `primaryStage.show()`. Icon wiring belongs here, immediately before `primaryStage.show()`:
-   ```java
-   URL iconUrl = getClass().getResource("/ch/ti/gagi/xsleditor/icon.png");
-   if (iconUrl != null) {
-       primaryStage.getIcons().add(new javafx.scene.image.Image(iconUrl.toExternalForm()));
-   }
-   ```
-
-3. **`AboutDialog`:** Optionally, the app icon can also be shown in the dialog's header area. This is a secondary concern — wiring to the Stage is the critical path.
-
-**Files changed:**
-- `icon.png` moved from root → `src/main/resources/ch/ti/gagi/xsleditor/icon.png`
-- `XSLEditorApp.java` — 3-line addition before `primaryStage.show()`
-
-**Dependencies:** None from other features. Independent.
-
-**Note:** On macOS, the dock icon is controlled by the `.app` bundle's `Info.plist` when running as a packaged app. When running from JAR or `./gradlew run`, `Stage.getIcons()` controls the window title bar icon but the dock shows the generic Java coffee cup. This is a macOS platform limitation, not a code defect.
-
----
-
-## Feature 6: README Rewrite
-
-**What:** Documentation-only update. No code, no build changes.
-
-**Integration points:** None. This is a standalone Markdown file.
-
-**Content that requires accuracy verification from code:**
-- Correct JAR invocation command (check `shadowJar` output name in `build.gradle`)
-- Current version number (aligns with Feature 4 — bump to 0.3.0)
-- Icon display (include `icon.png` screenshot or reference — aligns with Feature 5 move)
-- Build prerequisites: Java 21, `./gradlew shadowJar`
-
-**Build order note:** Write README after Features 4 and 5 are complete so the version number and icon path documented in the README are accurate.
-
----
-
-## Build Order Recommendation
-
-Features are largely independent; the following order minimizes rework and respects the one documentation dependency:
-
-| Order | Feature | Rationale |
-|-------|---------|-----------|
-| 1 | Version bump (Feature 4) | One-line change, zero risk, unblocks README accuracy. Do first. |
-| 2 | App icon move + wire (Feature 5) | Zero dependencies, trivial, unblocks README accuracy. |
-| 3 | CSS dark theme fix (Feature 1) | CSS-only, visually verifiable, no Java changes, independent. |
-| 4 | Log panel column fix (Feature 2) | One Java line + optional FXML tweak, independent. |
-| 5 | Encoding investigation (Feature 3) | Requires reproduction steps; may or may not result in code changes. Place here so CSS/column fixes don't interfere with render pipeline testing. |
-| 6 | README rewrite (Feature 6) | Last — documents the actual final state of icon, version, and build. |
-
----
-
-## Component Modification Summary
-
-| File | Feature(s) | Change Type |
-|------|-----------|-------------|
-| `build.gradle` | 4 | Version string bump (1 line) |
-| `src/main/resources/ch/ti/gagi/xsleditor/ui/main.css` | 1 | CSS rule additions |
-| `src/main/resources/ch/ti/gagi/xsleditor/ui/main.fxml` | 2 | `prefWidth` / `minWidth` tuning on TableColumns |
-| `src/main/java/.../ui/LogController.java` | 2 | `setColumnResizePolicy(CONSTRAINED_RESIZE_POLICY)` |
-| `src/main/java/.../XSLEditorApp.java` | 5 | Stage icon wiring (3 lines) |
-| `src/main/resources/ch/ti/gagi/xsleditor/icon.png` | 5 | New file (moved from root) |
-| `src/main/java/.../render/RenderEngine.java` | 3 | Possible encoding fix (TBD after investigation) |
-| `src/main/java/.../ui/PreviewController.java` | 3 | Possible charset declaration in HTML wrapper (TBD) |
-| `README.md` | 6 | Full rewrite |
-
-**Not touched:** `AboutDialog.java` (version loading is correct), `MainController.java`, `FileTreeController.java`, `EditorController.java`, all backend pipeline classes.
-
----
-
-## Dependency Graph Between Features
-
-```
-Feature 4 (version bump)  ──┐
-Feature 5 (icon)          ──┤──► Feature 6 (README)
-                              │
-Feature 1 (CSS)  ─── independent
-Feature 2 (columns) ─ independent
-Feature 3 (encoding) ─ independent (investigation-first)
+public class Launcher {
+    public static void main(String[] args) {
+        XSLEditorApp.main(args);
+    }
+}
 ```
 
-Features 1, 2, 3 are fully orthogonal to each other and to Features 4/5/6.
-Features 4 and 5 are prerequisites only for Feature 6 (README accuracy), not for each other.
+**Fix — update `build.gradle` shadowJar block:**
+
+```groovy
+shadowJar {
+    archiveClassifier.set('')
+    manifest {
+        attributes 'Main-Class': 'ch.ti.gagi.xsleditor.Launcher'   // was XSLEditorApp
+    }
+    mergeServiceFiles()
+}
+```
+
+The `application { mainClass }` entry stays as `XSLEditorApp` for the Gradle `run` task. Only shadowJar's manifest changes.
+
+---
+
+## Artifact Upload/Download Strategy
+
+Use `actions/upload-artifact@v4` and `actions/download-artifact@v4` (v4 is current; v3 is deprecated).
+
+**Naming convention:** `xsleditor-{platform}` — one artifact per job.
+
+Upload in each platform job:
+
+```yaml
+- uses: actions/upload-artifact@v4
+  with:
+    name: xsleditor-macos-arm64        # unique per job
+    path: dist/*.dmg
+    retention-days: 7
+```
+
+Download in the release job using pattern matching:
+
+```yaml
+- uses: actions/download-artifact@v4
+  with:
+    pattern: xsleditor-*
+    merge-multiple: true               # flattens all artifacts into one dir
+    path: dist/
+```
+
+This places all files flat into `dist/` — the glob `dist/*` then works directly as the `files:` input to softprops/action-gh-release.
+
+Artifact retention: 7 days is sufficient (GitHub Release is the permanent record). The fat JAR artifact (`xsleditor-jar`) is also uploaded to the release as a standalone asset for users who already have Java 21.
+
+---
+
+## macOS Signing Architecture
+
+### Certificate types required
+
+- **Developer ID Application** certificate — signs the `.app` bundle inside the DMG
+- **Developer ID Installer** certificate — only needed for `.pkg` format; skip for DMG in v0.4.0
+
+### Keychain setup (must run before jpackage on every macOS job)
+
+The ephemeral runner has no certificates. The keychain must be populated from secrets:
+
+```bash
+# Decode certificate
+echo "$MACOS_CERTIFICATE" | base64 --decode > /tmp/cert.p12
+
+# Create temporary keychain
+security create-keychain -p "$MACOS_KEYCHAIN_PASSWORD" build.keychain
+security default-keychain -s build.keychain
+security unlock-keychain -p "$MACOS_KEYCHAIN_PASSWORD" build.keychain
+security set-keychain-settings -lut 21600 build.keychain
+
+# Import certificate
+security import /tmp/cert.p12 \
+  -k build.keychain \
+  -P "$MACOS_CERTIFICATE_PASSWORD" \
+  -T /usr/bin/codesign \
+  -T /usr/bin/security
+
+# Allow codesign non-interactive access
+security set-key-partition-list \
+  -S apple-tool:,apple: \
+  -s -k "$MACOS_KEYCHAIN_PASSWORD" build.keychain
+```
+
+jpackage (via `--mac-sign --mac-signing-key-user-name`) then finds the identity in the default keychain without any UI prompt.
+
+### Signing happens inside jpackage
+
+`--mac-sign` causes jpackage to invoke `codesign` on every native library bundled in the `.app`, then on the `.app` bundle itself, then on the final `.dmg`. This is the correct order. Do not run `codesign` manually before or after jpackage.
+
+### Notarization and stapling (after jpackage)
+
+```bash
+# Submit and block until Apple responds (typically 2-5 min, up to 10 min)
+xcrun notarytool submit dist/XSLEditor-*.dmg \
+  --apple-id "$NOTARIZE_APPLE_ID" \
+  --password "$NOTARIZE_APP_SPECIFIC_PASSWORD" \
+  --team-id "$NOTARIZE_TEAM_ID" \
+  --wait
+
+# Staple the notarization ticket to the DMG (enables offline Gatekeeper)
+xcrun stapler staple dist/XSLEditor-*.dmg
+```
+
+Use `xcrun notarytool` only — `xcrun altool` was removed in Xcode 14. The `macos-15` runner ships Xcode 16.
+
+The step order within each macOS job is:
+
+```
+keychain setup → jpackage (signs .app + DMG) → notarytool submit --wait → stapler staple → upload-artifact
+```
+
+Only the signed, notarized, stapled DMG is uploaded. The release job receives a fully valid artifact.
+
+---
+
+## Release Creation
+
+Use **`softprops/action-gh-release@v2`**.
+
+Do not use v3 (requires Node 24 runner runtime, not yet universal as of 2026-04). Do not use `gh release create` CLI — multi-file uploads require shell quoting complexity and offer no benefit over the action.
+
+```yaml
+- uses: softprops/action-gh-release@v2
+  with:
+    files: dist/*
+    generate_release_notes: true
+    draft: false
+    prerelease: ${{ contains(github.ref_name, '-') }}
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+`generate_release_notes: true` uses GitHub's built-in changelog (commits between previous tag and current tag). This satisfies REL-01 without a custom script or `git log` parsing.
+
+`prerelease` auto-detection: tags containing a hyphen (e.g. `v0.4.0-beta1`) are marked pre-release automatically.
+
+`GITHUB_TOKEN` is provided automatically — no manual secret setup needed for release creation.
+
+---
+
+## Secrets Management
+
+### Required GitHub repository secrets
+
+Navigate to: Settings > Security > Secrets and variables > Actions
+
+| Secret name | Value | How to obtain |
+|-------------|-------|---------------|
+| `MACOS_CERTIFICATE` | Base64 of `.p12` file | Export from Keychain Access; `base64 -i cert.p12 \| pbcopy` |
+| `MACOS_CERTIFICATE_PASSWORD` | Password set when exporting `.p12` | Set during Keychain Access export |
+| `MACOS_SIGNING_IDENTITY` | Full identity string | `security find-identity -v -p codesigning` — e.g. `Developer ID Application: GAGI (TEAMXYZ12)` |
+| `MACOS_KEYCHAIN_PASSWORD` | Random strong password | Generated; used only for the ephemeral CI keychain |
+| `NOTARIZE_APPLE_ID` | Apple Developer account email | Apple Developer portal |
+| `NOTARIZE_APP_SPECIFIC_PASSWORD` | App-specific password | appleid.apple.com > App-Specific Passwords |
+| `NOTARIZE_TEAM_ID` | 10-character Team ID | Apple Developer portal > Membership |
+
+### Secrets not needed for Windows
+
+The Windows MSI job uses no secrets in v0.4.0. If Authenticode signing is added later, it requires `WINDOWS_CERTIFICATE` + `WINDOWS_CERTIFICATE_PASSWORD`.
+
+### GITHUB_TOKEN
+
+Provided automatically by GitHub Actions for the repository. Grant it write access to contents (for release creation): the default `GITHUB_TOKEN` permissions include `contents: write` when triggered by a tag push. No manual configuration needed.
+
+---
+
+## Version Extraction
+
+The git tag is the single source of truth for the version. Do not rely on `version` in `build.gradle` (currently hardcoded to `0.3.0`).
+
+```yaml
+env:
+  GITHUB_REF_NAME: ${{ github.ref_name }}   # e.g. "v0.4.0"
+```
+
+In shell steps:
+
+```bash
+APP_VERSION="${GITHUB_REF_NAME#v}"   # strips leading "v" → "0.4.0"
+```
+
+Pass version to Gradle so `version.properties` inside the JAR reflects the tag:
+
+```bash
+./gradlew shadowJar -Pversion="${GITHUB_REF_NAME#v}"
+```
+
+This overrides `project.version` at build time. The `processResources { expand(version: project.version) }` block will inject the correct version into the bundled `version.properties`.
+
+---
+
+## New Files and Directories
+
+### Files to create (no `.github` directory currently exists)
+
+```
+.github/
+  workflows/
+    release.yml           ← single workflow file (all 5 jobs)
+
+src/main/java/ch/ti/gagi/xsleditor/
+  Launcher.java           ← shim class (5 lines) — critical prerequisite
+
+docs/
+  SIGNING.md              ← Developer ID secrets setup guide (SIGN-01 requirement)
+```
+
+### Files to modify
+
+```
+build.gradle              ← shadowJar manifest Main-Class → Launcher
+```
+
+### Files not to create
+
+- No `Makefile` — jpackage invocations are short enough to inline in YAML
+- No `jpackage/*.cfg` files — platform-specific flags are few enough to inline; config files add indirection with no benefit at this scale
+- No separate `ci.yml` for this milestone
+
+---
+
+## Build Order Summary
+
+```
+[tag push v*]
+      │
+      ▼
+build-jar (ubuntu, ~2 min)
+  ./gradlew shadowJar -Pversion=X.Y.Z
+  → build/libs/XSLEditor-X.Y.Z.jar
+  → upload artifact: xsleditor-jar
+      │
+      ├──────────────────────────────────────────────────────┐
+      ▼                                                      ▼
+build-macos-arm64 (macos-15, ~10 min)          build-macos-x64 (macos-15-intel, ~10 min)
+  download: xsleditor-jar                        download: xsleditor-jar
+  keychain setup                                 keychain setup
+  jpackage --type dmg --mac-sign                 jpackage --type dmg --mac-sign
+  notarytool submit --wait                       notarytool submit --wait
+  stapler staple                                 stapler staple
+  upload: xsleditor-macos-arm64                  upload: xsleditor-macos-x64
+      │                                                      │
+      │                        ┌─────────────────────────────┘
+      │                        │
+      │          build-windows (windows-latest, ~5 min)
+      │            download: xsleditor-jar
+      │            jpackage --type msi
+      │            upload: xsleditor-windows
+      │                        │
+      └───────────┬────────────┘
+                  ▼
+            release (ubuntu, ~1 min)
+              download-artifact pattern: xsleditor-*
+              softprops/action-gh-release@v2
+              → GitHub Release with 4 assets:
+                  XSLEditor-X.Y.Z-arm64.dmg
+                  XSLEditor-X.Y.Z-x64.dmg
+                  XSLEditor-X.Y.Z.msi
+                  XSLEditor-X.Y.Z.jar
+```
+
+---
+
+## Integration Points with Existing Gradle Build
+
+| Existing element | CI usage |
+|-----------------|----------|
+| `id 'com.gradleup.shadow' version '9.0.0-beta12'` | `./gradlew shadowJar` — no change |
+| `shadowJar { archiveClassifier.set('') }` | Output filename is `XSLEditor-{version}.jar` (no classifier) — predictable for `--main-jar` |
+| `mainClass = 'ch.ti.gagi.xsleditor.XSLEditorApp'` | Unchanged — used by Gradle `run` task only |
+| `java { toolchain { languageVersion = JavaLanguageVersion.of(21) } }` | CI uses `actions/setup-java@v4` with `java-version: '21'` and `distribution: 'temurin'`; toolchain resolves to the runner JDK |
+| `processResources { expand(version: project.version) }` | Pass `-Pversion=X.Y.Z` to Gradle so `version.properties` in JAR matches the tag |
+| `test { useJUnitPlatform() }` | Run `./gradlew test` in `build-jar` job before `shadowJar` to gate on green tests |
+
+---
+
+## Cost Profile
+
+| Job | Runner | Est. wall time | Minute multiplier | Est. billed min |
+|-----|--------|---------------|-------------------|-----------------|
+| build-jar | ubuntu-latest | 3 min | x1 | 3 |
+| build-macos-arm64 | macos-15 | 10 min | x10 | 100 |
+| build-macos-x64 | macos-15-intel | 10 min | x10 | 100 |
+| build-windows | windows-latest | 5 min | x2 | 10 |
+| release | ubuntu-latest | 1 min | x1 | 1 |
+| **Total per release** | | ~10 min wall | | **~214 min** |
+
+Free tier: 2,000 min/month. Each release consumes ~214 billed minutes. Approximately 9 releases per month before hitting the free tier limit.
+
+---
+
+## Confidence Assessment
+
+| Area | Confidence | Notes |
+|------|------------|-------|
+| Single workflow file architecture | HIGH | Standard, widely used pattern |
+| macOS runner labels (macos-15 / macos-15-intel) | HIGH | Confirmed from GitHub official docs 2026 |
+| jpackage flags and invocation | HIGH | JDK 21 official docs + validated templates |
+| Launcher class requirement | HIGH | JavaFX constraint, well-documented |
+| notarytool (not altool) | HIGH | altool removed Xcode 14; macos-15 = Xcode 16 |
+| softprops/action-gh-release@v2 | HIGH | Stable, maintained, widely used |
+| Windows jpackage (unsigned MSI) | HIGH | No signing secrets, straightforward |
+| Notarization wait time | MEDIUM | Apple SLA: typically 2-5 min, can spike to 10 min |
+| macOS Actions billing multiplier | MEDIUM | x10 confirmed but GitHub pricing can change |
+
+---
+
+## Sources
+
+- [GitHub-hosted runners reference — GitHub Docs](https://docs.github.com/en/actions/reference/runners/github-hosted-runners)
+- [softprops/action-gh-release — GitHub Marketplace](https://github.com/marketplace/actions/gh-release)
+- [actions/upload-artifact@v4 — GitHub Marketplace](https://github.com/marketplace/actions/upload-a-build-artifact)
+- [Get started with v4 of GitHub Actions Artifacts — GitHub Blog](https://github.blog/news-insights/product-news/get-started-with-v4-of-github-actions-artifacts/)
+- [maven-jpackage-template apple-sign-notarize.md — Will Iverson](https://github.com/wiverson/maven-jpackage-template/blob/main/docs/apple-sign-notarize.md)
+- [Automatic Code-signing and Notarization for macOS apps using GitHub Actions — Federico Terzi](https://federicoterzi.com/blog/automatic-code-signing-and-notarization-for-macos-apps-using-github-actions/)
+- [How to Create Platform-Specific Installers from GitHub Actions — DEV Community](https://dev.to/sualeh/how-to-create-platform-specific-installers-for-your-java-applications-from-github-actions-2c15)
+- [Cross-platform release builds with GitHub Actions — Electric UI](https://electricui.com/blog/github-actions)
+- [How to Fix JavaFX Runtime Components are Missing — Eden Coding](https://edencoding.com/runtime-components-error/)
+- [Package a JavaFX Application as Platform Specific Executable — Inside.java](https://inside.java/2023/11/14/package-javafx-native-exec/)
+- [macos-15-intel availability — actions/runner-images #13045](https://github.com/actions/runner-images/issues/13045)
+- [Merge matrix build artifacts — GitHub Community Discussion #25338](https://github.com/orgs/community/discussions/25338)

@@ -1,92 +1,71 @@
-# Requirements: XSLEditor v0.3.0 Polish & Usability
+# Requirements: XSLEditor v0.4.0 — GitHub Releases & Distribution
 
-**Milestone:** v0.3.0  
-**Goal:** Migliorare leggibilità UI, correggere encoding, aggiornare documentazione e sistemare la versione About.  
-**Date:** 2026-04-23  
+**Milestone goal:** Automate build and publication of the app on GitHub Releases — JAR + signed/notarized macOS DMG + Windows MSI + Windows portable ZIP — triggered by a git tag push, with release notes generated automatically from git history.
 
 ---
 
-## v0.3.0 Requirements
+## v0.4.0 Requirements
 
-### UI Dark Theme
+### Build Prerequisites
 
-- [ ] **UI-01**: User sees readable text in the code editor (CodeArea background dark, syntax colors visible)
-- [ ] **UI-02**: User sees readable text in the file tree (TreeView cells readable in default and selected states)
-- [ ] **UI-03**: User sees readable text in the log panel rows (TableView cells readable, all severity levels)
-- [ ] **UI-04**: User sees a visible selected-row highlight with readable text in both TreeView and TableView
+- [ ] **BUILD-01**: Developer can launch the app from the fat JAR via `java -jar` — `Launcher.java` shim added, `shadowJar` manifest updated to `ch.ti.gagi.xsleditor.Launcher`
+- [ ] **BUILD-02**: Fat JAR embeds the correct version from the git tag (e.g. `0.4.0`) in `version.properties` — Gradle receives `-Pversion=X.Y.Z` from CI
+- [ ] **BUILD-03**: Fat JAR passes Saxon/FOP service registration check (`META-INF/services/javax.xml.transform.TransformerFactory` present and correct) before being passed to jpackage
+- [ ] **BUILD-04**: jpackage bundle includes `icon.png` — visible in macOS Dock and Windows taskbar
 
-### Log Panel Layout
+### CI Workflow
 
-- [ ] **LOG-01**: Log panel TableView expands to fill the full width of its container
-- [ ] **LOG-02**: No phantom empty column appears at the right edge of the log table
-- [ ] **LOG-03**: Log columns (Time, Level, Message, Source, Action) remain usable and not squashed at narrow window widths
+- [ ] **CI-01**: Workflow triggers automatically on `git push` of a tag matching `v*` and runs all build + release jobs end-to-end
+- [ ] **CI-02**: All platform runners use Liberica JDK+FX 21 (`distribution: liberica`, `java-package: jdk+fx`) — required for WebView native library
+- [ ] **CI-03**: Fat JAR built once on `ubuntu-latest` is downloaded and reused by all platform packaging jobs — no duplicate Gradle builds
 
-### About & Version
+### macOS Distribution
 
-- [ ] **VER-01**: About dialog displays the correct version (0.3.0), sourced automatically from the build
-- [ ] **VER-02**: About dialog displays the app icon
+- [ ] **MACOS-01**: CI produces a DMG for Apple Silicon (arm64) via `macos-15` runner
+- [ ] **MACOS-02**: CI produces a DMG for Intel x64 via `macos-15-intel` runner
+- [ ] **MACOS-03**: Both DMGs are signed with a Developer ID Application certificate (`--mac-sign --mac-entitlements entitlements.plist`); `codesign --verify --deep --strict` passes
+- [ ] **MACOS-04**: Both DMGs are notarized (`xcrun notarytool submit --wait`) and stapled (`xcrun stapler staple`); Gatekeeper accepts the app without quarantine dialog
 
-### App Icon
+### Windows Distribution
 
-- [ ] **ICON-01**: App icon is visible in the macOS Dock and window title bar
-- [ ] **ICON-02**: Icon file is stored in `src/main/resources/` (not project root)
+- [ ] **WIN-01**: CI produces a Windows MSI installer (unsigned) via `windows-latest` with `--win-dir-chooser --win-menu --win-shortcut`; installs and launches correctly
+- [ ] **WIN-02**: CI produces a Windows portable ZIP (`--type app-image`) via `windows-latest` — no installer, no admin rights required; ZIP extracted and app launched correctly without installation
 
-### Encoding Fix
+### GitHub Release
 
-- [ ] **ENC-01**: Root cause of encoding issue is identified (BOM, Saxon xsl:output declaration, or FOP font)
-- [ ] **ENC-02**: Special and non-ASCII characters display correctly in the code editor
-- [ ] **ENC-03**: Special and non-ASCII characters display correctly in the log panel messages
+- [ ] **REL-01**: CI creates a GitHub Release on tag push, attaching all 5 assets: arm64 DMG, x64 DMG, MSI, Windows portable ZIP, fat JAR
+- [ ] **REL-02**: GitHub Release includes auto-generated release notes from git log (tag-to-tag) via `generate_release_notes: true` on `softprops/action-gh-release@v2`
+- [ ] **REL-03**: Tags containing `-` (e.g. `v0.4.0-beta1`) are automatically marked as pre-release; clean tags (e.g. `v0.4.0`) are marked as full release
 
 ### Documentation
 
-- [ ] **DOC-01**: README includes project overview, prerequisites, build/run instructions, and stack description
-- [ ] **DOC-02**: README includes the app icon and a screenshot of the main window
-- [ ] **DOC-03**: README accurately reflects the current version and full tech stack
+- [ ] **SIGN-01**: `docs/SIGNING.md` documents how to export the Developer ID Application certificate as `.p12`, encode as base64, and configure all 7 required GitHub Actions secrets (`MACOS_CERTIFICATE`, `MACOS_CERTIFICATE_PASSWORD`, `MACOS_SIGNING_IDENTITY`, `MACOS_KEYCHAIN_PASSWORD`, `APPLE_ID`, `APPLE_TEAM_ID`, `APPLE_APP_SPECIFIC_PASSWORD`)
 
 ---
 
-## Archived: v0.2.1 Requirements (XSLEditor Full Rename)
+## Future Requirements (deferred)
 
-### Brand Update (UI/Docs)
-
-- [x] **RENAME-01**: Update all user-facing UI strings from "XSLEditor" to "XSLEditor".
-- [ ] **RENAME-02**: Update README.md and CLAUDE.md to use the new "XSLEditor" name.
-- [x] **RENAME-03**: Update About dialog title and content.
-
-### Codebase Refactor
-
-- [x] **RENAME-04**: Rename main application class from `XSLEditorApp` to `XSLEditorApp`.
-- [x] **RENAME-05**: Update base package from `ch.ti.gagi.xsleditor` to `ch.ti.gagi.xsleditor`.
-- [x] **RENAME-06**: Update all source file directory structures to match the new package name.
-- [x] **RENAME-07**: Update all imports and FXML references to the new package.
-
-### Build & Config
-
-- [x] **RENAME-08**: Update `build.gradle` and `settings.gradle` with new project name and main class path.
-- [ ] **RENAME-09**: Rename project configuration file from `.xslfo-tool.json` to `.xsle-tool.json`.
-- [ ] **RENAME-10**: Update `ProjectManager` to load/save using the new configuration filename (Breaking Change).
-
----
-
-## Future Requirements (Deferred)
-
-- Inline error gutter in editor — deferred per PRD (log panel sufficient)
-- XSLT debugger — deferred to v2.0
-- Multiple XML inputs simultaneously — out of scope
-- PDF font embedding improvements — deferred (FOP defaults acceptable)
-
----
+- Windows Authenticode code signing — eliminates SmartScreen warning; requires EV certificate (~$200-500/yr)
+- Linux packages (DEB, RPM, AppImage) — not needed for current team
+- macOS universal binary (single DMG arm64+x64) — requires `lipo` merge post-jpackage; two separate DMGs simpler
+- Auto-update in-app — no mechanism needed for internal dev tool
+- Mac App Store distribution — different signing + sandboxing requirements; internal tool only
+- Separate `ci.yml` for PR test runs — useful once release pipeline is stable
 
 ## Out of Scope
 
-| Item | Reason |
-|------|--------|
-| Auto-render on save | Manual trigger only — product decision |
-| File rename/delete in tree | Not in MVP scope |
-| macOS Dock icon badge/progress | Platform-specific, low value |
-| Session restore (last project) | Startup simplicity — user opens manually |
-| HTML preview | PDF only per PRD |
-| Migration tool for old `.xslfo-tool.json` | User must manually rename or re-configure |
+- Authentication — internal tool
+- Multi-user collaboration — local only
+- HTML preview — PDF only
+- Auto-render — manual trigger only
+- Session restore — keep startup simple
+- XSLT debugger — deferred to v2
+
+---
+
+## Archived: v0.3.0 Requirements
+
+Previously completed. Requirements UI-01..04, LOG-01..03, VER-01..02, ICON-01..02, ENC-01..03, DOC-01..03 — all delivered in phases 14–18.
 
 ---
 
@@ -94,24 +73,24 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| VER-01 | Phase 14 | Pending |
-| VER-02 | Phase 14 | Pending |
-| ICON-01 | Phase 14 | Pending |
-| ICON-02 | Phase 14 | Pending |
-| UI-01 | Phase 15 | Pending |
-| UI-02 | Phase 15 | Pending |
-| UI-03 | Phase 15 | Pending |
-| UI-04 | Phase 15 | Pending |
-| LOG-01 | Phase 16 | Pending |
-| LOG-02 | Phase 16 | Pending |
-| LOG-03 | Phase 16 | Pending |
-| ENC-01 | Phase 17 | Pending |
-| ENC-02 | Phase 17 | Pending |
-| ENC-03 | Phase 17 | Pending |
-| DOC-01 | Phase 18 | Pending |
-| DOC-02 | Phase 18 | Pending |
-| DOC-03 | Phase 18 | Pending |
+| BUILD-01 | — | Pending |
+| BUILD-02 | — | Pending |
+| BUILD-03 | — | Pending |
+| BUILD-04 | — | Pending |
+| CI-01 | — | Pending |
+| CI-02 | — | Pending |
+| CI-03 | — | Pending |
+| MACOS-01 | — | Pending |
+| MACOS-02 | — | Pending |
+| MACOS-03 | — | Pending |
+| MACOS-04 | — | Pending |
+| WIN-01 | — | Pending |
+| WIN-02 | — | Pending |
+| REL-01 | — | Pending |
+| REL-02 | — | Pending |
+| REL-03 | — | Pending |
+| SIGN-01 | — | Pending |
 
 ---
 
-*Requirements created: 2026-04-23*
+*Requirements created: 2026-04-25 — Milestone v0.4.0*

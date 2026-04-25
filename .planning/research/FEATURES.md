@@ -1,457 +1,145 @@
-# Feature Landscape: v0.3.0 Polish & Usability
+# Feature Landscape: GitHub Actions CI/CD Distribution Pipeline
 
-**Domain:** JavaFX desktop developer tool (XML/XSLT editor + PDF pipeline)
-**Researched:** 2026-04-23
-**Source:** Codebase inspection + JavaFX CSS/layout conventions (MEDIUM confidence)
-
----
-
-## Feature Group 1: Dark Theme Text Visibility
-
-### What the bug is
-
-JavaFX's default Modena theme sets control backgrounds to light grays and text to near-black.
-`main.css` overrides backgrounds for named containers (`.log-table-view`, `.file-tree-view`,
-`.placeholder-pane`) but does NOT set a global dark background or override the Modena defaults
-for TabPane, Tab headers, the scene root, the ToolBar, or MenuBar. As a result:
-
-- `CodeArea` (RichTextFX) uses Modena's default white background with black caret — invisible
-  on the surrounding dark chrome.
-- `TabPane` tab headers get Modena's light gray; tab labels are dark text on light — correct
-  by accident but visually inconsistent.
-- `ToolBar` and `MenuBar` get Modena's light-gray skin — bright strip against the dark content
-  area below.
-- `TableView` row text for INFO entries falls back to Modena's near-black — invisible on
-  `#1e1e1e` cell background. Only ERROR/WARN rows get explicit color overrides; INFO has none.
-- `TreeView` selected-cell text has `tree-cell:selected` with no `-fx-text-fill`, so Modena
-  may invert it to white-on-white or dark-on-dark depending on platform.
-
-### Table stakes behavior (expected for a dark-theme desktop tool)
-
-| Element | Expected |
-|---------|----------|
-| Scene/root background | Dark (#1e1e1e or #2b2b2b) |
-| CodeArea (RichTextFX) | Dark background, light caret, light default text |
-| TabPane tab headers | Dark background, readable tab labels |
-| ToolBar background | Dark, matching menu bar |
-| MenuBar background | Dark |
-| TableView INFO rows | Readable text (e.g. #cccccc) on dark cell background |
-| TreeView selected cell | Text remains visible (no inversion to white-on-white) |
-| Dialog panes (About) | Already dark via inline style — this is fine |
-
-### How dark theme is done correctly in JavaFX
-
-JavaFX 21 ships with `Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA)` as
-the default. There are two correct approaches to a full dark theme:
-
-**Option A — CSS root override (recommended for this project).**
-Target `.root` in `main.css` with `-fx-base`, `-fx-background`, `-fx-control-inner-background`
-and `-fx-text-base-color`. These four Modena-derived lookups cascade into almost every built-in
-control automatically. Then add targeted overrides for RichTextFX `CodeArea` which does not
-participate in Modena's lookup chain.
-
-```css
-.root {
-    -fx-base: #3c3f41;
-    -fx-background: #1e1e1e;
-    -fx-control-inner-background: #2b2b2b;
-    -fx-text-base-color: #cccccc;
-}
-```
-
-The `CodeArea` needs explicit overrides because it is not a standard JavaFX control:
-```css
-.code-area {
-    -fx-background-color: #1e1e1e;
-}
-.code-area .content {
-    -fx-background-color: #1e1e1e;
-}
-.code-area .caret {
-    -fx-stroke: #cccccc;
-}
-.code-area .text {
-    -fx-fill: #cccccc;
-}
-```
-
-**Option B — AtlantaFX or custom user-agent stylesheet.** Replace Modena entirely with a
-third-party dark stylesheet JAR. Not appropriate here because it would add a dependency and
-risk breaking the existing class-based CSS that works for log colors, tree colors, and
-preview banner.
-
-**Verdict: Option A.** Add `.root` overrides to `main.css`. The stylesheet is already linked
-via FXML; the `.root` selector applies to the Scene root `BorderPane` and cascades outward.
-All existing named-class overrides continue to win because CSS specificity of a named class
-`.log-table-view` beats the type selector cascade from `.root`.
-
-### Complexity
-
-**Low.** CSS-only changes to `main.css`. No Java changes. No layout changes. Risk: Modena
-lookup cascades for some controls (e.g. buttons, progress bars) may need additional targeted
-fixes after seeing the result — but the pattern is well-known and incremental.
-
-### Dependencies
-
-- `main.css` (already loaded via `stylesheets="@main.css"` in `main.fxml`)
-- RichTextFX `CodeArea` CSS classes: `.code-area`, `.code-area .content`, `.code-area .caret`,
-  `.code-area .text` — these are the documented RichTextFX CSS hooks.
+**Domain:** Java 21 + JavaFX desktop app distribution via GitHub Actions
+**Project:** XSLEditor v0.4.0
+**Researched:** 2026-04-24
+**Confidence:** HIGH (verified against official docs, established ecosystem patterns, multiple sources)
 
 ---
 
-## Feature Group 2: Log Panel Full-Width Layout
+## Table Stakes
 
-### What the bug is
+Features every Java desktop release pipeline must have. Missing = pipeline is incomplete or users cannot install the app.
 
-The `TableView` in the log panel has five `TableColumn` elements with hardcoded `prefWidth`
-values summing to 665 px (65+60+100+400+40). The `TableView` itself has no column resize
-policy set, so Modena defaults to `UNCONSTRAINED_RESIZE_POLICY`. This means:
-
-1. Columns do not grow with window width — a blank scrollable area appears to the right.
-2. JavaFX renders an **extra empty trailing column** header at the right of every TableView
-   that uses UNCONSTRAINED policy — this is the visual "extra column" reported.
-3. The `VBox` containing the filter bar + table has no `prefWidth` binding to the window
-   either, so the outer container may not be stretching to `BorderPane.bottom` full width
-   as expected.
-
-### Table stakes behavior
-
-| Element | Expected |
-|---------|----------|
-| TableView | Fills the full width of the log panel on any window size |
-| Column headers | No blank trailing header column visible |
-| Message column | Takes available space after fixed-width Time/Level/Type/AI columns |
-| Filter bar | Full width, no horizontal gap |
-
-### How full-width TableView works in JavaFX
-
-The correct approach uses `TableView.CONSTRAINED_RESIZE_POLICY` and designates one
-"flex" column with no `prefWidth` override, letting it absorb residual width.
-
-In FXML:
-```xml
-<TableView fx:id="logTableView" prefHeight="120" VBox.vgrow="ALWAYS"
-           columnResizePolicy="$TableView.CONSTRAINED_RESIZE_POLICY">
-```
-
-Or in Java (LogController.initialize):
-```java
-logTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-```
-
-With `CONSTRAINED_RESIZE_POLICY`:
-- The blank trailing column disappears.
-- Columns cannot overflow the table width (horizontal scrollbar suppressed).
-- Fixed columns (Time, Level, Type, AI) keep their `prefWidth` as a minimum hint.
-- The Message column should have `prefWidth` removed or set high; it absorbs remaining space.
-
-The filter bar `HBox` width issue: the `TitledPane`'s content `VBox` needs no change —
-`BorderPane.bottom` already stretches children to full width by default. If the filter bar
-has a gap it is likely because the `HBox` has `spacing="4"` but no `maxWidth="Infinity"`.
-Setting `HBox.setMaxWidth(Double.MAX_VALUE)` or adding `maxWidth="Infinity"` in FXML closes it.
-
-### Complexity
-
-**Low.** One attribute change in `main.fxml` for the resize policy. Remove hardcoded
-`prefWidth` from `colMessage` or let it remain as a hint only. The constraint policy treats
-`prefWidth` as a relative weight, not an absolute pixel size — so fixed columns remain small
-and the message column expands. No Java code changes needed if done in FXML.
-
-### Dependencies
-
-- `main.fxml` (column definitions)
-- `LogController.initialize` if resize policy set there instead of FXML
-- No changes to `LogEntry`, no changes to cell factories
+| Feature | Why Expected | Complexity | Notes |
+|---------|--------------|------------|-------|
+| Workflow triggered by `v*` tag push | Standard trigger; releases are always tag-based | Low | `on: push: tags: ['v*']` — one-liner in workflow |
+| Fat JAR as release asset | Lowest-friction artifact; works on any machine with Java 21 installed | Low | Already built via `shadowJar`; simply upload to release |
+| macOS `.app` / `.dmg` via jpackage | macOS users expect a bundle they can drag to Applications, not a raw JAR | Medium | Requires `macos-latest` runner; JRE embedded; `--type dmg` is the standard delivery format |
+| Windows `.exe` or `.msi` via jpackage | Windows users expect a native installer | Medium | Requires `windows-latest` runner; WiX 3 toolset required for MSI |
+| Platform-specific runners (matrix or separate jobs) | jpackage cannot cross-compile — each platform must build on its own OS | Low-Medium | Matrix strategy or two named jobs; artifacts uploaded separately and merged into one release |
+| Upload all artifacts to one GitHub Release | Users expect one release page listing all downloads | Low | `softprops/action-gh-release@v2` with `files:` glob; multi-job artifact merge via `actions/upload-artifact` + `actions/download-artifact` |
+| macOS code signing with Apple Developer ID | Without signing, macOS Gatekeeper shows "unidentified developer" and blocks the app on first launch | High | p12 certificate + password stored as GitHub Secrets; passed to jpackage via `--mac-signing-key-user-name` |
+| Secrets setup guide for maintainers | Contributors need to know which secrets to add for the signing pipeline to succeed | Low | Document: `MACOS_CERTIFICATE` (base64 p12), `MACOS_CERTIFICATE_PWD`, `MACOS_KEYCHAIN_PASSWORD`, and Apple ID credentials for notarization |
 
 ---
 
-## Feature Group 3: Character Encoding
+## Differentiators
 
-### What the bug is
+Features that make this pipeline notably good but are not universally present in basic setups.
 
-All file reads in the codebase use `StandardCharsets.UTF_8` explicitly:
-- `EditorController`: `Files.readString(key, StandardCharsets.UTF_8)`
-- `RenderOrchestrator`: `Files.readString(entryPath, StandardCharsets.UTF_8)`
-- `LibraryPreprocessor`: `Files.readString(file, StandardCharsets.UTF_8)`
-- `ProjectFileManager`: `Files.readString(absolutePath, StandardCharsets.UTF_8)`
-
-The file read path is consistent and correct. However, the XSLT Saxon pipeline uses
-`StringWriter` → `writer.toString()` → string returned. Saxon serializes the XSL-FO result
-to a Java `String` object; Java strings are always Unicode internally. The XSL-FO string is
-then encoded back to `byte[]` via `.getBytes(StandardCharsets.UTF_8)` before being fed to FOP.
-This chain is internally consistent.
-
-**Likely actual source of the encoding problem:** The display of characters in the `CodeArea`
-(RichTextFX) or in the log panel `TableView`. Two candidate causes:
-
-1. **System-locale-dependent behavior.** If the JVM is started without `-Dfile.encoding=UTF-8`
-   (or `-Dstdout.encoding=UTF-8` in Java 17+) and the OS locale is not UTF-8, some
-   platform-dependent Java APIs fall back to the system charset. The `Files.readString` calls
-   all pin UTF-8 so this is unlikely to be the problem there.
-
-2. **XML declaration encoding mismatch.** XSLT/XSL-FO files may declare `encoding="ISO-8859-1"`
-   or `encoding="windows-1252"` in their `<?xml version="1.0" encoding="..."?>` declaration
-   but actually be saved in UTF-8. Saxon honors the declared encoding when given a `StreamSource`
-   from `File`; when given a `StringReader` (the path after LibraryPreprocessor), the declared
-   encoding is ignored because string content is already decoded — this can expose mismatches.
-
-3. **FOP font encoding for PDF.** Characters not in the embedded font's encoding appear as
-   boxes or wrong glyphs in the PDF. This is an FOP/font issue, not a Java string issue.
-   FOP requires explicit font configuration for non-ASCII characters in PDF output.
-
-4. **PreviewController HTML rendering.** Pages are rendered as PNG via PDFBox, embedded as
-   base64 in HTML. If PDF glyphs are missing (FOP font issue), the PNG will show boxes.
-   This is a rendering artifact, not a Java string encoding bug.
-
-### Expected behavior
-
-| Stage | Expected |
-|-------|----------|
-| File open in editor | All UTF-8 characters (including accented, special) display correctly |
-| XSLT compile/run | No garbled text in error messages |
-| XSL-FO to PDF | Characters from the XSLT output appear correctly in PDF |
-| Log panel messages | Error messages from Saxon/FOP display without garbling |
-
-### Investigation needed to confirm root cause
-
-Before implementing a fix, the exact symptom should be confirmed:
-- Is it in the editor display (JavaFX rendering)?
-- In error messages in the log panel?
-- In the generated PDF (FOP font)?
-- In a specific file type (XML input, XSLT, or both)?
-
-### Likely fix
-
-If the symptom is in the **editor display**: RichTextFX `CodeArea` renders Java Strings, which
-are Unicode. If the file is genuinely UTF-8 and `Files.readString` with `UTF_8` is used, the
-CodeArea will display it correctly. The issue may be a font: if the UI font does not contain
-the glyph, JavaFX substitutes or omits it. Setting a font with good Unicode coverage (e.g.
-system default or explicitly DejaVu, Noto) resolves this.
-
-If the symptom is in **Saxon error messages**: Saxon error text is already a Java String;
-no encoding issue. May be a platform locale issue with how macOS stdout handles the JVM.
-
-If the symptom is in the **PDF output**: FOP requires an `fop.xconf` with `<fonts>` section
-referencing fonts that cover the required character ranges. This is a configuration task, not
-a code change.
-
-### Complexity
-
-**Medium.** Root cause diagnosis requires running the app and observing the symptom location.
-Once confirmed, the fix is likely: (a) CSS font-family on CodeArea, or (b) FOP font config
-file added to resources. The diagnosis step is the unknown cost.
-
-### Dependencies
-
-- `RenderEngine.java` if FOP font config is needed
-- `main.css` if it is a UI font issue
-- New `fop.xconf` resource file if FOP font embedding is the culprit
+| Feature | Value Proposition | Complexity | Notes |
+|---------|-------------------|------------|-------|
+| Auto-generated release notes (tag-to-tag) | Eliminates manual changelog writing; gives users a clear diff of what changed | Low | GitHub native: `generate_release_notes: true` in `softprops/action-gh-release`; zero-config baseline sufficient for internal tool |
+| macOS notarization | Without notarization, macOS 10.15+ shows a blocking quarantine dialog on first launch for Developer ID distribution; notarization eliminates the dialog entirely | High | Requires Apple Developer Program ($99/yr); notarization via `notarytool`; ticket stapled to the .dmg; first submission can take up to 12 hours, subsequent ~10 minutes |
+| Draft release with manual publish | Lets a developer review the release page and notes before it goes public | Low | `draft: true` in `softprops/action-gh-release`; human publishes manually via GitHub UI |
+| Separate JAR-only job on Linux runner | Produces the fat JAR without consuming a macOS or Windows runner minute; faster and cheaper | Low | `ubuntu-latest` is the fastest/cheapest runner tier; Gradle `shadowJar` runs fine on Linux |
+| Windows MSI (vs EXE) | MSI supports silent install and is the professional standard for developer tools on Windows | Medium | Requires WiX 3 toolset on the Windows runner (`choco install wixtoolset`); jpackage `--type msi` |
+| Version injected from git tag | Single source of truth for the version string; no manual `build.gradle` edit needed | Low | `VERSION=$(git describe --tags --abbrev=0)` in workflow; passed to Gradle via `-Pversion=$VERSION` or `ORG_GRADLE_PROJECT_version` env var; the existing `version.properties` processResources mechanism picks it up |
 
 ---
 
-## Feature Group 4: About Version Auto-Update
+## Anti-Features
 
-### What the current state is
+Features that add complexity without value for an internal developer tool.
 
-The `version.properties` file in `src/main/resources/` contains:
-```
-version=${version}
-```
-
-`build.gradle` has:
-```groovy
-processResources {
-    filesMatching('version.properties') {
-        expand(version: project.version)
-    }
-}
-```
-
-`AboutDialog.loadVersion()` reads this file from the classpath at runtime. This mechanism is
-already implemented and correct — `project.version` is `'0.1.0'` in `build.gradle`, and the
-Gradle `processResources` task expands the token at build time.
-
-**The bug:** `build.gradle` still declares `version = '0.1.0'` — hardcoded. The actual
-project version is v0.3.0 (current milestone). The mechanism works; the version string just
-needs to be updated in `build.gradle` at each release.
-
-### Table stakes behavior
-
-The About dialog should show the version that matches the built artifact. The correct pattern
-is:
-1. `build.gradle`: `version = '0.3.0'` (single source of truth)
-2. `processResources` expands it into `version.properties` at build time
-3. `AboutDialog.loadVersion()` reads it — no code change needed
-
-### Differentiator (nice to have)
-
-If CI/CD ever creates releases, reading from a git tag at build time is possible via:
-```groovy
-version = System.getenv("VERSION") ?: "0.3.0-dev"
-```
-This is out of scope for v0.3.0.
-
-### Complexity
-
-**Trivial.** One line change: update `version = '0.1.0'` to `version = '0.3.0'` in
-`build.gradle`. The machinery is already in place. No Java code changes.
-
-### Dependencies
-
-- `build.gradle` only
+| Anti-Feature | Why Avoid | What to Do Instead |
+|--------------|-----------|-------------------|
+| Auto-update / in-app update check | Internal tool — developers pull releases manually; auto-update requires a server, protocol, and signing trust chain (jDeploy, Sparkle, etc.) | Tag-based release is sufficient; developers are informed of releases via git/Slack |
+| Homebrew cask publication | Useful for consumer tools; overkill for a closed internal tool without a public Homebrew tap | Keep distribution to GitHub Releases only |
+| Linux `.deb` / `.rpm` / AppImage | XSLEditor targets macOS and Windows; no stated Linux user base | Omit; Linux users can run the fat JAR directly |
+| Mac App Store submission | Requires App Store sandboxing; XSLT/FOP file I/O is incompatible with the App Store sandbox model | Not feasible; Developer ID signing is the correct distribution path |
+| Windows EV code signing certificate | EV certs cost ~$300/yr; SmartScreen shows a warning on first run but does not block; controlled internal distribution makes this tolerable | Skip; document that SmartScreen may appear on first run for Windows |
+| Automatic version-bump commits from CI | Requires CI to push commits back to the repo; complicates branch protection rules | Use the git tag itself as the version source |
+| Test execution in release workflow | Tests already run on every commit/PR push; re-running on tag doubles build time with no new information | Keep test job on PR/push to main; release workflow assumes tests already passed |
+| Separate staging vs production release environments | Internal tool shipped to known developers; no need for environment protection rules beyond draft review | One release workflow, one release step |
 
 ---
 
-## Feature Group 5: App Icon Placement
-
-### What the current state is
-
-`icon.png` exists at the project root (`/icon.png`). It is not referenced anywhere in the
-Java code — `XSLEditorApp.start()` does not call `primaryStage.getIcons().add(...)`.
-There is no resources path for images under `src/main/resources/`.
-
-### Table stakes behavior
-
-For a JavaFX desktop app:
-1. **Stage icon:** `primaryStage.getIcons().add(new Image(stream))` sets the window title bar
-   icon and macOS Dock icon. JavaFX accepts multiple sizes for the `ObservableList<Image>`;
-   the platform picks the best-fitting one.
-2. **Resource location:** The image must be on the classpath at runtime (inside the fat JAR).
-   The standard location is `src/main/resources/` with any subdirectory, e.g.
-   `src/main/resources/ch/ti/gagi/xsleditor/icon.png`.
-3. **README usage:** The icon can be referenced in `README.md` using a relative path from the
-   repo root. If the icon moves to `src/main/resources/...`, the README path must update too.
-   Alternatively, a copy stays at the project root for README and docs use; the resources
-   copy is the one loaded at runtime.
-
-### Expected implementation
-
-```java
-// In XSLEditorApp.start(), after scene creation:
-try (InputStream iconStream = getClass()
-        .getResourceAsStream("/ch/ti/gagi/xsleditor/icon.png")) {
-    if (iconStream != null) {
-        primaryStage.getIcons().add(new Image(iconStream));
-    }
-} catch (Exception ignored) {}
-```
-
-The `try-with-resources` + null check ensures the app starts even if the icon resource is
-missing (e.g. during tests or if the resource path is wrong).
-
-### Complexity
-
-**Low.** Two steps:
-1. Move/copy `icon.png` to `src/main/resources/ch/ti/gagi/xsleditor/icon.png`.
-2. Add 5 lines to `XSLEditorApp.start()`.
-
-No build changes needed — Gradle's `processResources` copies all non-Java files from
-`src/main/resources` into the build classpath automatically.
-
-### Dependencies
-
-- `XSLEditorApp.java` (3–5 lines added)
-- New resource path for `icon.png`
-- `README.md` path reference (if README uses the icon)
-
----
-
-## Feature Group 6: README Rewrite
-
-### What the current state is
-
-`README.md` is 18 lines. It contains: project name, one-line description, the pipeline
-diagram, a purpose sentence, and a status line pointing to `docs/PRD.md`. It is a skeleton.
-
-### Table stakes for a developer tool README
-
-| Section | Why expected |
-|---------|--------------|
-| Project description (2-3 sentences) | Answers "what is this and who is it for" |
-| Screenshot or pipeline diagram | Developers scan before reading |
-| Requirements (Java version, OS) | Determines if they can run it |
-| Build instructions | `./gradlew shadowJar` + how to run the JAR |
-| How to open a project | Core user workflow in 3-4 steps |
-| Feature list | What it does at a glance |
-| App icon in header | Visual identity |
-
-### Differentiators (nice to have but not blocking)
-
-- Keyboard shortcut reference table
-- Known limitations section
-- Link to `docs/PRD.md` for full requirements (already exists)
-- Contributor note (Claude Code attribution already in About dialog)
-
-### Anti-features for this README
-
-- Installation wizard / package manager instructions — this is an internal tool
-- Badges (CI, coverage) — no CI pipeline configured
-- Internationalization notes — single-language tool
-
-### Complexity
-
-**Low to Medium.** Content writing task. No code involved. The main cost is deciding what
-level of detail to include for an internal developer audience. The pipeline diagram can be
-promoted from the current README since it is already correct. The build/run instructions
-require knowing the exact `./gradlew` commands and JAR output path.
-
-### Dependencies
-
-- `build.gradle` version (must be updated to 0.3.0 first for accurate README)
-- Icon placement (README should reference the icon once it has a stable location)
-- None in terms of code
-
----
-
-## Anti-Features for v0.3.0
-
-| Anti-Feature | Why to Avoid | What to Do Instead |
-|--------------|-------------|-------------------|
-| Replace RichTextFX with a different editor | Massive scope, regressions in 5 existing features | CSS overrides for dark theme |
-| Third-party dark theme JAR (AtlantaFX etc.) | New dependency, risk breaking existing CSS | `.root` CSS override in `main.css` |
-| Automated version bump scripts | Overkill for internal tool | Update `build.gradle` manually per release |
-| CI badge generation | No CI pipeline | Omit from README for now |
-| FOP full font configuration | Out of scope until encoding root cause confirmed | Diagnose first |
-
----
-
-## Feature Dependency Order
+## Feature Dependencies
 
 ```
-Icon placement → README (README references icon)
-build.gradle version → About dialog (version shown correctly)
-Dark theme diagnosis → Dark theme fix (cannot fix without knowing what breaks)
-Encoding diagnosis → Encoding fix (root cause unknown)
-TableView resize policy → (independent, no dependencies)
+[Tag push trigger]
+    |
+    +--> [Linux job: shadowJar (ubuntu-latest)] ──────────────────────┐
+    |                                                                   |
+    +--> [macOS job: jpackage .dmg (macos-latest)]                    |
+    |        |                                                          |
+    |        +--> [Code signing: Apple Developer ID certificate]        |
+    |                  |                                                +--> [Release job]
+    |                  +--> [Notarization via notarytool] (optional)    |    needs: all 3 jobs
+    |                            |                                      |    download-artifact
+    |                            +--> [Staple ticket to .dmg]           |    softprops/action-gh-release
+    |                                                                   |    generate_release_notes: true
+    +--> [Windows job: jpackage .exe/.msi (windows-latest)] ─────────┘
+             |
+             +--> [WiX toolset installed on runner (for MSI)]
+
+ORDERING CONSTRAINTS:
+  1. Code signing must happen BEFORE notarization.
+  2. Notarization must happen BEFORE DMG stapling.
+  3. All platform jobs must complete BEFORE the release job runs.
+  4. Release job declares: needs: [build-macos, build-windows, build-jar]
 ```
 
 ---
 
-## Complexity Summary
+## MVP Recommendation
 
-| Feature | Complexity | Risk | Java changes | CSS changes | FXML changes |
-|---------|------------|------|--------------|-------------|--------------|
-| Dark theme (CodeArea bg) | Low | Low | No | Yes | No |
-| Dark theme (root cascade) | Low | Low | No | Yes | No |
-| Dark theme (INFO row text) | Low | Low | No | Yes | No |
-| Log panel full-width | Low | Low | No | No | Yes (1 attr) |
-| Log panel extra column | Low | Low | No | No | Yes (1 attr) |
-| Encoding (diagnosis) | Medium | Medium | Maybe | Maybe | No |
-| About version | Trivial | None | No | No | No |
-| App icon (resource) | Low | None | Yes (5 lines) | No | No |
-| README rewrite | Low-Med | None | No | No | No |
+Build in this order:
+
+**Phase 1 — Minimum working pipeline (ship this first):**
+1. Tag-triggered workflow (`on: push: tags: ['v*']`)
+2. Fat JAR built on Linux runner (`shadowJar`), uploaded as artifact
+3. macOS `.app` or `.dmg` via jpackage on `macos-latest` — unsigned initially
+4. Windows `.exe` via jpackage on `windows-latest`
+5. Release job: download all artifacts, attach to GitHub Release
+6. Auto-generated release notes (`generate_release_notes: true`)
+
+**Phase 2 — Signing pass (after confirming the pipeline works end-to-end):**
+7. macOS code signing with Apple Developer ID certificate (add secrets, add `--mac-signing-key-user-name` to jpackage call)
+8. Secrets setup guide committed to repo (`.github/SIGNING.md` or `docs/signing.md`)
+
+**Phase 3 — Notarization (optional, high effort, eliminates quarantine dialog):**
+9. macOS notarization via `notarytool` + staple
+10. Draft release mode for pre-publish review
+
+**Defer indefinitely:**
+- Auto-update, Homebrew tap, Linux packages, Windows EV signing, App Store
+
+---
+
+## Implementation Notes
+
+### jpackage cannot cross-compile (HIGH confidence)
+jpackage produces native installers only for the OS it runs on. A macOS `.app` can only be produced on a macOS runner. A Windows `.msi` requires a Windows runner. GitHub Actions solves this with separate jobs using `runs-on: macos-latest` and `runs-on: windows-latest`. Each job uploads its artifact with `actions/upload-artifact`; the release job downloads all of them with `actions/download-artifact` and attaches them in one `softprops/action-gh-release` call.
+
+### macOS Gatekeeper without signing (HIGH confidence)
+An unsigned `.app` distributed outside the Mac App Store triggers "Apple could not verify..." on first launch (macOS 10.15+). The user can bypass it via right-click > Open, but this is friction. For an internal tool used exclusively by developers, this is tolerable in Phase 1 but should be resolved in Phase 2.
+
+### macOS notarization is separate from signing (HIGH confidence)
+Signing with a Developer ID certificate establishes identity. Notarization means Apple's automated scanner has verified the binary is free of known malware. Both are required for zero-friction distribution. The tool is `notarytool` (successor to `altool`, deprecated 2023). First submission: up to 12 hours. Subsequent submissions: ~10 minutes. Requires a paid Apple Developer Program membership ($99/yr).
+
+### Windows MSI requires WiX 3 (MEDIUM confidence)
+`jpackage --type msi` on Windows requires WiX Toolset 3.x to be installed on the runner. Install it in the workflow step via `choco install wixtoolset`. WiX 4 is not compatible with jpackage as of JDK 21. Starting with `--type exe` (no WiX dependency) is a lower-friction starting point.
+
+### Release notes: GitHub native is sufficient (HIGH confidence)
+GitHub's built-in `generate_release_notes: true` (via `softprops/action-gh-release`) uses PR titles and labels between tags. For this internal tool with direct commits to main (no PR workflow), the notes will show raw commit messages. This is acceptable. If structured conventional commits are adopted, `mikepenz/release-changelog-builder-action` gives grouping; not needed for Phase 1.
+
+### Version from git tag (MEDIUM confidence)
+The existing `version.properties` mechanism (Gradle `processResources` with token expansion) already supports version injection. In the CI workflow: `VERSION=${GITHUB_REF_NAME}` (GitHub sets `GITHUB_REF_NAME` to the tag name on tag pushes), then pass `ORG_GRADLE_PROJECT_version=$VERSION` as an environment variable. Gradle picks this up automatically without modifying `build.gradle`.
 
 ---
 
 ## Sources
 
-- Codebase inspection: `main.css`, `main.fxml`, `LogController.java`, `EditorTab.java`,
-  `AboutDialog.java`, `XSLEditorApp.java`, `RenderEngine.java`, `build.gradle`
-- JavaFX CSS reference: `.root` Modena lookup keys (`-fx-base`, `-fx-control-inner-background`,
-  `-fx-text-base-color`) — standard JavaFX 21 CSS documentation pattern
-- RichTextFX CSS hooks: `.code-area`, `.code-area .content`, `.code-area .caret` —
-  documented in RichTextFX README and stylesheet (MEDIUM confidence; version 0.11.5 in use)
-- `TableView.CONSTRAINED_RESIZE_POLICY` — JavaFX 21 standard API; behavior of trailing
-  phantom column under UNCONSTRAINED policy is a well-known JavaFX behavior (HIGH confidence)
-- Gradle `processResources` token expansion — documented Gradle feature, confirmed working
-  in `build.gradle` (HIGH confidence; mechanism already in place)
+- [sualeh/build-jpackage — cross-platform jpackage GitHub Actions examples](https://github.com/sualeh/build-jpackage)
+- [wiverson/maven-jpackage-template — macOS signing and notarization guide](https://github.com/wiverson/maven-jpackage-template/blob/main/docs/apple-sign-notarize.md)
+- [Automatic Code-signing and Notarization for macOS via GitHub Actions — Federico Terzi](https://federicoterzi.com/blog/automatic-code-signing-and-notarization-for-macos-apps-using-github-actions/)
+- [softprops/action-gh-release — canonical release action](https://github.com/softprops/action-gh-release)
+- [GitHub: Automatically generated release notes](https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes)
+- [Release Changelog Builder Action (marketplace)](https://github.com/marketplace/actions/release-changelog-builder)
+- [How to Create a Release With Multiple Artifacts From GitHub Actions Matrix Strategy — Luca Cavallin](https://www.lucavall.in/blog/how-to-create-a-release-with-multiple-artifacts-from-a-github-actions-workflow-using-the-matrix-strategy)
+- [How to Build macOS DMG and Windows MSI Installers with jpackage — Business Compass (2025)](https://blogs.businesscompassllc.com/2025/12/how-to-build-and-package-java.html)
+- [Oracle jpackage Command Reference — JDK 21](https://docs.oracle.com/en/java/javase/21/docs/specs/man/jpackage.html)
+- [indygreg/apple-code-sign-action — open source signing action](https://github.com/indygreg/apple-code-sign-action)

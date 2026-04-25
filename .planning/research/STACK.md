@@ -1,219 +1,310 @@
-# Technology Stack — v0.3.0 Polish & Usability
+# Technology Stack — v0.4.0 GitHub Actions CI/CD & Distribution
 
 **Project:** XSLEditor
-**Milestone:** v0.3.0 Polish & Usability
-**Researched:** 2026-04-23
-**Mode:** Existing app — gaps and fixes only
+**Milestone:** v0.4.0 GitHub Releases & Distribution
+**Researched:** 2026-04-24
+**Mode:** New milestone — CI/CD and distribution pipeline only
 
-No new libraries required. All four feature areas are solvable with the existing stack (JavaFX 21, RichTextFX 0.11.5, Jackson 2.17.2, version.properties). The issues are CSS omissions, a single missing FXML attribute, and no encoding bug in the pipeline code itself.
+Existing stack (Java 21, JavaFX 21, Gradle 9, com.gradleup.shadow 9.0.0-beta12, Saxon-HE 12.4, Apache FOP 2.9) is unchanged. This document covers only what is needed for the new distribution milestone.
 
 ---
 
-## Feature Area 1: Dark Theme — Editor (CodeArea) Text Visibility
+## GitHub Actions — Action Versions
 
-### Problem
+Use these exact versions. All are the current stable major tags as of April 2026.
 
-`main.css` has no `.code-area` or `.styled-text-area` selectors. RichTextFX ships with a minimal internal CSS (`code-area.css`, `styled-text-area.css`) that sets only font-family, cursor, caret blink rate, and line spacing — no background, no text fill. JavaFX's Modena theme (the default) supplies a white/near-white background and near-black text for text input controls. Because CodeArea extends `StyledTextArea`, Modena's input-field background (#ffffff or system default) wins unless overridden.
+| Action | Version | Purpose |
+|--------|---------|---------|
+| `actions/checkout` | `v4` | Checkout repo with full git history (needed for release notes) |
+| `actions/setup-java` | `v5` | Install JDK 21 (Temurin distribution) with Gradle cache |
+| `actions/upload-artifact` | `v4` | Pass per-platform build output to the release job |
+| `actions/download-artifact` | `v4` | Collect artifacts in the release job |
+| `softprops/action-gh-release` | `v2` | Create GitHub Release and attach assets |
+| `apple-actions/import-codesign-certs` | `v3` | Import p12 certificate into macOS keychain |
 
-Result: the CodeArea renders as a white rectangle inside the dark shell.
+**Why v2 for action-gh-release, not v3:** v3.0.0 (Node 24 runtime) was released April 2026 and is still settling. v2.6.2 is the last stable Node 20 line and is fully functional. Upgrade to v3 when it has been stable for a few weeks.
 
-### Fix — CSS only, no Java changes
+**Why v4 for artifact actions:** v3 was deprecated January 30, 2025 and is unsupported. v4 is the stable line; v5+ exists but is experimental. Do not use v3.
 
-Add to `main.css`:
+---
 
-```css
-/* RichTextFX CodeArea — dark theme override */
-.code-area {
-    -fx-background-color: #1e1e1e;
-}
+## Workflow Structure
 
-.code-area .styled-text-area {
-    -fx-background-color: #1e1e1e;
-}
+One workflow file: `.github/workflows/release.yml`
 
-/* Default text fill for unstyled/plain text segments */
-.code-area .styled-text-area .text {
-    -fx-fill: #d4d4d4;
-}
+**Trigger:** `push` on tags matching `v*`
 
-/* Caret color */
-.code-area .styled-text-area .caret {
-    -fx-stroke: #aeafad;
-}
+**Jobs (sequential via `needs:`):**
 
-/* Selection highlight */
-.code-area .styled-text-area .selection {
-    -fx-fill: rgba(38, 79, 120, 0.8);
-}
-
-/* Line number gutter (if LineNumberFactory is used — currently not, but safe to include) */
-.lineno {
-    -fx-background-color: #252526;
-    -fx-text-fill: #5a5a5a;
-    -fx-padding: 0 4 0 4;
-}
+```
+build-macos   (macos-latest)  →  upload artifact: XSLEditor-macos.dmg
+build-windows (windows-latest) →  upload artifact: XSLEditor-windows.msi
+build-jar     (ubuntu-latest)  →  upload artifact: XSLEditor-{version}.jar
+release       (ubuntu-latest)  →  download all 3, create GitHub Release, attach assets
 ```
 
-**Confidence: HIGH.** Verified against RichTextFX 0.11.5 bundled CSS (extracted from JAR). These are the exact selectors used by the library's own demo dark-theme stylesheets.
+Run the three build jobs in parallel (no `needs:` between them). The release job `needs: [build-macos, build-windows, build-jar]`.
 
-**Why `.code-area .styled-text-area .text` not `.code-area .text`:** The paragraph text nodes sit inside `.styled-text-area`'s paragraph boxes. The `.text` selector targets JavaFX `Text` nodes, which use `-fx-fill` (not `-fx-text-fill`). This is the RichTextFX-specific distinction — regular Label/TextField nodes use `-fx-text-fill`, but the internal text flow uses `-fx-fill`.
-
-**Integration note:** The existing syntax highlight CSS classes (`.xml-element`, `.xml-attribute`, etc.) already use `-fx-fill`. They will continue to work correctly. The `.text` default only applies to segments that carry no style class (plain/unstyled text).
+Do NOT use a matrix strategy here. The three platforms require platform-specific signing steps and different jpackage options. A matrix collapses that distinction and makes per-platform conditionals ugly. Three named jobs is simpler, more readable, and easier to debug.
 
 ---
 
-## Feature Area 2: Dark Theme — TreeView and TableView Text Visibility
+## Java Setup — Recommended Configuration
 
-### Problem analysis
-
-The existing `main.css` already has correct rules for:
-- `.file-tree-view .tree-cell` (`-fx-text-fill: #cccccc`)
-- `.file-tree-view .tree-cell.entrypoint` (green)
-- `.file-tree-view .tree-cell.xml-input` (blue)
-- `.log-table-view .table-cell` (`-fx-text-fill: #cccccc`)
-- `.log-table-view .column-header` + `.column-header-background`
-
-These look correct on paper. If text is still invisible, the cause is Modena's selected-row override winning over the custom cell background. The fix is to also define the `:selected` pseudo-class text fill explicitly.
-
-Check for these missing rules and add if absent:
-
-```css
-/* Ensure selected table row does not revert text to dark */
-.log-table-view .table-row-cell:selected .table-cell {
-    -fx-text-fill: #ffffff;
-    -fx-background-color: #094771;
-}
-
-/* TreeView selected row text stays readable */
-.file-tree-view .tree-cell:selected {
-    -fx-text-fill: #ffffff;
-}
+```yaml
+- uses: actions/setup-java@v5
+  with:
+    distribution: 'temurin'
+    java-version: '21'
+    cache: 'gradle'
 ```
 
-**The existing `.file-tree-view .tree-cell:selected` rule sets background and border but no `-fx-text-fill`, so selected items get Modena's default selected-row text color (which may be dark on dark).**
+Use `temurin` (Eclipse Adoptium). It ships full JDK including `jpackage` on all three platforms. Avoid `zulu` — jpackage availability on Zulu builds is inconsistent. Avoid `oracle` — license friction.
 
-**Confidence: HIGH** — standard JavaFX CSS dark-theme fix; documented behavior of Modena overriding text-fill on selected rows.
-
----
-
-## Feature Area 3: Log Panel — Full-Width Columns, Remove Extra Column
-
-### Problem
-
-The FXML defines 5 columns: `colTime` (65px), `colLevel` (60px), `colType` (100px), `colMessage` (400px), `colAi` (40px). Fixed `prefWidth` values with no `columnResizePolicy` attribute on the `TableView` means JavaFX uses `UNCONSTRAINED_RESIZE_POLICY` by default — columns do not fill the available width, leaving empty gray space on the right.
-
-`colType` carries the error category string (e.g. "XSLT_COMPILE"), which is redundant because the message already implies the type. "Remove extra column" means `colType`.
-
-### Fix — Two-part
-
-**Part A: Remove `colType`**
-
-In `main.fxml`: delete the `<TableColumn fx:id="colType" .../>` element.
-
-In `MainController.java`: remove the `@FXML private TableColumn<LogEntry, String> colType;` field declaration and the `colType` argument from the `logController.initialize(...)` call.
-
-In `LogController.java`: remove the `colType` parameter from `initialize(...)`, its `Objects.requireNonNull` call, and the `colType.setCellValueFactory(...)` line.
-
-**Part B: Full-width column policy**
-
-In `main.fxml`, add `columnResizePolicy` to the `TableView` element:
-
-```xml
-<TableView fx:id="logTableView" prefHeight="120" VBox.vgrow="ALWAYS"
-           columnResizePolicy="CONSTRAINED_RESIZE_POLICY">
-```
-
-`TableView.CONSTRAINED_RESIZE_POLICY` distributes excess width across all columns proportionally. With 4 columns remaining (Time 65, Level 60, Message flexible, AI 40), `colMessage` will expand to fill all remaining space.
-
-**Confidence: HIGH** — `CONSTRAINED_RESIZE_POLICY` is a standard JavaFX constant. FXML accepts it as a string literal; JavaFX FXML loader resolves it to `TableView.CONSTRAINED_RESIZE_POLICY` automatically.
-
-**Important caveat:** `CONSTRAINED_RESIZE_POLICY` prevents the user from resizing individual columns below the total width. If resize-by-drag is needed, use `columnResizePolicy="UNCONSTRAINED_RESIZE_POLICY"` and instead set `colMessage`'s `maxWidth` to `Infinity` via `HBox.hgrow="ALWAYS"` equivalent — but for a log panel this is not required.
+The `cache: 'gradle'` option caches `~/.gradle/caches` and `~/.gradle/wrapper`. Enables significantly faster CI runs after the first.
 
 ---
 
-## Feature Area 4: About Dialog — Version Auto-Update
+## jpackage Integration with shadowJar
 
-### Problem assessment
+### The Launcher Wrapper Requirement
 
-**This is already implemented correctly.** The `version.properties` file at `src/main/resources/version.properties` contains `version=${version}`. Gradle's `processResources` block expands this at build time using `project.version` from `build.gradle`. `AboutDialog.loadVersion()` reads it via `getClass().getResourceAsStream("/version.properties")`.
+`XSLEditorApp` extends `javafx.application.Application` directly (verified in codebase). When a class that extends `Application` is the JAR manifest `Main-Class`, the JVM checks that JavaFX modules are on the module path. In a fat JAR, JavaFX is on the classpath, not the module path — this causes a runtime error.
 
-The only issue: `build.gradle` has `version = '0.1.0'` hardcoded. This version string needs to be updated to `'0.3.0'` as part of the milestone. The mechanism itself is complete and correct — no code changes needed.
-
-**What to verify manually:** Run `./gradlew processResources` and confirm `build/resources/main/version.properties` contains `version=0.3.0` (not `${version}` literally). If the About dialog shows `${version}` literally, it means the resource filter is not running before the JAR is built — the fix is `./gradlew clean shadowJar` to force re-processing.
-
-**Confidence: HIGH** — mechanism verified in codebase. `build/resources/main/version.properties` already exists from a prior build.
-
----
-
-## Feature Area 5: Encoding Issues
-
-### Problem assessment
-
-The pipeline code is correct. A grep across all Java source shows:
-- `EditorController`: `Files.readString(path, StandardCharsets.UTF_8)` and `Files.writeString(path, text, StandardCharsets.UTF_8)`
-- `RenderOrchestrator`: `Files.readString(entryPath, StandardCharsets.UTF_8)`
-- `LibraryPreprocessor`: `Files.readString(file, StandardCharsets.UTF_8)`
-- `RenderEngine`: `foContent.getBytes(StandardCharsets.UTF_8)`, serializer encoding set to "UTF-8"
-
-No implicit platform-default charset calls exist. No `new String(bytes)` without charset, no `FileReader` without charset.
-
-**The encoding problem is most likely in the XSL-FO template itself, not the Java code.** Common causes:
-1. The XSLT stylesheet omits `<xsl:output encoding="UTF-8"/>`, causing Saxon to default to UTF-16 for some output methods.
-2. The XSL-FO document lacks `<?xml version="1.0" encoding="UTF-8"?>` declaration, causing FOP's SAX parser to interpret it differently.
-3. The XML input file contains non-ASCII characters (e.g. accented Italian words like "è", "à") and the XSLT passes them through as-is. FOP renders them correctly if FOP's font configuration includes the glyph; if not, the glyph appears as a box or is dropped — this is a FOP font issue, not a Java encoding issue.
-
-**The one potential Java-level gap:** `RenderEngine.transformToString()` uses a `StringWriter` as the Saxon serializer output. The serializer has `ENCODING=UTF-8` set, but `StringWriter` is an in-memory character stream — UTF-8 encoding/decoding is irrelevant when the result is a Java `String`. However, `foContent.getBytes(StandardCharsets.UTF_8)` in `renderFoToPdf()` re-encodes correctly for the `ByteArrayInputStream` fed to FOP. This chain is correct.
-
-**Recommended investigation approach (no code changes yet):**
-1. Identify which specific character(s) are mangled and at which stage (post-XSLT? post-FOP?).
-2. Check the XSLT template for `<xsl:output method="xml" encoding="UTF-8" indent="yes"/>`.
-3. Check FOP font configuration for the required glyphs.
-
-**If a Java fix is needed**, the only realistic gap is if `StreamSource(xmlFile.toFile())` triggers platform-default encoding in some edge case. The robust fix:
+**Required fix: add a Launcher class** that does not extend `Application`:
 
 ```java
-// In RenderEngine.transformToString(), replace:
-transformer.setSource(new StreamSource(xmlFile.toFile()));
-// With:
-transformer.setSource(new StreamSource(
-    new java.io.InputStreamReader(
-        new java.io.FileInputStream(xmlFile.toFile()),
-        StandardCharsets.UTF_8)));
+// src/main/java/ch/ti/gagi/xsleditor/Launcher.java
+package ch.ti.gagi.xsleditor;
+
+public class Launcher {
+    public static void main(String[] args) {
+        XSLEditorApp.main(args);
+    }
+}
 ```
 
-But this is a speculative fix — Saxon resolves external entity URIs from the file path and typically handles encoding via the XML declaration. Only apply if the investigation confirms the source.
+Update `build.gradle` and `shadowJar` manifest to use `ch.ti.gagi.xsleditor.Launcher` as `Main-Class`. The existing `application { mainClass }` can stay as-is for local `./gradlew run`.
 
-**Confidence: MEDIUM** — pipeline code analysis is HIGH confidence (no implicit charset calls), but root cause of the reported encoding issue is unconfirmed without a reproducer.
+### jpackage Input — Fat JAR from shadowJar
+
+jpackage accepts `--input <dir>` containing the JAR and `--main-jar <filename>`. The shadow JAR (with `archiveClassifier.set('')`) produces `build/libs/XSLEditor-<version>.jar`. Use that directly.
+
+```bash
+jpackage \
+  --input build/libs \
+  --main-jar XSLEditor-${VERSION}.jar \
+  --main-class ch.ti.gagi.xsleditor.Launcher \
+  --name XSLEditor \
+  --app-version ${VERSION} \
+  --type dmg          # or msi on Windows
+```
+
+jpackage will run `jlink` internally to create an embedded JRE that includes the JVM. Because JavaFX is bundled in the fat JAR (classpath), NOT on the module path, jpackage does NOT need JavaFX jmods. Do NOT pass `--add-modules javafx.controls` etc. — that would conflict with the fat JAR approach.
+
+**What jpackage embeds:** A stripped JRE (via jlink) containing only the modules referenced by the application's code. Since JavaFX is on the classpath (fat JAR), jpackage's jlink step only bundles the core JVM modules. This is correct behavior for the non-modular fat JAR approach.
 
 ---
 
-## No New Dependencies Needed
+## macOS Signing & Notarization
 
-| Library | Current Version | Status |
-|---------|----------------|--------|
-| JavaFX | 21 | No change — all required APIs present |
-| RichTextFX | 0.11.5 | No change — CSS override is the fix |
-| Apache FOP | 2.9 | No change |
-| Saxon-HE | 12.4 | No change |
-| Jackson | 2.17.2 | No change |
-| PDFBox | 2.0.31 | No change |
+### Certificate Type
+
+Use **Developer ID Application** certificate (not Mac App Store, not Development). This is required for distribution outside the App Store. The certificate is issued by Apple Developer Program membership.
+
+### Secrets Required (repository secrets)
+
+| Secret Name | Value |
+|-------------|-------|
+| `MACOS_CERTIFICATE` | Base64-encoded `.p12` file |
+| `MACOS_CERTIFICATE_PWD` | Password used when exporting the `.p12` |
+| `MACOS_CERTIFICATE_NAME` | Common name, e.g. `Developer ID Application: Name (TEAMID)` |
+| `APPLE_ID` | Apple ID email (for notarization) |
+| `APPLE_APP_SPECIFIC_PWD` | App-specific password from appleid.apple.com |
+| `APPLE_TEAM_ID` | 10-character Team ID from developer.apple.com |
+
+Export the `.p12` from Keychain Access: select the Developer ID Application cert + private key → Export → Personal Information Exchange (.p12). Base64-encode: `base64 -i cert.p12 | pbcopy`.
+
+### macOS Signing Steps (in workflow)
+
+```yaml
+- uses: apple-actions/import-codesign-certs@v3
+  with:
+    p12-file-base64: ${{ secrets.MACOS_CERTIFICATE }}
+    p12-password: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+
+- name: Build DMG (unsigned)
+  run: |
+    ./gradlew shadowJar
+    jpackage \
+      --input build/libs \
+      --main-jar XSLEditor-${VERSION}.jar \
+      --main-class ch.ti.gagi.xsleditor.Launcher \
+      --name XSLEditor \
+      --app-version ${VERSION} \
+      --type dmg \
+      --mac-sign \
+      --mac-signing-key-user-name "${{ secrets.MACOS_CERTIFICATE_NAME }}"
+
+- name: Notarize DMG
+  run: |
+    xcrun notarytool submit XSLEditor-${VERSION}.dmg \
+      --apple-id "${{ secrets.APPLE_ID }}" \
+      --password "${{ secrets.APPLE_APP_SPECIFIC_PWD }}" \
+      --team-id "${{ secrets.APPLE_TEAM_ID }}" \
+      --wait
+
+- name: Staple DMG
+  run: xcrun stapler staple XSLEditor-${VERSION}.dmg
+```
+
+**Use `notarytool`, not `altool`.** Apple deprecated `altool` after Fall 2023; it no longer works. `notarytool` is available on macOS 12+ runners. `macos-latest` is macOS 15 as of April 2026 — confirmed safe.
+
+**The `--wait` flag** on `notarytool submit` blocks the step until Apple's notarization service returns a result (typically 1-5 minutes). Simpler than polling.
+
+**Stapling** attaches the notarization ticket to the DMG so Gatekeeper can verify offline. Never skip stapling.
+
+### jpackage `--mac-sign` vs manual codesign
+
+Use `--mac-sign` + `--mac-signing-key-user-name` on jpackage. This signs the `.app` bundle internally (all executables inside) during the jpackage build, which is the correct approach. Do NOT sign the DMG manually with `codesign` after jpackage — sign the `.app` via jpackage, then notarize the DMG.
 
 ---
 
-## Key JavaFX APIs for Implementer Reference
+## Windows Installer
 
-| API | Location | Purpose |
-|-----|----------|---------|
-| `-fx-fill` on `.text` | CSS | RichTextFX text node color (NOT `-fx-text-fill`) |
-| `-fx-background-color` on `.code-area` | CSS | Editor background |
-| `TableView.CONSTRAINED_RESIZE_POLICY` | FXML attribute | Full-width column distribution |
-| `getClass().getResourceAsStream("/version.properties")` | AboutDialog | Already implemented |
-| `TableView.getColumns().remove(col)` | Java API | Alternative to FXML removal (not recommended — use FXML) |
+### WiX Requirement
+
+jpackage requires WiX 3 to build `.msi` and `.exe` installer types on Windows. WiX 3.14.1 is preinstalled on `windows-latest` GitHub-hosted runners. No installation step needed.
+
+**Critical version constraint:** jpackage (up to JDK 21) looks for `candle.exe` and `light.exe` on PATH — these are WiX 3 tools. WiX 4 and WiX 5 use a different CLI (`wix build`) and do NOT provide `candle.exe`/`light.exe`. If WiX 4+ is on PATH and WiX 3 is not, jpackage fails. The `windows-latest` runner has WiX 3 on PATH — do not install WiX 4 in the workflow.
+
+### Windows jpackage Command
+
+```bash
+jpackage `
+  --input build/libs `
+  --main-jar XSLEditor-${VERSION}.jar `
+  --main-class ch.ti.gagi.xsleditor.Launcher `
+  --name XSLEditor `
+  --app-version ${VERSION} `
+  --type msi `
+  --win-dir-chooser `
+  --win-menu `
+  --win-shortcut
+```
+
+Windows runner uses PowerShell by default — use backtick (`` ` ``) for line continuation, or write as a single line. Alternatively use `shell: bash` in the step to use bash syntax.
+
+**Prefer MSI over EXE.** MSI is the standard Windows installer format, supports silent install (`/quiet`), and is more appropriate for developer tools. EXE (NSIS-based via jpackage) requires no extra tooling but is less scriptable.
+
+### Windows Signing (OPTIONAL for v0.4.0)
+
+Windows code signing requires an EV (Extended Validation) code signing certificate from a CA (Sectigo, DigiCert, etc.), which costs ~$300+/year and requires hardware token or cloud HSM. This is out of scope for v0.4.0. The MSI will trigger a SmartScreen warning on first run, which is acceptable for an internal developer tool. Document this in the release notes.
+
+---
+
+## Release Notes Generation
+
+### Recommended Approach: GitHub's Built-in Auto-Generation
+
+Use `generate_release_notes: true` on `softprops/action-gh-release`. GitHub compares the current tag to the previous tag and generates a categorized changelog from PR titles and commit messages.
+
+```yaml
+- uses: softprops/action-gh-release@v2
+  with:
+    generate_release_notes: true
+    files: |
+      XSLEditor-*.dmg
+      XSLEditor-*.msi
+      XSLEditor-*.jar
+```
+
+This requires no extra tooling, no configuration files, and produces a reasonable result immediately. The generated notes include: merged PRs, contributors, and a "Full Changelog" link.
+
+**Alternative if more control is needed:** `git log --oneline <prev-tag>..<current-tag>` piped into the release body. This is a one-liner in the workflow, no extra action required. Use this if GitHub's auto-generation produces noise.
+
+Do NOT add `mikepenz/release-changelog-builder-action` or similar third-party tools — over-engineering for this project.
+
+---
+
+## Version Extraction in Workflow
+
+The version number needs to be extracted from the git tag to pass to jpackage. The tag format is `v0.4.0`; jpackage expects `0.4.0`.
+
+```yaml
+- name: Extract version
+  id: version
+  run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+```
+
+Then use `${{ steps.version.outputs.VERSION }}` in subsequent steps. This works on all three platforms (bash is available via `shell: bash`).
+
+---
+
+## build.gradle Changes Required
+
+Two changes needed:
+
+**1. Update mainClass for jpackage Launcher:**
+
+```groovy
+application {
+    mainClass = 'ch.ti.gagi.xsleditor.Launcher'  // was: XSLEditorApp
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    manifest {
+        attributes 'Main-Class': 'ch.ti.gagi.xsleditor.Launcher'  // was: XSLEditorApp
+    }
+    mergeServiceFiles()
+}
+```
+
+**2. Update version:**
+
+```groovy
+version = '0.4.0'  // was: '0.3.0'
+```
+
+No other build.gradle changes needed. The shadow plugin already produces the correct fat JAR. No new Gradle plugins are required for CI/CD — jpackage is invoked directly as a CLI tool in the workflow.
+
+---
+
+## What NOT to Add
+
+| Tool / Approach | Why Not |
+|-----------------|---------|
+| `badass-runtime-plugin` (Gradle) | Unnecessary; jpackage CLI invocation directly in workflow is simpler and more transparent |
+| `jlink` manual step | jpackage calls jlink internally; no manual step needed for fat JAR approach |
+| `wix-actions/setup-wix` | WiX 3 is preinstalled on windows-latest; no setup step needed |
+| `semantic-release` | Over-engineering; simple tag push → release workflow is sufficient |
+| `mikepenz/release-changelog-builder-action` | GitHub's built-in `generate_release_notes: true` is sufficient |
+| `gradle/actions/setup-gradle` | `actions/setup-java@v5` with `cache: gradle` covers this; the dedicated Gradle action is only needed for advanced use cases |
+| Windows EV code signing | Cost (~$300+/year), hardware HSM requirements — out of scope for v0.4.0 |
+| macOS `.pkg` installer | `.dmg` is simpler and standard for developer tools; pkg adds complexity with no benefit |
+| `NSIS` EXE type via jpackage | MSI is preferred; NSIS EXE provides no advantage for this project |
+
+---
+
+## macOS Runner Note
+
+`macos-latest` on GitHub-hosted runners is macOS 15 (Sequoia) as of early 2026. It includes:
+- Xcode 16+ (provides `xcrun`, `codesign`, `notarytool`, `stapler`)
+- JDK is NOT preinstalled at the version we need — `actions/setup-java@v5` handles this
+
+The `macos-latest` runner is ARM (Apple Silicon M1). JavaFX 21 from Temurin includes both x86_64 and aarch64 fat binaries — the build will produce an ARM `.app`. If x86_64 compatibility is needed, use `macos-13` (Intel runner) for that job. For v0.4.0, ARM-only is acceptable.
 
 ---
 
 ## Sources
 
-- RichTextFX 0.11.5 bundled CSS extracted from JAR: `org/fxmisc/richtext/code-area.css`, `styled-text-area.css` — HIGH confidence
-- JavaFX 21 CSS Reference Guide (Modena defaults for input controls) — HIGH confidence
-- Codebase inspection: `main.css`, `main.fxml`, `LogController.java`, `AboutDialog.java`, `EditorTab.java`, `RenderEngine.java`, `RenderOrchestrator.java` — HIGH confidence
+- [actions/setup-java — GitHub](https://github.com/actions/setup-java): v5 confirmed current major — MEDIUM confidence (WebSearch)
+- [actions/upload-artifact — GitHub](https://github.com/actions/upload-artifact): v4 stable, v3 deprecated Jan 2025 — HIGH confidence (official changelog)
+- [softprops/action-gh-release — GitHub](https://github.com/softprops/action-gh-release): v2.6.2 last stable Node 20 line — MEDIUM confidence (WebSearch)
+- [apple-actions/import-codesign-certs — GitHub](https://github.com/Apple-Actions/import-codesign-certs): v3 confirmed (v6.0.0 is latest tag, action tag v3 still current for usage) — MEDIUM confidence (WebSearch)
+- [foojay.io: Creating Executables For JavaFX Applications](https://foojay.io/today/creating-executables-for-javafx-applications/): jpackage fat JAR + Launcher pattern — MEDIUM confidence
+- [inside.java: Package a JavaFX Application as a Platform Specific Executable](https://inside.java/2023/11/14/package-javafx-native-exec/): Oracle official, 2023 — HIGH confidence
+- [WiX Toolset discussions — jpackage WiX 4 incompatibility](https://github.com/orgs/wixtoolset/discussions/7982): WiX 3 requirement confirmed, WiX 4 breaks jpackage — MEDIUM confidence
+- [federicoterzi.com: Automatic Code-signing and Notarization for macOS using GitHub Actions](https://federicoterzi.com/blog/automatic-code-signing-and-notarization-for-macos-apps-using-github-actions/): Full signing workflow pattern — MEDIUM confidence
+- [GitHub Actions community: WiX preinstalled on windows-latest](https://github.com/orgs/community/discussions/27149): WiX 3 on PATH confirmed — MEDIUM confidence
