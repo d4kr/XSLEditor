@@ -73,23 +73,23 @@ Previously completed. Requirements UI-01..04, LOG-01..03, VER-01..02, ICON-01..0
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| BUILD-01 | — | Pending |
-| BUILD-02 | — | Pending |
-| BUILD-03 | — | Pending |
-| BUILD-04 | — | Pending |
-| CI-01 | — | Pending |
-| CI-02 | — | Pending |
-| CI-03 | — | Pending |
-| MACOS-01 | — | Pending |
-| MACOS-02 | — | Pending |
-| MACOS-03 | — | Pending |
-| MACOS-04 | — | Pending |
-| WIN-01 | — | Pending |
-| WIN-02 | — | Pending |
-| REL-01 | — | Pending |
-| REL-02 | — | Pending |
-| REL-03 | — | Pending |
-| SIGN-01 | — | Pending |
+| BUILD-01 | Phase 19 | Pending |
+| BUILD-02 | Phase 19 | Pending |
+| BUILD-03 | Phase 19 | Pending |
+| BUILD-04 | Phase 19 | Pending |
+| CI-01 | Phase 20 | Pending |
+| CI-02 | Phase 20 | Pending |
+| CI-03 | Phase 20 | Pending |
+| MACOS-01 | Phase 20 | Pending |
+| MACOS-02 | Phase 20 | Pending |
+| MACOS-03 | Phase 21 | Pending |
+| MACOS-04 | Phase 22 | Pending |
+| WIN-01 | Phase 20 | Pending |
+| WIN-02 | Phase 20 | Pending |
+| REL-01 | Phase 20 | Pending |
+| REL-02 | Phase 20 | Pending |
+| REL-03 | Phase 20 | Pending |
+| SIGN-01 | Phase 23 | Pending |
 
 ---
 
