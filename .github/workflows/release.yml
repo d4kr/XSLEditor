@@ -101,10 +101,13 @@ jobs:
           name: fat-jar
           path: dist/
 
-      - name: Strip pre-release suffix for --app-version
+      - name: Compute --app-version for macOS (strip pre-release; major must be >= 1)
         run: |
           VERSION_CLEAN=$(echo "$APP_VERSION" | sed 's/-.*//')
-          echo "VERSION_CLEAN=$VERSION_CLEAN" >> $GITHUB_ENV
+          MAJOR=$(echo "$VERSION_CLEAN" | cut -d. -f1)
+          REST=$(echo "$VERSION_CLEAN" | cut -d. -f2-)
+          if [ "$MAJOR" = "0" ]; then VERSION_MACOS="1.${REST}"; else VERSION_MACOS="$VERSION_CLEAN"; fi
+          echo "VERSION_MACOS=$VERSION_MACOS" >> $GITHUB_ENV
 
       - name: jpackage DMG (x64)
         run: |
