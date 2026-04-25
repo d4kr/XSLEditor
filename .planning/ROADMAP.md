@@ -60,7 +60,7 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
 
 **Milestone Goal:** Automate build and publication of the app on GitHub Releases — JAR + signed/notarized macOS DMG + Windows MSI + Windows portable ZIP — triggered by a git tag push, with release notes generated automatically from git history.
 
-- [ ] **Phase 19: Launcher Shim & Local Build** — Add Launcher.java, update shadowJar manifest, verify fat JAR and jpackage locally
+- [ ] **Phase 19: Launcher Shim & Local Build** — Add Launcher.java, update shadowJar manifest, verify fat JAR and jpackage locally (2 plans)
 - [ ] **Phase 20: CI Skeleton — Unsigned Release Pipeline** — GitHub Actions workflow producing unsigned DMGs, Windows MSI, Windows ZIP, fat JAR, and a GitHub Release on tag push
 - [ ] **Phase 21: macOS Signing** — Sign both DMGs with Developer ID Application certificate; codesign verification passes
 - [ ] **Phase 22: macOS Notarization** — Notarize and staple both DMGs; Gatekeeper accepts without quarantine dialog
@@ -202,7 +202,7 @@ Plans:
 | 16. Log Panel Layout | v0.3.0 | 1/1 | Complete | 2026-04-23 |
 | 17. Encoding Investigation & Fix | v0.3.0 | 1/1 | Complete | 2026-04-23 |
 | 18. README Rewrite | v0.3.0 | 1/1 | Complete | 2026-04-24 |
-| 19. Launcher Shim & Local Build | v0.4.0 | 0/? | Not started | - |
+| 19. Launcher Shim & Local Build | v0.4.0 | 0/2 | Not started | - |
 | 20. CI Skeleton — Unsigned Release Pipeline | v0.4.0 | 0/? | Not started | - |
 | 21. macOS Signing | v0.4.0 | 0/? | Not started | - |
 | 22. macOS Notarization | v0.4.0 | 0/? | Not started | - |
