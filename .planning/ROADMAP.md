@@ -170,7 +170,10 @@ Plans:
   2. The CI signing sequence (import cert to keychain, `security set-key-partition-list`, jpackage with `--mac-sign --mac-entitlements`) runs without interactive prompts and does not hang on a headless runner
   3. The `entitlements.plist` file (with `com.apple.security.cs.allow-jit` and `com.apple.security.cs.disable-library-validation`) is committed to the repository and referenced in the jpackage invocation
   4. The 7 required GitHub Actions secrets (`MACOS_CERTIFICATE`, `MACOS_CERTIFICATE_PASSWORD`, `MACOS_SIGNING_IDENTITY`, `MACOS_KEYCHAIN_PASSWORD`, `APPLE_ID`, `APPLE_TEAM_ID`, `APPLE_APP_SPECIFIC_PASSWORD`) are documented and the workflow reads them correctly
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 21-01-PLAN.md — entitlements.plist + CI signing sequence in both macOS jobs
+- [ ] 21-02-PLAN.md — Secrets documentation comment in release.yml
 
 ### Phase 22: macOS Notarization
 **Goal**: Both macOS DMGs are notarized by Apple and stapled so that Gatekeeper accepts them on any macOS machine without a quarantine dialog — even offline
@@ -204,9 +207,9 @@ Plans:
 | 18. README Rewrite | v0.3.0 | 1/1 | Complete | 2026-04-24 |
 | 19. Launcher Shim & Local Build | v0.4.0 | 0/2 | Not started | - |
 | 20. CI Skeleton — Unsigned Release Pipeline | v0.4.0 | 0/? | Not started | - |
-| 21. macOS Signing | v0.4.0 | 0/? | Not started | - |
+| 21. macOS Signing | v0.4.0 | 0/2 | Not started | - |
 | 22. macOS Notarization | v0.4.0 | 0/? | Not started | - |
 | 23. Signing Documentation | v0.4.0 | 0/? | Not started | - |
 
 ---
-*Roadmap updated: 2026-04-24*
+*Roadmap updated: 2026-04-25*
