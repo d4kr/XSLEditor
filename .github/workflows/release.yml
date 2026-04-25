@@ -55,10 +55,13 @@ jobs:
           name: fat-jar
           path: dist/
 
-      - name: Strip pre-release suffix for --app-version
+      - name: Compute --app-version for macOS (strip pre-release; major must be >= 1)
         run: |
           VERSION_CLEAN=$(echo "$APP_VERSION" | sed 's/-.*//')
-          echo "VERSION_CLEAN=$VERSION_CLEAN" >> $GITHUB_ENV
+          MAJOR=$(echo "$VERSION_CLEAN" | cut -d. -f1)
+          REST=$(echo "$VERSION_CLEAN" | cut -d. -f2-)
+          if [ "$MAJOR" = "0" ]; then VERSION_MACOS="1.${REST}"; else VERSION_MACOS="$VERSION_CLEAN"; fi
+          echo "VERSION_MACOS=$VERSION_MACOS" >> $GITHUB_ENV
 
       - name: jpackage DMG (arm64)
         run: |
@@ -66,13 +69,13 @@ jobs:
           jpackage \
             --type dmg \
             --name XSLEditor \
-            --app-version "$VERSION_CLEAN" \
+            --app-version "$VERSION_MACOS" \
             --input dist/ \
             --main-jar "xsleditor-${APP_VERSION}.jar" \
             --main-class ch.ti.gagi.xsleditor.Launcher \
             --icon src/main/resources/ch/ti/gagi/xsleditor/icon.icns \
             --dest output/
-          mv "output/XSLEditor-${VERSION_CLEAN}.dmg" "output/XSLEditor-${APP_VERSION}-arm64.dmg"
+          mv "output/XSLEditor-${VERSION_MACOS}.dmg" "output/XSLEditor-${APP_VERSION}-arm64.dmg"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -109,13 +112,13 @@ jobs:
           jpackage \
             --type dmg \
             --name XSLEditor \
-            --app-version "$VERSION_CLEAN" \
+            --app-version "$VERSION_MACOS" \
             --input dist/ \
             --main-jar "xsleditor-${APP_VERSION}.jar" \
             --main-class ch.ti.gagi.xsleditor.Launcher \
             --icon src/main/resources/ch/ti/gagi/xsleditor/icon.icns \
             --dest output/
-          mv "output/XSLEditor-${VERSION_CLEAN}.dmg" "output/XSLEditor-${APP_VERSION}-x64.dmg"
+          mv "output/XSLEditor-${VERSION_MACOS}.dmg" "output/XSLEditor-${APP_VERSION}-x64.dmg"
 
       - uses: actions/upload-artifact@v4
         with:
