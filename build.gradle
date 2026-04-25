@@ -6,11 +6,11 @@ plugins {
 }
 
 application {
-    mainClass = 'ch.ti.gagi.xsleditor.XSLEditorApp'
+    mainClass = 'ch.ti.gagi.xsleditor.Launcher'
 }
 
 group = 'ch.ti.gagi'
-version = '0.3.0'
+version = project.findProperty('version') ?: '0.3.0'
 
 java {
     toolchain {
@@ -46,14 +46,14 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'ch.ti.gagi.xsleditor.XSLEditorApp'
+        attributes 'Main-Class': 'ch.ti.gagi.xsleditor.Launcher'
     }
 }
 
 shadowJar {
     archiveClassifier.set('')
     manifest {
-        attributes 'Main-Class': 'ch.ti.gagi.xsleditor.XSLEditorApp'
+        attributes 'Main-Class': 'ch.ti.gagi.xsleditor.Launcher'
     }
     // Merge service files to avoid Saxon/FOP conflicts
     mergeServiceFiles()
