@@ -1,0 +1,213 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+-*'
+
+jobs:
+  build-jar:
+    runs-on: ubuntu-latest
+    outputs:
+      app-version: ${{ steps.version.outputs.app-version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "app-version=$VERSION" >> $GITHUB_OUTPUT
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: liberica
+          java-version: '21'
+          java-package: jdk+fx
+
+      - name: Build fat JAR
+        run: ./gradlew shadowJar -Pversion=${{ env.APP_VERSION }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fat-jar
+          path: build/libs/xsleditor-*.jar
+          retention-days: 1
+
+  package-macos-arm:
+    needs: build-jar
+    runs-on: macos-15
+    env:
+      APP_VERSION: ${{ needs.build-jar.outputs.app-version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: liberica
+          java-version: '21'
+          java-package: jdk+fx
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fat-jar
+          path: dist/
+
+      - name: jpackage DMG (arm64)
+        run: |
+          mkdir -p output
+          jpackage \
+            --type dmg \
+            --name XSLEditor \
+            --app-version "$APP_VERSION" \
+            --input dist/ \
+            --main-jar "xsleditor-${APP_VERSION}.jar" \
+            --main-class ch.ti.gagi.xsleditor.Launcher \
+            --icon src/main/resources/ch/ti/gagi/xsleditor/icon.icns \
+            --dest output/
+          mv "output/XSLEditor-${APP_VERSION}.dmg" "output/XSLEditor-${APP_VERSION}-arm64.dmg"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dmg-arm64
+          path: output/XSLEditor-*-arm64.dmg
+
+  package-macos-x64:
+    needs: build-jar
+    runs-on: macos-15-intel
+    env:
+      APP_VERSION: ${{ needs.build-jar.outputs.app-version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: liberica
+          java-version: '21'
+          java-package: jdk+fx
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fat-jar
+          path: dist/
+
+      - name: jpackage DMG (x64)
+        run: |
+          mkdir -p output
+          jpackage \
+            --type dmg \
+            --name XSLEditor \
+            --app-version "$APP_VERSION" \
+            --input dist/ \
+            --main-jar "xsleditor-${APP_VERSION}.jar" \
+            --main-class ch.ti.gagi.xsleditor.Launcher \
+            --icon src/main/resources/ch/ti/gagi/xsleditor/icon.icns \
+            --dest output/
+          mv "output/XSLEditor-${APP_VERSION}.dmg" "output/XSLEditor-${APP_VERSION}-x64.dmg"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dmg-x64
+          path: output/XSLEditor-*-x64.dmg
+
+  package-windows:
+    needs: build-jar
+    runs-on: windows-latest
+    env:
+      APP_VERSION: ${{ needs.build-jar.outputs.app-version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: liberica
+          java-version: '21'
+          java-package: jdk+fx
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fat-jar
+          path: dist/
+
+      - name: Add WiX to PATH
+        shell: bash
+        run: echo "${WIX}bin" >> $GITHUB_PATH
+
+      - name: Generate icon.ico
+        shell: pwsh
+        run: |
+          magick convert `
+            src/main/resources/ch/ti/gagi/xsleditor/icon.png `
+            -define icon:auto-resize=256,128,64,48,32,16 `
+            src/main/resources/ch/ti/gagi/xsleditor/icon.ico
+
+      - name: Strip pre-release suffix for --app-version
+        shell: bash
+        run: |
+          VERSION_CLEAN=$(echo "$APP_VERSION" | sed 's/-.*//')
+          echo "VERSION_CLEAN=$VERSION_CLEAN" >> $GITHUB_ENV
+
+      - name: jpackage app-image
+        shell: bash
+        run: |
+          mkdir -p output
+          jpackage \
+            --type app-image \
+            --name XSLEditor \
+            --app-version "$VERSION_CLEAN" \
+            --input dist/ \
+            --main-jar "xsleditor-${APP_VERSION}.jar" \
+            --main-class ch.ti.gagi.xsleditor.Launcher \
+            --icon src/main/resources/ch/ti/gagi/xsleditor/icon.ico \
+            --dest output/
+
+      - name: jpackage MSI
+        shell: bash
+        run: |
+          jpackage \
+            --type msi \
+            --name XSLEditor \
+            --app-version "$VERSION_CLEAN" \
+            --app-image output/XSLEditor \
+            --dest output/ \
+            --win-dir-chooser \
+            --win-menu \
+            --win-shortcut
+
+      - name: Create portable ZIP
+        shell: pwsh
+        run: |
+          Compress-Archive -Path output/XSLEditor `
+            -DestinationPath "output/XSLEditor-${{ env.APP_VERSION }}-portable.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-msi
+          path: output/XSLEditor-*.msi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-zip
+          path: output/XSLEditor-*-portable.zip
+
+  release:
+    needs: [build-jar, package-macos-arm, package-macos-x64, package-windows]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: '*'
+          merge-multiple: false
+          path: release-assets/
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          files: release-assets/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
