@@ -118,4 +118,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-24 — Milestone v0.4.0 started*
+*Last updated: 2026-04-26 — Phase 22 complete: macOS notarization + stapling live in CI; Gatekeeper accepts downloads offline*
