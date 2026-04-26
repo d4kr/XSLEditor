@@ -207,7 +207,7 @@ Plans:
 | 18. README Rewrite | v0.3.0 | 1/1 | Complete | 2026-04-24 |
 | 19. Launcher Shim & Local Build | v0.4.0 | 0/2 | Not started | - |
 | 20. CI Skeleton — Unsigned Release Pipeline | v0.4.0 | 0/? | Not started | - |
-| 21. macOS Signing | v0.4.0 | 2/2 | Complete   | 2026-04-26 |
+| 21. macOS Signing | v0.4.0 | 2/2 | Complete    | 2026-04-26 |
 | 22. macOS Notarization | v0.4.0 | 0/? | Not started | - |
 | 23. Signing Documentation | v0.4.0 | 0/? | Not started | - |
 

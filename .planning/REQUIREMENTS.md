@@ -23,7 +23,7 @@
 
 - [ ] **MACOS-01**: CI produces a DMG for Apple Silicon (arm64) via `macos-15` runner
 - [ ] **MACOS-02**: CI produces a DMG for Intel x64 via `macos-15-intel` runner
-- [ ] **MACOS-03**: Both DMGs are signed with a Developer ID Application certificate (`--mac-sign --mac-entitlements entitlements.plist`); `codesign --verify --deep --strict` passes
+- [x] **MACOS-03**: Both DMGs are signed with a Developer ID Application certificate (`--mac-sign --mac-entitlements entitlements.plist`); `codesign --verify --deep --strict` passes
 - [ ] **MACOS-04**: Both DMGs are notarized (`xcrun notarytool submit --wait`) and stapled (`xcrun stapler staple`); Gatekeeper accepts the app without quarantine dialog
 
 ### Windows Distribution
@@ -82,7 +82,7 @@ Previously completed. Requirements UI-01..04, LOG-01..03, VER-01..02, ICON-01..0
 | CI-03 | Phase 20 | Pending |
 | MACOS-01 | Phase 20 | Pending |
 | MACOS-02 | Phase 20 | Pending |
-| MACOS-03 | Phase 21 | Pending |
+| MACOS-03 | Phase 21 | Complete |
 | MACOS-04 | Phase 22 | Pending |
 | WIN-01 | Phase 20 | Pending |
 | WIN-02 | Phase 20 | Pending |
