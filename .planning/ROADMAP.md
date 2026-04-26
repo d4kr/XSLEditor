@@ -63,7 +63,7 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
 - [ ] **Phase 19: Launcher Shim & Local Build** — Add Launcher.java, update shadowJar manifest, verify fat JAR and jpackage locally (2 plans)
 - [ ] **Phase 20: CI Skeleton — Unsigned Release Pipeline** — GitHub Actions workflow producing unsigned DMGs, Windows MSI, Windows ZIP, fat JAR, and a GitHub Release on tag push
 - [x] **Phase 21: macOS Signing** — Sign both DMGs with Developer ID Application certificate; codesign verification passes (completed 2026-04-26)
-- [ ] **Phase 22: macOS Notarization** — Notarize and staple both DMGs; Gatekeeper accepts without quarantine dialog
+- [x] **Phase 22: macOS Notarization** — Notarize and staple both DMGs; Gatekeeper accepts without quarantine dialog (completed 2026-04-26)
 - [ ] **Phase 23: Signing Documentation** — docs/SIGNING.md guides a maintainer through configuring all 7 macOS signing secrets
 
 ## Phase Details
@@ -185,7 +185,7 @@ Plans:
   3. Downloading the stapled arm64 DMG on a macOS machine and opening the app does not show a Gatekeeper quarantine dialog ("Apple cannot verify that this app is free of malware")
 **Plans**: 1 plan
 Plans:
-- [ ] 22-01-PLAN.md — Notarize + staple + Gatekeeper-check steps in both macOS CI jobs
+- [x] 22-01-PLAN.md — Notarize + staple + Gatekeeper-check steps in both macOS CI jobs
 
 ### Phase 23: Signing Documentation
 **Goal**: A developer who is new to the repository can configure all macOS signing secrets and have the full signing + notarization pipeline working by following `docs/SIGNING.md` alone
@@ -210,7 +210,7 @@ Plans:
 | 19. Launcher Shim & Local Build | v0.4.0 | 0/2 | Not started | - |
 | 20. CI Skeleton — Unsigned Release Pipeline | v0.4.0 | 0/? | Not started | - |
 | 21. macOS Signing | v0.4.0 | 2/2 | Complete    | 2026-04-26 |
-| 22. macOS Notarization | v0.4.0 | 0/1 | Ready to execute | - |
+| 22. macOS Notarization | v0.4.0 | 1/1 | Complete    | 2026-04-26 |
 | 23. Signing Documentation | v0.4.0 | 0/? | Not started | - |
 
 ---
