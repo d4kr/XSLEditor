@@ -111,18 +111,22 @@ jobs:
           MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
           MACOS_KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PASSWORD }}
         run: |
-          echo "$MACOS_CERTIFICATE" | base64 --decode > /tmp/certificate.p12
+          # Write cert to a restricted-permission temp dir (not world-readable /tmp directly)
+          CERT_DIR=$(mktemp -d)
+          chmod 700 "$CERT_DIR"
+          echo "$MACOS_CERTIFICATE" | base64 --decode > "$CERT_DIR/certificate.p12"
           security create-keychain -p "$MACOS_KEYCHAIN_PASSWORD" build.keychain
           security set-keychain-settings -lut 21600 build.keychain
           security unlock-keychain -p "$MACOS_KEYCHAIN_PASSWORD" build.keychain
-          security import /tmp/certificate.p12 \
+          security import "$CERT_DIR/certificate.p12" \
             -k build.keychain -f pkcs12 \
             -T /usr/bin/codesign -T /usr/bin/security \
             -P "$MACOS_CERTIFICATE_PASSWORD"
           security list-keychains -d user -s build.keychain login.keychain
           security set-key-partition-list -S apple-tool:,apple: \
             -k "$MACOS_KEYCHAIN_PASSWORD" build.keychain
-          rm -f /tmp/certificate.p12
+          # Remove cert immediately after import; cleanup also runs on failure via Delete keychain step
+          rm -rf "$CERT_DIR"
 
       - name: jpackage DMG (arm64, signed)
         env:
@@ -209,18 +213,22 @@ jobs:
           MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
           MACOS_KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PASSWORD }}
         run: |
-          echo "$MACOS_CERTIFICATE" | base64 --decode > /tmp/certificate.p12
+          # Write cert to a restricted-permission temp dir (not world-readable /tmp directly)
+          CERT_DIR=$(mktemp -d)
+          chmod 700 "$CERT_DIR"
+          echo "$MACOS_CERTIFICATE" | base64 --decode > "$CERT_DIR/certificate.p12"
           security create-keychain -p "$MACOS_KEYCHAIN_PASSWORD" build.keychain
           security set-keychain-settings -lut 21600 build.keychain
           security unlock-keychain -p "$MACOS_KEYCHAIN_PASSWORD" build.keychain
-          security import /tmp/certificate.p12 \
+          security import "$CERT_DIR/certificate.p12" \
             -k build.keychain -f pkcs12 \
             -T /usr/bin/codesign -T /usr/bin/security \
             -P "$MACOS_CERTIFICATE_PASSWORD"
           security list-keychains -d user -s build.keychain login.keychain
           security set-key-partition-list -S apple-tool:,apple: \
             -k "$MACOS_KEYCHAIN_PASSWORD" build.keychain
-          rm -f /tmp/certificate.p12
+          # Remove cert immediately after import; cleanup also runs on failure via Delete keychain step
+          rm -rf "$CERT_DIR"
 
       - name: jpackage DMG (x64, signed)
         env:
