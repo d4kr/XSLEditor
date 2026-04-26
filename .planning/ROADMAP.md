@@ -195,7 +195,9 @@ Plans:
   1. `docs/SIGNING.md` exists in the repository and documents the end-to-end process: exporting the Developer ID Application certificate as `.p12` from Keychain Access, base64-encoding it, and setting all 7 required GitHub Actions secrets
   2. The document names each secret (`MACOS_CERTIFICATE`, `MACOS_CERTIFICATE_PASSWORD`, `MACOS_SIGNING_IDENTITY`, `MACOS_KEYCHAIN_PASSWORD`, `APPLE_ID`, `APPLE_TEAM_ID`, `APPLE_APP_SPECIFIC_PASSWORD`) and explains what value each expects
   3. The document notes the Apple Developer Program membership requirement ($99/yr) for notarization and explains the SmartScreen warning that appears on Windows due to unsigned MSI
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 23-01-PLAN.md — Create docs/SIGNING.md, link from README, add pointer comment in release.yml
 
 ## Progress
 
@@ -211,7 +213,7 @@ Plans:
 | 20. CI Skeleton — Unsigned Release Pipeline | v0.4.0 | 0/? | Not started | - |
 | 21. macOS Signing | v0.4.0 | 2/2 | Complete    | 2026-04-26 |
 | 22. macOS Notarization | v0.4.0 | 1/1 | Complete    | 2026-04-26 |
-| 23. Signing Documentation | v0.4.0 | 0/? | Not started | - |
+| 23. Signing Documentation | v0.4.0 | 0/1 | Planned     | - |
 
 ---
 *Roadmap updated: 2026-04-26*
