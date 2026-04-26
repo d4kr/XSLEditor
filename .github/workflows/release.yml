@@ -63,7 +63,28 @@ jobs:
           if [ "$MAJOR" = "0" ]; then VERSION_MACOS="1.${REST}"; else VERSION_MACOS="$VERSION_CLEAN"; fi
           echo "VERSION_MACOS=$VERSION_MACOS" >> $GITHUB_ENV
 
-      - name: jpackage DMG (arm64)
+      - name: Import signing certificate
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          MACOS_KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PASSWORD }}
+        run: |
+          echo "$MACOS_CERTIFICATE" | base64 --decode > /tmp/certificate.p12
+          security create-keychain -p "$MACOS_KEYCHAIN_PASSWORD" build.keychain
+          security set-keychain-settings -lut 21600 build.keychain
+          security unlock-keychain -p "$MACOS_KEYCHAIN_PASSWORD" build.keychain
+          security import /tmp/certificate.p12 \
+            -k build.keychain -f pkcs12 \
+            -T /usr/bin/codesign -T /usr/bin/security \
+            -P "$MACOS_CERTIFICATE_PASSWORD"
+          security list-keychains -d user -s build.keychain login.keychain
+          security set-key-partition-list -S apple-tool:,apple: \
+            -k "$MACOS_KEYCHAIN_PASSWORD" build.keychain
+          rm -f /tmp/certificate.p12
+
+      - name: jpackage DMG (arm64, signed)
+        env:
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
         run: |
           mkdir -p output
           jpackage \
@@ -74,13 +95,31 @@ jobs:
             --main-jar "xsleditor-${APP_VERSION}.jar" \
             --main-class ch.ti.gagi.xsleditor.Launcher \
             --icon src/main/resources/ch/ti/gagi/xsleditor/icon.icns \
-            --dest output/
-          mv "output/XSLEditor-${VERSION_MACOS}.dmg" "output/XSLEditor-${APP_VERSION}-arm64.dmg"
+            --dest output/ \
+            --mac-sign \
+            --mac-signing-key-user-name "$MACOS_SIGNING_IDENTITY" \
+            --mac-entitlements packaging/entitlements.plist \
+            --mac-package-identifier ch.ti.gagi.xsleditor \
+            --mac-signing-keychain build.keychain
+          mv "output/XSLEditor-${VERSION_MACOS}.dmg" \
+             "output/XSLEditor-${APP_VERSION}-arm64.dmg"
+
+      - name: Verify code signature
+        run: |
+          codesign --verify --deep --strict --verbose=2 \
+            "output/XSLEditor-${APP_VERSION}-arm64.dmg"
+          echo "Codesign verification passed"
+          codesign -dv --verbose=4 "output/XSLEditor-${APP_VERSION}-arm64.dmg" 2>&1 \
+            | grep "TeamIdentifier"
 
       - uses: actions/upload-artifact@v4
         with:
           name: dmg-arm64
           path: output/XSLEditor-*-arm64.dmg
+
+      - name: Delete keychain
+        if: always()
+        run: security delete-keychain build.keychain || true
 
   package-macos-x64:
     needs: build-jar
@@ -109,7 +148,28 @@ jobs:
           if [ "$MAJOR" = "0" ]; then VERSION_MACOS="1.${REST}"; else VERSION_MACOS="$VERSION_CLEAN"; fi
           echo "VERSION_MACOS=$VERSION_MACOS" >> $GITHUB_ENV
 
-      - name: jpackage DMG (x64)
+      - name: Import signing certificate
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          MACOS_KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PASSWORD }}
+        run: |
+          echo "$MACOS_CERTIFICATE" | base64 --decode > /tmp/certificate.p12
+          security create-keychain -p "$MACOS_KEYCHAIN_PASSWORD" build.keychain
+          security set-keychain-settings -lut 21600 build.keychain
+          security unlock-keychain -p "$MACOS_KEYCHAIN_PASSWORD" build.keychain
+          security import /tmp/certificate.p12 \
+            -k build.keychain -f pkcs12 \
+            -T /usr/bin/codesign -T /usr/bin/security \
+            -P "$MACOS_CERTIFICATE_PASSWORD"
+          security list-keychains -d user -s build.keychain login.keychain
+          security set-key-partition-list -S apple-tool:,apple: \
+            -k "$MACOS_KEYCHAIN_PASSWORD" build.keychain
+          rm -f /tmp/certificate.p12
+
+      - name: jpackage DMG (x64, signed)
+        env:
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
         run: |
           mkdir -p output
           jpackage \
@@ -120,13 +180,31 @@ jobs:
             --main-jar "xsleditor-${APP_VERSION}.jar" \
             --main-class ch.ti.gagi.xsleditor.Launcher \
             --icon src/main/resources/ch/ti/gagi/xsleditor/icon.icns \
-            --dest output/
-          mv "output/XSLEditor-${VERSION_MACOS}.dmg" "output/XSLEditor-${APP_VERSION}-x64.dmg"
+            --dest output/ \
+            --mac-sign \
+            --mac-signing-key-user-name "$MACOS_SIGNING_IDENTITY" \
+            --mac-entitlements packaging/entitlements.plist \
+            --mac-package-identifier ch.ti.gagi.xsleditor \
+            --mac-signing-keychain build.keychain
+          mv "output/XSLEditor-${VERSION_MACOS}.dmg" \
+             "output/XSLEditor-${APP_VERSION}-x64.dmg"
+
+      - name: Verify code signature
+        run: |
+          codesign --verify --deep --strict --verbose=2 \
+            "output/XSLEditor-${APP_VERSION}-x64.dmg"
+          echo "Codesign verification passed"
+          codesign -dv --verbose=4 "output/XSLEditor-${APP_VERSION}-x64.dmg" 2>&1 \
+            | grep "TeamIdentifier"
 
       - uses: actions/upload-artifact@v4
         with:
           name: dmg-x64
           path: output/XSLEditor-*-x64.dmg
+
+      - name: Delete keychain
+        if: always()
+        run: security delete-keychain build.keychain || true
 
   package-windows:
     needs: build-jar
