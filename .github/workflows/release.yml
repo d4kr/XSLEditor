@@ -132,6 +132,11 @@ jobs:
         env:
           MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
         run: |
+          # Guard: fail fast if required signing secrets are not configured
+          if [ -z "$MACOS_SIGNING_IDENTITY" ]; then
+            echo "ERROR: MACOS_SIGNING_IDENTITY secret is not configured"
+            exit 1
+          fi
           mkdir -p output
           jpackage \
             --type dmg \
@@ -234,6 +239,11 @@ jobs:
         env:
           MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
         run: |
+          # Guard: fail fast if required signing secrets are not configured
+          if [ -z "$MACOS_SIGNING_IDENTITY" ]; then
+            echo "ERROR: MACOS_SIGNING_IDENTITY secret is not configured"
+            exit 1
+          fi
           mkdir -p output
           jpackage \
             --type dmg \
