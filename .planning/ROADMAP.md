@@ -183,7 +183,9 @@ Plans:
   1. `xcrun notarytool submit --wait` completes with status `Accepted` for both the arm64 and x64 DMGs in the CI workflow
   2. `xcrun stapler staple` runs successfully on both DMGs after notarization; the staple ticket is embedded in the DMG
   3. Downloading the stapled arm64 DMG on a macOS machine and opening the app does not show a Gatekeeper quarantine dialog ("Apple cannot verify that this app is free of malware")
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 22-01-PLAN.md — Notarize + staple + Gatekeeper-check steps in both macOS CI jobs
 
 ### Phase 23: Signing Documentation
 **Goal**: A developer who is new to the repository can configure all macOS signing secrets and have the full signing + notarization pipeline working by following `docs/SIGNING.md` alone
@@ -208,8 +210,8 @@ Plans:
 | 19. Launcher Shim & Local Build | v0.4.0 | 0/2 | Not started | - |
 | 20. CI Skeleton — Unsigned Release Pipeline | v0.4.0 | 0/? | Not started | - |
 | 21. macOS Signing | v0.4.0 | 2/2 | Complete    | 2026-04-26 |
-| 22. macOS Notarization | v0.4.0 | 0/? | Not started | - |
+| 22. macOS Notarization | v0.4.0 | 0/1 | Ready to execute | - |
 | 23. Signing Documentation | v0.4.0 | 0/? | Not started | - |
 
 ---
-*Roadmap updated: 2026-04-25*
+*Roadmap updated: 2026-04-26*
