@@ -315,6 +315,38 @@ jobs:
           echo "TeamIdentifier: $TEAM"
           hdiutil detach /tmp/xsleditor-verify-x64 -quiet
 
+      - name: Notarize DMG (x64)
+        env:
+          APPLE_ID:                    ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID:               ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "$APPLE_ID" ] || [ -z "$APPLE_TEAM_ID" ] || [ -z "$APPLE_APP_SPECIFIC_PASSWORD" ]; then
+            echo "ERROR: One or more notarization secrets are not configured"
+            echo "Required: APPLE_ID, APPLE_TEAM_ID, APPLE_APP_SPECIFIC_PASSWORD"
+            exit 1
+          fi
+          xcrun notarytool submit "output/XSLEditor-${APP_VERSION}-x64.dmg" \
+            --apple-id  "$APPLE_ID" \
+            --team-id   "$APPLE_TEAM_ID" \
+            --password  "$APPLE_APP_SPECIFIC_PASSWORD" \
+            --wait \
+            --timeout 300s
+          echo "Notarization complete"
+
+      - name: Staple DMG (x64)
+        run: |
+          set -euo pipefail
+          xcrun stapler staple "output/XSLEditor-${APP_VERSION}-x64.dmg"
+          echo "Staple complete"
+
+      - name: Verify Gatekeeper acceptance (informational, x64)
+        run: |
+          # spctl result on CI runner may differ from end-user machine; treat as informational only
+          spctl -a -v --type install "output/XSLEditor-${APP_VERSION}-x64.dmg" 2>&1 || true
+          echo "Gatekeeper check complete (informational)"
+
       - uses: actions/upload-artifact@v7.0.1
         with:
           name: dmg-x64
