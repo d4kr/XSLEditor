@@ -2,13 +2,15 @@
 gsd_state_version: 1.0
 milestone: v0.4.0
 milestone_name: GitHub Releases & Distribution
-status: roadmap ready
-last_updated: "2026-04-25T00:00:00Z"
+status: executing
+last_updated: "2026-04-26T06:56:22.260Z"
+last_activity: 2026-04-26 -- Phase 21 execution started
 progress:
-  total_phases: 5
-  completed_phases: 0
-  total_plans: 2
-  completed_plans: 2
+  total_phases: 10
+  completed_phases: 5
+  total_plans: 12
+  completed_plans: 7
+  percent: 58
 ---
 
 # Project State: XSLEditor
@@ -18,16 +20,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-24)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** v0.4.0 — GitHub Releases & Distribution (Phase 19 next)
+**Current focus:** Phase 21 — macos-signing
 
 ---
 
 ## Current Position
 
-Phase: 19 — Launcher Shim & Local Build (in progress)
-Plan: 19-02 complete
-Status: Phase 19 plans 01 and 02 complete
-Last activity: 2026-04-25 — 19-02 jpackage bundle with icon.icns
+Phase: 21 (macos-signing) — EXECUTING
+Plan: 1 of 2
+Status: Executing Phase 21
+Last activity: 2026-04-26 -- Phase 21 execution started
 
 Progress: [__________] 0% (v0.4.0 — 0/5 phases, Phase 19 2/2 plans done)
 
@@ -54,7 +56,7 @@ Progress: [__________] 0% (v0.4.0 — 0/5 phases, Phase 19 2/2 plans done)
 |-------|------|--------------|--------|
 | 19 | Launcher Shim & Local Build | BUILD-01, BUILD-02, BUILD-03, BUILD-04 | Not started |
 | 20 | CI Skeleton — Unsigned Release Pipeline | CI-01, CI-02, CI-03, MACOS-01, MACOS-02, WIN-01, WIN-02, REL-01, REL-02, REL-03 | Not started |
-| 21 | macOS Signing | MACOS-03 | Not started |
+| 21 | macOS Signing | MACOS-03 | Ready to execute (2 plans) |
 | 22 | macOS Notarization | MACOS-04 | Not started |
 | 23 | Signing Documentation | SIGN-01 | Not started |
 

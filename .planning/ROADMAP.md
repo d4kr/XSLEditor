@@ -62,7 +62,7 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
 
 - [ ] **Phase 19: Launcher Shim & Local Build** — Add Launcher.java, update shadowJar manifest, verify fat JAR and jpackage locally (2 plans)
 - [ ] **Phase 20: CI Skeleton — Unsigned Release Pipeline** — GitHub Actions workflow producing unsigned DMGs, Windows MSI, Windows ZIP, fat JAR, and a GitHub Release on tag push
-- [ ] **Phase 21: macOS Signing** — Sign both DMGs with Developer ID Application certificate; codesign verification passes
+- [x] **Phase 21: macOS Signing** — Sign both DMGs with Developer ID Application certificate; codesign verification passes (completed 2026-04-26)
 - [ ] **Phase 22: macOS Notarization** — Notarize and staple both DMGs; Gatekeeper accepts without quarantine dialog
 - [ ] **Phase 23: Signing Documentation** — docs/SIGNING.md guides a maintainer through configuring all 7 macOS signing secrets
 
@@ -172,8 +172,8 @@ Plans:
   4. The 7 required GitHub Actions secrets (`MACOS_CERTIFICATE`, `MACOS_CERTIFICATE_PASSWORD`, `MACOS_SIGNING_IDENTITY`, `MACOS_KEYCHAIN_PASSWORD`, `APPLE_ID`, `APPLE_TEAM_ID`, `APPLE_APP_SPECIFIC_PASSWORD`) are documented and the workflow reads them correctly
 **Plans**: 2 plans
 Plans:
-- [ ] 21-01-PLAN.md — entitlements.plist + CI signing sequence in both macOS jobs
-- [ ] 21-02-PLAN.md — Secrets documentation comment in release.yml
+- [x] 21-01-PLAN.md — entitlements.plist + CI signing sequence in both macOS jobs
+- [x] 21-02-PLAN.md — Secrets documentation comment in release.yml
 
 ### Phase 22: macOS Notarization
 **Goal**: Both macOS DMGs are notarized by Apple and stapled so that Gatekeeper accepts them on any macOS machine without a quarantine dialog — even offline
@@ -207,7 +207,7 @@ Plans:
 | 18. README Rewrite | v0.3.0 | 1/1 | Complete | 2026-04-24 |
 | 19. Launcher Shim & Local Build | v0.4.0 | 0/2 | Not started | - |
 | 20. CI Skeleton — Unsigned Release Pipeline | v0.4.0 | 0/? | Not started | - |
-| 21. macOS Signing | v0.4.0 | 0/2 | Not started | - |
+| 21. macOS Signing | v0.4.0 | 2/2 | Complete   | 2026-04-26 |
 | 22. macOS Notarization | v0.4.0 | 0/? | Not started | - |
 | 23. Signing Documentation | v0.4.0 | 0/? | Not started | - |
 
