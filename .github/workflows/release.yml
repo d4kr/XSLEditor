@@ -1,3 +1,45 @@
+# =============================================================================
+# Required GitHub Actions Secrets
+# =============================================================================
+# Configure these secrets at:
+# GitHub → Settings → Secrets and variables → Actions → New repository secret
+#
+# ── Phase 21: macOS Signing (used in package-macos-arm and package-macos-x64) ──
+#
+# MACOS_CERTIFICATE
+#   Base64-encoded Developer ID Application certificate (.p12 export from Keychain Access)
+#   How to obtain: Keychain Access → right-click "Developer ID Application: Name (TEAM)"
+#                  → Export → save as .p12 with a password
+#   How to encode: base64 -i /path/to/cert.p12 | pbcopy
+#
+# MACOS_CERTIFICATE_PASSWORD
+#   The password you set when exporting the .p12 from Keychain Access.
+#
+# MACOS_SIGNING_IDENTITY
+#   The NAME PORTION ONLY of the certificate subject.
+#   Correct:   Acme Corp
+#   Incorrect: Developer ID Application: Acme Corp (ABC123XYZ7)
+#   jpackage uses --mac-signing-key-user-name which expects the name only.
+#
+# MACOS_KEYCHAIN_PASSWORD
+#   Any random string used as the password for the ephemeral CI keychain.
+#   Generate: openssl rand -hex 16
+#   This keychain is created and deleted on every CI run.
+#
+# ── Phase 22: macOS Notarization (reserved — not yet used in this workflow) ──
+#
+# APPLE_ID
+#   Apple ID email address of the developer account that owns the certificate.
+#
+# APPLE_TEAM_ID
+#   10-character team identifier from developer.apple.com/account (e.g. ABC123XYZ7)
+#
+# APPLE_APP_SPECIFIC_PASSWORD
+#   App-specific password for the Apple ID.
+#   Generate: appleid.apple.com → Sign-In and Security → App-Specific Passwords
+#
+# =============================================================================
+
 name: Release
 
 on:
