@@ -148,11 +148,24 @@ jobs:
 
       - name: Verify code signature
         run: |
+          set -euo pipefail
+          # Mount the DMG so we can verify the .app bundle inside
+          hdiutil attach "output/XSLEditor-${APP_VERSION}-arm64.dmg" \
+            -mountpoint /tmp/xsleditor-verify-arm64 -nobrowse -quiet
+          # Verify the .app bundle (this is what codesign signed, not the DMG container)
           codesign --verify --deep --strict --verbose=2 \
-            "output/XSLEditor-${APP_VERSION}-arm64.dmg"
+            "/tmp/xsleditor-verify-arm64/XSLEditor.app"
           echo "Codesign verification passed"
-          codesign -dv --verbose=4 "output/XSLEditor-${APP_VERSION}-arm64.dmg" 2>&1 \
-            | grep "TeamIdentifier"
+          # Confirm TeamIdentifier is present and non-empty
+          TEAM=$(codesign -dv --verbose=4 "/tmp/xsleditor-verify-arm64/XSLEditor.app" 2>&1 \
+            | grep "^TeamIdentifier=" | cut -d= -f2)
+          if [ -z "$TEAM" ]; then
+            echo "ERROR: TeamIdentifier not found in signature"
+            hdiutil detach /tmp/xsleditor-verify-arm64 -quiet || true
+            exit 1
+          fi
+          echo "TeamIdentifier: $TEAM"
+          hdiutil detach /tmp/xsleditor-verify-arm64 -quiet
 
       - uses: actions/upload-artifact@v7.0.1
         with:
@@ -233,11 +246,24 @@ jobs:
 
       - name: Verify code signature
         run: |
+          set -euo pipefail
+          # Mount the DMG so we can verify the .app bundle inside
+          hdiutil attach "output/XSLEditor-${APP_VERSION}-x64.dmg" \
+            -mountpoint /tmp/xsleditor-verify-x64 -nobrowse -quiet
+          # Verify the .app bundle (this is what codesign signed, not the DMG container)
           codesign --verify --deep --strict --verbose=2 \
-            "output/XSLEditor-${APP_VERSION}-x64.dmg"
+            "/tmp/xsleditor-verify-x64/XSLEditor.app"
           echo "Codesign verification passed"
-          codesign -dv --verbose=4 "output/XSLEditor-${APP_VERSION}-x64.dmg" 2>&1 \
-            | grep "TeamIdentifier"
+          # Confirm TeamIdentifier is present and non-empty
+          TEAM=$(codesign -dv --verbose=4 "/tmp/xsleditor-verify-x64/XSLEditor.app" 2>&1 \
+            | grep "^TeamIdentifier=" | cut -d= -f2)
+          if [ -z "$TEAM" ]; then
+            echo "ERROR: TeamIdentifier not found in signature"
+            hdiutil detach /tmp/xsleditor-verify-x64 -quiet || true
+            exit 1
+          fi
+          echo "TeamIdentifier: $TEAM"
+          hdiutil detach /tmp/xsleditor-verify-x64 -quiet
 
       - uses: actions/upload-artifact@v7.0.1
         with:
