@@ -48,7 +48,7 @@
                 </Menu>
                 <Menu text="Search">
                     <MenuItem fx:id="findInFilesMenuItem" text="Find in Files"
-                              accelerator="Ctrl+Shift+F" onAction="#handleFindInFiles"/>
+                              accelerator="Shortcut+Shift+F" onAction="#handleFindInFiles"/>
                 </Menu>
                 <Menu text="Help">
                     <MenuItem text="About XSLEditor..." onAction="#handleAbout"/>
