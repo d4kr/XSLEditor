@@ -1,13 +1,13 @@
 # XSLEditor
 
-## Current Milestone: v0.4.0 GitHub Releases & Distribution
+## Current Milestone: v0.4.1 Keyboard Shortcuts & Edit Menu
 
-**Goal:** Automatizzare la build e la pubblicazione dell'app su GitHub Releases — JAR + macOS app firmata + Windows installer — attivata da un nuovo tag git, con release notes generate automaticamente dalla cronologia git.
+**Goal:** Aggiungere acceleratori tastiera a tutte le voci di menu esistenti e completare il menu Edit con i comandi clipboard standard (Cut, Copy, Paste, Select All).
 
 **Target features:**
-- GitHub Actions workflow: build e release automatica al push di un tag `v*`
-- Build macOS `.app` bundle — jpackage con JRE embedded, firmato con Apple Developer ID
-- Build Windows `.exe`/`.msi` — jpackage con JRE embedded
+- Acceleratori tastiera (Cmd/Ctrl+key) su tutti i menu item esistenti (File, View, Run, Search, Help)
+- Menu Edit — comandi clipboard: Cut, Copy, Paste, Select All sul CodeArea attivo
+- Undo/Redo: deferred — UndoManager usato solo per dirty tracking, non ancora esposto
 - Build fat JAR (shadowJar) incluso nella release
 - Release notes auto-generate da git log (tag-to-tag diff)
 - Guida per configurare i secrets di firma macOS nel repo (certificato p12 + password)
@@ -38,13 +38,10 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 - ✓ ABOUT-01..05: About dialog — version, runtime stack, author, license — v0.2.0
 - ✓ ERR-06: ChatGPT button per error log row — opens pre-filled query in browser — v0.2.0
 
-### Active (v0.4.0)
+### Active (v0.4.1)
 
-- [ ] **CI-01..**: GitHub Actions workflow — build JAR + macOS app + Windows installer on tag push
-- [ ] **DIST-01..**: jpackage macOS bundle — signed with Apple Developer ID, JRE embedded
-- [ ] **DIST-02..**: jpackage Windows bundle — exe/msi, JRE embedded
-- [ ] **REL-01..**: GitHub Releases auto-publish — assets attached, release notes from git log
-- ✓ **SIGN-01**: Signing guide — macOS Developer ID secrets setup for repo contributors — Validated in Phase 23: signing-documentation
+- [ ] **KBD-01..**: Keyboard accelerators on all existing menu items (File, View, Run, Search, Help)
+- [ ] **EDIT-10..**: Edit menu — Cut, Copy, Paste, Select All commands wired to active CodeArea
 
 ### Out of Scope
 
@@ -118,4 +115,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-27 — Phase 23 complete: docs/SIGNING.md created — self-contained maintainer guide for all 7 macOS signing + notarization secrets*
+*Last updated: 2026-04-27 — Milestone v0.4.1 started: keyboard shortcuts & Edit menu*

@@ -108,7 +108,7 @@ All strings are exact — executor must use these verbatim.
 | GridPane row 3 — value | Runtime value from `org.apache.fop.Version.getVersion()` | Right column; fallback: `"2.9"` if API unavailable |
 | GridPane row 4 — label | `JavaFX` | Left column |
 | GridPane row 4 — value | Runtime value from `System.getProperty("javafx.version")` | Right column |
-| Author line | `Author: Krähen Domenico` | Single Label node — source: git config user.name |
+| Author line | `Author: d4kr` | Single Label node — source: git config user.name |
 | License label | `License: Apache 2.0` | Inline with Hyperlink — rendered as Label + Hyperlink in an HBox |
 | License hyperlink text | `View license` | Hyperlink node text |
 | License URL | `https://www.apache.org/licenses/LICENSE-2.0` | Opened via `getHostServices().showDocument(url)` (D-05) |
@@ -142,7 +142,7 @@ Dialog<Void>  title="About XSLEditor"
         col0: Label "JavaFX"    font=Monospaced 13  fill=#888888
         col1: Label <runtime>   font=System 13      fill=#cccccc
       Separator                     color=#444444
-      Label  "Author: Krähen Domenico"  font=System 13  fill=#cccccc
+      Label  "Author: d4kr"  font=System 13  fill=#cccccc
       HBox  spacing=8  alignment=CENTER_LEFT
         Label  "License: Apache 2.0"    font=System 13  fill=#cccccc
         Hyperlink  "View license"        font=System 13  color=#007acc

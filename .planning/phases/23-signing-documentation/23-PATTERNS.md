@@ -187,6 +187,6 @@ No files in this phase lack a close analog. All three targets are either in-plac
 
 ## Metadata
 
-**Analog search scope:** `/Users/kraehend/Developer/XSLEditor/docs/`, `/Users/kraehend/Developer/XSLEditor/README.md`, `/Users/kraehend/Developer/XSLEditor/.github/workflows/release.yml`
+**Analog search scope:** `~/Developer/XSLEditor/docs/`, `~/Developer/XSLEditor/README.md`, `~/Developer/XSLEditor/.github/workflows/release.yml`
 **Files scanned:** 4 (README.md, docs/PRD.md, docs/SPEC.md, .github/workflows/release.yml)
 **Pattern extraction date:** 2026-04-26

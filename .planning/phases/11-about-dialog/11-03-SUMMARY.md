@@ -37,7 +37,7 @@ key-decisions:
   - "No guard on projectContext.projectLoadedProperty() for About — the Help menu is always available regardless of project state"
   - "No fx:id added to the Help MenuItem — it is not referenced from Java code, so an ID would be dead weight"
   - "FOP version fixed to read from META-INF/maven/.../pom.properties instead of a broken reflection path (fix commit 38784aa)"
-  - "Author name corrected to include proper umlaut: Krähen Domenico (fix commit 38784aa)"
+  - "Author name corrected to include proper umlaut: d4kr (fix commit 38784aa)"
 
 patterns-established:
   - "FXML menu wiring: add Menu/MenuItem after target sibling, bind onAction to @FXML private handler, no fx:id unless Java references the node"
@@ -67,7 +67,7 @@ completed: "2026-04-22"
 - Added `<Menu text="Help">` with `<MenuItem text="About XSLEditor..." onAction="#handleAbout"/>` to main.fxml, positioned after the Search menu, before the closing `</MenuBar>` tag (satisfies ABOUT-01)
 - Added `@FXML private void handleAbout()` to MainController, which instantiates `new AboutDialog(primaryStage, XSLEditorApp.hostServices())` and calls `dialog.showAndWait()`
 - Fixed FOP version string to read from `META-INF/maven/org.apache.xmlgraphics/fop/pom.properties` (fix commit 38784aa)
-- Fixed author name to correctly render "Krähen Domenico" with umlaut (fix commit 38784aa)
+- Fixed author name to correctly render "d4kr" with umlaut (fix commit 38784aa)
 - Human verify checkpoint approved: dialog opens modal, dark theme, correct version rows, hyperlink opens browser and dialog stays open, non-resizable, Escape closes
 - All 5 ABOUT requirements (ABOUT-01 through ABOUT-05) satisfied across Phase 11 plans 01, 02, 03
 
@@ -108,7 +108,7 @@ Each task was committed atomically:
 - **Issue:** Author name rendered without the ä character due to source file encoding issue
 - **Fix:** Corrected the string literal in AboutDialog.java with proper UTF-8 umlaut
 - **Files modified:** `src/main/java/ch/ti/gagi/xsleditor/ui/AboutDialog.java`
-- **Verification:** Human verify checkpoint confirmed "Krähen Domenico" renders correctly in dialog
+- **Verification:** Human verify checkpoint confirmed "d4kr" renders correctly in dialog
 - **Committed in:** `38784aa` (fix commit)
 
 ---

@@ -65,7 +65,7 @@ completed: "2026-04-22"
 - GridPane (hgap=16, vgap=4) with 4 rows: Monospaced 13 #888888 labels, System 13 #cccccc values
 - saxonVersion() calls `net.sf.saxon.Version.getProductVersion()` with try/catch fallback "unknown" (T-11-07)
 - fopVersion() calls `org.apache.fop.Version.getVersion()` with try/catch fallback "2.9" (T-11-07)
-- Author line "Author: Krähen Domenico" in System 13 #cccccc
+- Author line "Author: d4kr" in System 13 #cccccc
 - License HBox: "License: Apache 2.0" Label + "View license" Hyperlink (#007acc) opening `https://www.apache.org/licenses/LICENSE-2.0` via hostServices.showDocument() (D-05)
 - APPLICATION_MODAL, setResizable(false), ButtonType.CLOSE, setHeaderText(null) (D-04)
 - ./gradlew compileJava green
@@ -80,7 +80,7 @@ completed: "2026-04-22"
 
 ## Decisions Made
 
-- **Literal ä in source:** Java source files are UTF-8; using literal "Krähen Domenico" is cleaner than `ä` escape.
+- **Literal ä in source:** Java source files are UTF-8; using literal "d4kr" is cleaner than `ä` escape.
 - **initModality guarded by ownerStage != null:** Consistent with SearchDialog null-guard; allows construction in headless test contexts without a live Stage.
 - **try/catch(Exception) not just ClassNotFoundException:** Broader catch covers any runtime failure from version APIs per T-11-07 threat mitigation.
 

@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v0.4.0
-milestone_name: GitHub Releases & Distribution
-status: milestone_complete
-last_updated: "2026-04-27T05:26:46.648Z"
-last_activity: 2026-04-27 -- Phase 23 execution started
+milestone: v0.4.1
+milestone_name: Keyboard Shortcuts & Edit Menu
+status: planning
+last_updated: "2026-04-27T19:40:03.628Z"
+last_activity: 2026-04-27
 progress:
-  total_phases: 10
-  completed_phases: 8
-  total_plans: 14
-  completed_plans: 10
-  percent: 80
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State: XSLEditor
@@ -26,14 +26,10 @@ See: .planning/PROJECT.md (updated 2026-04-24)
 
 ## Current Position
 
-Phase: 23
-Plan: Not started
-Status: Milestone complete
-Last activity: 2026-04-27
-
-Progress: [__________] 0% (v0.4.0 — 0/5 phases, Phase 19 2/2 plans done)
-
----
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-04-27 — Milestone v0.4.1 started
 
 ## Completed Phases
 
