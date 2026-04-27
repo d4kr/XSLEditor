@@ -17,14 +17,26 @@
         <VBox>
             <MenuBar fx:id="menuBar">
                 <Menu text="File">
-                    <MenuItem fx:id="menuItemOpenProject" text="Open Project..." onAction="#handleOpenProject"/>
+                    <MenuItem fx:id="menuItemOpenProject"
+                              text="Open Project..."
+                              accelerator="Shortcut+O"
+                              onAction="#handleOpenProject"/>
                     <SeparatorMenuItem/>
-                    <MenuItem fx:id="menuItemSetEntrypoint" text="Set Entrypoint"/>
-                    <MenuItem fx:id="menuItemSetXmlInput" text="Set XML Input"/>
+                    <MenuItem fx:id="menuItemSetEntrypoint"
+                              text="Set Entrypoint"
+                              accelerator="Shortcut+Shift+E"/>
+                    <MenuItem fx:id="menuItemSetXmlInput"
+                              text="Set XML Input"
+                              accelerator="Shortcut+Shift+I"/>
                     <SeparatorMenuItem/>
-                    <MenuItem fx:id="menuItemNewFile" text="New File..." onAction="#handleNewFile"/>
+                    <MenuItem fx:id="menuItemNewFile"
+                              text="New File..."
+                              accelerator="Shortcut+N"
+                              onAction="#handleNewFile"/>
                     <SeparatorMenuItem/>
-                    <MenuItem text="Exit" onAction="#handleExit"/>
+                    <MenuItem text="Exit"
+                              accelerator="Shortcut+Q"
+                              onAction="#handleExit"/>
                 </Menu>
                 <Menu text="Edit"/>
                 <Menu text="View"/>
@@ -36,7 +48,7 @@
                 </Menu>
                 <Menu text="Search">
                     <MenuItem fx:id="findInFilesMenuItem" text="Find in Files"
-                              accelerator="Ctrl+Shift+F" onAction="#handleFindInFiles"/>
+                              accelerator="Shortcut+Shift+F" onAction="#handleFindInFiles"/>
                 </Menu>
                 <Menu text="Help">
                     <MenuItem text="About XSLEditor..." onAction="#handleAbout"/>
