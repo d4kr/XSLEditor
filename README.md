@@ -85,6 +85,10 @@ src/main/resources/
 - Project files are stored as `.xsle-tool.json` alongside the project's XSLT files
 - Custom preprocessing directives (`<?LIBRARY ...?>`) are resolved before the XSLT pipeline runs
 
+## Contributing / Release Setup
+
+To configure macOS signing and notarization secrets for CI releases, see [`docs/SIGNING.md`](docs/SIGNING.md).
+
 ## License
 
 Internal developer tool — not distributed publicly.
