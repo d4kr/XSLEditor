@@ -222,7 +222,9 @@ Plans:
   3. Pressing `Shortcut+Q` triggers the application exit flow (with close-confirmation dialog if there are unsaved changes), identical to clicking File > Exit
   4. Pressing `Shortcut+Shift+E` invokes Set Entrypoint on the currently selected file, identical to clicking File > Set Entrypoint
   5. Pressing `Shortcut+Shift+I` invokes Set XML Input on the currently selected file, identical to clicking File > Set XML Input
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 24-01-PLAN.md — Add Shortcut+ accelerators to five File menu items in main.fxml (FXML-only)
 **UI hint**: yes
 
 ### Phase 25: Edit Menu Clipboard Commands
@@ -252,7 +254,7 @@ Plans:
 | 21. macOS Signing | v0.4.0 | 2/2 | Complete | 2026-04-26 |
 | 22. macOS Notarization | v0.4.0 | 1/1 | Complete | 2026-04-26 |
 | 23. Signing Documentation | v0.4.0 | 1/1 | Complete | 2026-04-27 |
-| 24. Keyboard Accelerators | v0.4.1 | 0/? | Not started | - |
+| 24. Keyboard Accelerators | v0.4.1 | 0/1 | Planned | - |
 | 25. Edit Menu Clipboard Commands | v0.4.1 | 0/? | Not started | - |
 
 ---
