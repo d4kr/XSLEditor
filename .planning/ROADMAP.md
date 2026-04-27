@@ -213,7 +213,7 @@ Plans:
 | 20. CI Skeleton — Unsigned Release Pipeline | v0.4.0 | 0/? | Not started | - |
 | 21. macOS Signing | v0.4.0 | 2/2 | Complete    | 2026-04-26 |
 | 22. macOS Notarization | v0.4.0 | 1/1 | Complete    | 2026-04-26 |
-| 23. Signing Documentation | v0.4.0 | 1/1 | Complete   | 2026-04-27 |
+| 23. Signing Documentation | v0.4.0 | 1/1 | Complete    | 2026-04-27 |
 
 ---
 *Roadmap updated: 2026-04-26*

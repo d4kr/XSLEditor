@@ -39,7 +39,7 @@
 
 ### Documentation
 
-- [ ] **SIGN-01**: `docs/SIGNING.md` documents how to export the Developer ID Application certificate as `.p12`, encode as base64, and configure all 7 required GitHub Actions secrets (`MACOS_CERTIFICATE`, `MACOS_CERTIFICATE_PASSWORD`, `MACOS_SIGNING_IDENTITY`, `MACOS_KEYCHAIN_PASSWORD`, `APPLE_ID`, `APPLE_TEAM_ID`, `APPLE_APP_SPECIFIC_PASSWORD`)
+- [x] **SIGN-01**: `docs/SIGNING.md` documents how to export the Developer ID Application certificate as `.p12`, encode as base64, and configure all 7 required GitHub Actions secrets (`MACOS_CERTIFICATE`, `MACOS_CERTIFICATE_PASSWORD`, `MACOS_SIGNING_IDENTITY`, `MACOS_KEYCHAIN_PASSWORD`, `APPLE_ID`, `APPLE_TEAM_ID`, `APPLE_APP_SPECIFIC_PASSWORD`)
 
 ---
 
@@ -89,7 +89,7 @@ Previously completed. Requirements UI-01..04, LOG-01..03, VER-01..02, ICON-01..0
 | REL-01 | Phase 20 | Pending |
 | REL-02 | Phase 20 | Pending |
 | REL-03 | Phase 20 | Pending |
-| SIGN-01 | Phase 23 | Pending |
+| SIGN-01 | Phase 23 | Complete |
 
 ---
 
