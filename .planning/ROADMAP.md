@@ -254,7 +254,7 @@ Plans:
 | 21. macOS Signing | v0.4.0 | 2/2 | Complete | 2026-04-26 |
 | 22. macOS Notarization | v0.4.0 | 1/1 | Complete | 2026-04-26 |
 | 23. Signing Documentation | v0.4.0 | 1/1 | Complete | 2026-04-27 |
-| 24. Keyboard Accelerators | v0.4.1 | 1/1 | Complete   | 2026-04-27 |
+| 24. Keyboard Accelerators | v0.4.1 | 1/1 | Complete    | 2026-04-27 |
 | 25. Edit Menu Clipboard Commands | v0.4.1 | 0/? | Not started | - |
 
 ---
