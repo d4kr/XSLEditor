@@ -26,7 +26,7 @@
 #   Generate: openssl rand -hex 16
 #   This keychain is created and deleted on every CI run.
 #
-# ── Phase 22: macOS Notarization (reserved — not yet used in this workflow) ──
+# ── Phase 22: macOS Notarization (used in package-macos-arm and package-macos-x64) ──
 #
 # APPLE_ID
 #   Apple ID email address of the developer account that owns the certificate.
