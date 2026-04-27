@@ -64,7 +64,7 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
 - [ ] **Phase 20: CI Skeleton — Unsigned Release Pipeline** — GitHub Actions workflow producing unsigned DMGs, Windows MSI, Windows ZIP, fat JAR, and a GitHub Release on tag push
 - [x] **Phase 21: macOS Signing** — Sign both DMGs with Developer ID Application certificate; codesign verification passes (completed 2026-04-26)
 - [x] **Phase 22: macOS Notarization** — Notarize and staple both DMGs; Gatekeeper accepts without quarantine dialog (completed 2026-04-26)
-- [ ] **Phase 23: Signing Documentation** — docs/SIGNING.md guides a maintainer through configuring all 7 macOS signing secrets
+- [x] **Phase 23: Signing Documentation** — docs/SIGNING.md guides a maintainer through configuring all 7 macOS signing secrets (completed 2026-04-27)
 
 ## Phase Details
 
@@ -197,7 +197,7 @@ Plans:
   3. The document notes the Apple Developer Program membership requirement ($99/yr) for notarization and explains the SmartScreen warning that appears on Windows due to unsigned MSI
 **Plans**: 1 plan
 Plans:
-- [ ] 23-01-PLAN.md — Create docs/SIGNING.md, link from README, add pointer comment in release.yml
+- [x] 23-01-PLAN.md — Create docs/SIGNING.md, link from README, add pointer comment in release.yml
 
 ## Progress
 
@@ -213,7 +213,7 @@ Plans:
 | 20. CI Skeleton — Unsigned Release Pipeline | v0.4.0 | 0/? | Not started | - |
 | 21. macOS Signing | v0.4.0 | 2/2 | Complete    | 2026-04-26 |
 | 22. macOS Notarization | v0.4.0 | 1/1 | Complete    | 2026-04-26 |
-| 23. Signing Documentation | v0.4.0 | 0/1 | Planned     | - |
+| 23. Signing Documentation | v0.4.0 | 1/1 | Complete   | 2026-04-27 |
 
 ---
 *Roadmap updated: 2026-04-26*
