@@ -19,16 +19,16 @@ created: 2026-04-27
 |----------|-------|
 | **Framework** | none — manual UI verification |
 | **Config file** | none |
-| **Quick run command** | `mvn compile -q` |
-| **Full suite command** | `mvn compile -q` |
+| **Quick run command** | `./gradlew compileJava -q` |
+| **Full suite command** | `./gradlew compileJava -q` |
 | **Estimated runtime** | ~10 seconds |
 
 ---
 
 ## Sampling Rate
 
-- **After every task commit:** Run `mvn compile -q`
-- **After every plan wave:** Run `mvn compile -q`
+- **After every task commit:** Run `./gradlew compileJava -q`
+- **After every plan wave:** Run `./gradlew compileJava -q`
 - **Before `/gsd-verify-work`:** Full suite must be green
 - **Max feedback latency:** 30 seconds
 
@@ -38,11 +38,11 @@ created: 2026-04-27
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 24-01-01 | 01 | 1 | KBD-01 | — | N/A | manual | `mvn compile -q` | ✅ | ⬜ pending |
-| 24-01-02 | 01 | 1 | KBD-02 | — | N/A | manual | `mvn compile -q` | ✅ | ⬜ pending |
-| 24-01-03 | 01 | 1 | KBD-03 | — | N/A | manual | `mvn compile -q` | ✅ | ⬜ pending |
-| 24-01-04 | 01 | 1 | KBD-04 | — | N/A | manual | `mvn compile -q` | ✅ | ⬜ pending |
-| 24-01-05 | 01 | 1 | KBD-05 | — | N/A | manual | `mvn compile -q` | ✅ | ⬜ pending |
+| 24-01-01 | 01 | 1 | KBD-01 | — | N/A | manual | `./gradlew compileJava -q` | ✅ | ⬜ pending |
+| 24-01-02 | 01 | 1 | KBD-02 | — | N/A | manual | `./gradlew compileJava -q` | ✅ | ⬜ pending |
+| 24-01-03 | 01 | 1 | KBD-03 | — | N/A | manual | `./gradlew compileJava -q` | ✅ | ⬜ pending |
+| 24-01-04 | 01 | 1 | KBD-04 | — | N/A | manual | `./gradlew compileJava -q` | ✅ | ⬜ pending |
+| 24-01-05 | 01 | 1 | KBD-05 | — | N/A | manual | `./gradlew compileJava -q` | ✅ | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
