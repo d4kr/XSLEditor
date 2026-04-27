@@ -1,96 +1,60 @@
-# Requirements: XSLEditor v0.4.0 — GitHub Releases & Distribution
+# Requirements: XSLEditor v0.4.1 — Keyboard Shortcuts & Edit Menu
 
-**Milestone goal:** Automate build and publication of the app on GitHub Releases — JAR + signed/notarized macOS DMG + Windows MSI + Windows portable ZIP — triggered by a git tag push, with release notes generated automatically from git history.
+**Defined:** 2026-04-27
+**Core Value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
 
----
+## v0.4.1 Requirements
 
-## v0.4.0 Requirements
+### Keyboard Shortcuts
 
-### Build Prerequisites
+- [ ] **KBD-01**: User can open a project via keyboard with `Shortcut+O` (File > Open Project...)
+- [ ] **KBD-02**: User can create a new file via keyboard with `Shortcut+N` (File > New File...)
+- [ ] **KBD-03**: User can exit the application via keyboard with `Shortcut+Q` (File > Exit)
+- [ ] **KBD-04**: User can set XSLT entrypoint via keyboard with `Shortcut+Shift+E` (File > Set Entrypoint)
+- [ ] **KBD-05**: User can set XML input via keyboard with `Shortcut+Shift+I` (File > Set XML Input)
 
-- [ ] **BUILD-01**: Developer can launch the app from the fat JAR via `java -jar` — `Launcher.java` shim added, `shadowJar` manifest updated to `ch.ti.gagi.xsleditor.Launcher`
-- [ ] **BUILD-02**: Fat JAR embeds the correct version from the git tag (e.g. `0.4.0`) in `version.properties` — Gradle receives `-Pversion=X.Y.Z` from CI
-- [ ] **BUILD-03**: Fat JAR passes Saxon/FOP service registration check (`META-INF/services/javax.xml.transform.TransformerFactory` present and correct) before being passed to jpackage
-- [ ] **BUILD-04**: jpackage bundle includes `icon.png` — visible in macOS Dock and Windows taskbar
+### Edit Menu
 
-### CI Workflow
+- [ ] **EDIT-10**: User can cut selected text in active editor via Edit > Cut (`Shortcut+X`)
+- [ ] **EDIT-11**: User can copy selected text in active editor via Edit > Copy (`Shortcut+C`)
+- [ ] **EDIT-12**: User can paste clipboard text into active editor via Edit > Paste (`Shortcut+V`)
+- [ ] **EDIT-13**: User can select all text in active editor via Edit > Select All (`Shortcut+A`)
 
-- [ ] **CI-01**: Workflow triggers automatically on `git push` of a tag matching `v*` and runs all build + release jobs end-to-end
-- [ ] **CI-02**: All platform runners use Liberica JDK+FX 21 (`distribution: liberica`, `java-package: jdk+fx`) — required for WebView native library
-- [ ] **CI-03**: Fat JAR built once on `ubuntu-latest` is downloaded and reused by all platform packaging jobs — no duplicate Gradle builds
+## Future Requirements
 
-### macOS Distribution
+### Edit Menu Extensions
 
-- [ ] **MACOS-01**: CI produces a DMG for Apple Silicon (arm64) via `macos-15` runner
-- [ ] **MACOS-02**: CI produces a DMG for Intel x64 via `macos-15-intel` runner
-- [x] **MACOS-03**: Both DMGs are signed with a Developer ID Application certificate (`--mac-sign --mac-entitlements entitlements.plist`); `codesign --verify --deep --strict` passes
-- [x] **MACOS-04**: Both DMGs are notarized (`xcrun notarytool submit --wait`) and stapled (`xcrun stapler staple`); Gatekeeper accepts the app without quarantine dialog
-
-### Windows Distribution
-
-- [ ] **WIN-01**: CI produces a Windows MSI installer (unsigned) via `windows-latest` with `--win-dir-chooser --win-menu --win-shortcut`; installs and launches correctly
-- [ ] **WIN-02**: CI produces a Windows portable ZIP (`--type app-image`) via `windows-latest` — no installer, no admin rights required; ZIP extracted and app launched correctly without installation
-
-### GitHub Release
-
-- [ ] **REL-01**: CI creates a GitHub Release on tag push, attaching all 5 assets: arm64 DMG, x64 DMG, MSI, Windows portable ZIP, fat JAR
-- [ ] **REL-02**: GitHub Release includes auto-generated release notes from git log (tag-to-tag) via `generate_release_notes: true` on `softprops/action-gh-release@v2`
-- [ ] **REL-03**: Tags containing `-` (e.g. `v0.4.0-beta1`) are automatically marked as pre-release; clean tags (e.g. `v0.4.0`) are marked as full release
-
-### Documentation
-
-- [x] **SIGN-01**: `docs/SIGNING.md` documents how to export the Developer ID Application certificate as `.p12`, encode as base64, and configure all 7 required GitHub Actions secrets (`MACOS_CERTIFICATE`, `MACOS_CERTIFICATE_PASSWORD`, `MACOS_SIGNING_IDENTITY`, `MACOS_KEYCHAIN_PASSWORD`, `APPLE_ID`, `APPLE_TEAM_ID`, `APPLE_APP_SPECIFIC_PASSWORD`)
-
----
-
-## Future Requirements (deferred)
-
-- Windows Authenticode code signing — eliminates SmartScreen warning; requires EV certificate (~$200-500/yr)
-- Linux packages (DEB, RPM, AppImage) — not needed for current team
-- macOS universal binary (single DMG arm64+x64) — requires `lipo` merge post-jpackage; two separate DMGs simpler
-- Auto-update in-app — no mechanism needed for internal dev tool
-- Mac App Store distribution — different signing + sandboxing requirements; internal tool only
-- Separate `ci.yml` for PR test runs — useful once release pipeline is stable
+- **EDIT-14**: User can undo last edit via Edit > Undo (`Shortcut+Z`) — deferred until UndoManager actions are fully wired beyond dirty-state tracking
+- **EDIT-15**: User can redo last undone edit via Edit > Redo (`Shortcut+Shift+Z`) — deferred with Undo
 
 ## Out of Scope
 
-- Authentication — internal tool
-- Multi-user collaboration — local only
-- HTML preview — PDF only
-- Auto-render — manual trigger only
-- Session restore — keep startup simple
-- XSLT debugger — deferred to v2
-
----
-
-## Archived: v0.3.0 Requirements
-
-Previously completed. Requirements UI-01..04, LOG-01..03, VER-01..02, ICON-01..02, ENC-01..03, DOC-01..03 — all delivered in phases 14–18.
-
----
+| Feature | Reason |
+|---------|--------|
+| Delete Line / Duplicate Line | Not requested for this milestone |
+| Undo / Redo in Edit menu | UndoManager used for dirty tracking only; expose in a dedicated milestone |
+| View menu items | View menu empty; no features defined |
+| Help menu shortcut | About has no standard keyboard shortcut |
 
 ## Traceability
 
-| REQ-ID | Phase | Status |
-|--------|-------|--------|
-| BUILD-01 | Phase 19 | Pending |
-| BUILD-02 | Phase 19 | Pending |
-| BUILD-03 | Phase 19 | Pending |
-| BUILD-04 | Phase 19 | Pending |
-| CI-01 | Phase 20 | Pending |
-| CI-02 | Phase 20 | Pending |
-| CI-03 | Phase 20 | Pending |
-| MACOS-01 | Phase 20 | Pending |
-| MACOS-02 | Phase 20 | Pending |
-| MACOS-03 | Phase 21 | Complete |
-| MACOS-04 | Phase 22 | Complete |
-| WIN-01 | Phase 20 | Pending |
-| WIN-02 | Phase 20 | Pending |
-| REL-01 | Phase 20 | Pending |
-| REL-02 | Phase 20 | Pending |
-| REL-03 | Phase 20 | Pending |
-| SIGN-01 | Phase 23 | Complete |
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| KBD-01 | — | Pending |
+| KBD-02 | — | Pending |
+| KBD-03 | — | Pending |
+| KBD-04 | — | Pending |
+| KBD-05 | — | Pending |
+| EDIT-10 | — | Pending |
+| EDIT-11 | — | Pending |
+| EDIT-12 | — | Pending |
+| EDIT-13 | — | Pending |
+
+**Coverage:**
+- v0.4.1 requirements: 9 total
+- Mapped to phases: 0 (pending roadmap)
+- Unmapped: 9 ⚠️
 
 ---
-
-*Requirements created: 2026-04-25 — Milestone v0.4.0*
+*Requirements defined: 2026-04-27*
+*Last updated: 2026-04-27 after initial definition*
