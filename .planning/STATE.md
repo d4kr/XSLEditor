@@ -3,10 +3,10 @@ gsd_state_version: 1.0
 milestone: v0.4.1
 milestone_name: Keyboard Shortcuts & Edit Menu
 status: planning
-last_updated: "2026-04-27T19:40:03.628Z"
+last_updated: "2026-04-27T00:00:00.000Z"
 last_activity: 2026-04-27
 progress:
-  total_phases: 0
+  total_phases: 2
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -17,19 +17,21 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-24)
+See: .planning/PROJECT.md (updated 2026-04-27)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** Phase 23 — signing-documentation
+**Current focus:** Phase 24 — Keyboard Accelerators
 
 ---
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 24 of 25 (Keyboard Accelerators)
 Plan: —
-Status: Defining requirements
-Last activity: 2026-04-27 — Milestone v0.4.1 started
+Status: Ready to plan
+Last activity: 2026-04-27 — Roadmap created for v0.4.1
+
+Progress: [░░░░░░░░░░] 0%
 
 ## Completed Phases
 
@@ -43,32 +45,25 @@ Last activity: 2026-04-27 — Milestone v0.4.1 started
 - Phase 16 — Log Panel Layout — 2026-04-23
 - Phase 17 — Encoding Investigation & Fix — 2026-04-23
 - Phase 18 — README Rewrite — 2026-04-24
+- Phases 19–23 — v0.4.0 GitHub Releases & Distribution — shipped 2026-04-27
 
 ---
 
-## v0.4.0 Phase Map
+## v0.4.1 Phase Map
 
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
-| 19 | Launcher Shim & Local Build | BUILD-01, BUILD-02, BUILD-03, BUILD-04 | Not started |
-| 20 | CI Skeleton — Unsigned Release Pipeline | CI-01, CI-02, CI-03, MACOS-01, MACOS-02, WIN-01, WIN-02, REL-01, REL-02, REL-03 | Not started |
-| 21 | macOS Signing | MACOS-03 | Ready to execute (2 plans) |
-| 22 | macOS Notarization | MACOS-04 | Not started |
-| 23 | Signing Documentation | SIGN-01 | Not started |
+| 24 | Keyboard Accelerators | KBD-01, KBD-02, KBD-03, KBD-04, KBD-05 | Not started |
+| 25 | Edit Menu Clipboard Commands | EDIT-10, EDIT-11, EDIT-12, EDIT-13 | Not started |
 
 ---
 
 ## Key Decisions
 
-- v0.4.0 goal: CI/CD + distribution pipeline via GitHub Actions, jpackage, signing
-- Launcher.java shim is mandatory (Phase 19) — JavaFX Application subclass cannot be the fat JAR main class
-- All runners must use Liberica JDK+FX 21 — Temurin omits libjfxwebkit required for WebView
-- Fat JAR built once on ubuntu-latest; downloaded by platform packaging jobs (no duplicate Gradle runs)
-- macOS signing requires Apple Developer ID certificate stored as GitHub secret (p12 + password)
-- Notarization (Phase 22) requires Apple Developer Program membership ($99/yr)
-- Windows MSI unsigned in v0.4.0 — Authenticode signing deferred (requires EV cert ~$200–500/yr)
-- Release notes auto-generated from git log between tags via softprops/action-gh-release@v2
-- Tags with `-` auto-marked as pre-release; clean tags as full release
+- v0.4.1 goal: keyboard accelerators on File menu items + Edit menu clipboard commands wired to active CodeArea
+- Phase 24 is FXML-only work (accelerator attributes in main.fxml); no Java logic changes required
+- Phase 25 adds new FXML menu items and Java delegation in MainController; must resolve active CodeArea at action time
+- Undo/Redo (EDIT-14, EDIT-15) deferred — UndoManager used only for dirty tracking in v0.4.1
 
 See .planning/PROJECT.md Key Decisions table for full log.
 
@@ -76,15 +71,12 @@ See .planning/PROJECT.md Key Decisions table for full log.
 
 ## Accumulated Context
 
-- v0.3.0 shipped 2026-04-24: 5 phases (14–18), UI polish, encoding fix, README
+- v0.4.0 shipped 2026-04-27: phases 19–23, CI/CD pipeline, signing, notarization, signing docs
 - Tech debt carried: EDIT-06 partial, EDIT-07 unverified, no automated tests for About dialog
-- Fat JAR build already works via Gradle shadowJar (com.gradleup.shadow 9.0.0-beta12)
-- jpackage requires JDK 14+; Java 21 already in use — compatible
-- Critical pitfalls documented in research/SUMMARY.md (C-01 through C-06)
-- macOS x64 runner (macos-15-intel) available until Aug 2027 only
+- Per-CodeArea Ctrl+S uses WellBehavedFX Nodes.addInputMap (scene-level handler causes focus bugs) — clipboard commands should follow same pattern or delegate via MenuBar action handlers to avoid focus issues
 
 ---
 
 ## Blockers / Concerns
 
-- Phase 22 (notarization) requires active Apple Developer Program membership ($99/yr) — confirm before starting
+None.

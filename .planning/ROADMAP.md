@@ -6,7 +6,8 @@
 - ✅ **v0.2.0 Developer UX Improvements** — Phases 10–12 (shipped 2026-04-22)
 - ✅ **v0.2.1 XSLEditor Full Rename** — Phase 13 (shipped 2026-04-22)
 - ✅ **v0.3.0 Polish & Usability** — Phases 14–18 (shipped 2026-04-24)
-- 🚧 **v0.4.0 GitHub Releases & Distribution** — Phases 19–23 (in progress)
+- ✅ **v0.4.0 GitHub Releases & Distribution** — Phases 19–23 (shipped 2026-04-27)
+- 🚧 **v0.4.1 Keyboard Shortcuts & Edit Menu** — Phases 24–25 (in progress)
 
 ## Phases
 
@@ -48,23 +49,31 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
 <details>
 <summary>✅ v0.3.0 Polish & Usability (Phases 14–18) — SHIPPED 2026-04-24</summary>
 
-- [x] **Phase 14: Version & Icon Housekeeping** — Bump version to 0.3.0, move icon to resources, wire icon in app and About dialog — completed 2026-04-23
-- [x] **Phase 15: Dark Theme CSS Fixes** — Make editor, file tree, and log panel text fully readable on dark backgrounds
-- [x] **Phase 16: Log Panel Layout** — Full-width table, no phantom column, no squashed columns at narrow widths
-- [x] **Phase 17: Encoding Investigation & Fix** — Diagnose root cause of non-ASCII character issues, fix at the confirmed layer
-- [x] **Phase 18: README Rewrite** — Complete README with correct version, icon, screenshot, and build instructions
+- [x] **Phase 14: Version & Icon Housekeeping** — completed 2026-04-23
+- [x] **Phase 15: Dark Theme CSS Fixes** — completed 2026-04-23
+- [x] **Phase 16: Log Panel Layout** — completed 2026-04-23
+- [x] **Phase 17: Encoding Investigation & Fix** — completed 2026-04-23
+- [x] **Phase 18: README Rewrite** — completed 2026-04-24
 
 </details>
 
-### 🚧 v0.4.0 GitHub Releases & Distribution (In Progress)
+<details>
+<summary>✅ v0.4.0 GitHub Releases & Distribution (Phases 19–23) — SHIPPED 2026-04-27</summary>
 
-**Milestone Goal:** Automate build and publication of the app on GitHub Releases — JAR + signed/notarized macOS DMG + Windows MSI + Windows portable ZIP — triggered by a git tag push, with release notes generated automatically from git history.
+- [x] **Phase 19: Launcher Shim & Local Build** — completed
+- [x] **Phase 20: CI Skeleton — Unsigned Release Pipeline** — completed
+- [x] **Phase 21: macOS Signing** — completed 2026-04-26
+- [x] **Phase 22: macOS Notarization** — completed 2026-04-26
+- [x] **Phase 23: Signing Documentation** — completed 2026-04-27
 
-- [ ] **Phase 19: Launcher Shim & Local Build** — Add Launcher.java, update shadowJar manifest, verify fat JAR and jpackage locally (2 plans)
-- [ ] **Phase 20: CI Skeleton — Unsigned Release Pipeline** — GitHub Actions workflow producing unsigned DMGs, Windows MSI, Windows ZIP, fat JAR, and a GitHub Release on tag push
-- [x] **Phase 21: macOS Signing** — Sign both DMGs with Developer ID Application certificate; codesign verification passes (completed 2026-04-26)
-- [x] **Phase 22: macOS Notarization** — Notarize and staple both DMGs; Gatekeeper accepts without quarantine dialog (completed 2026-04-26)
-- [x] **Phase 23: Signing Documentation** — docs/SIGNING.md guides a maintainer through configuring all 7 macOS signing secrets (completed 2026-04-27)
+</details>
+
+### 🚧 v0.4.1 Keyboard Shortcuts & Edit Menu (In Progress)
+
+**Milestone Goal:** Add keyboard accelerators to all existing File menu items and wire the Edit menu with standard clipboard commands (Cut, Copy, Paste, Select All) delegated to the active CodeArea.
+
+- [ ] **Phase 24: Keyboard Accelerators** — Wire `Shortcut+` accelerators to all five File menu items via FXML `accelerator` attributes
+- [ ] **Phase 25: Edit Menu Clipboard Commands** — Add Cut, Copy, Paste, Select All to the Edit menu and delegate each to the focused CodeArea in MainController
 
 ## Phase Details
 
@@ -199,6 +208,35 @@ Plans:
 Plans:
 - [x] 23-01-PLAN.md — Create docs/SIGNING.md, link from README, add pointer comment in release.yml
 
+---
+
+## v0.4.1 Phase Details
+
+### Phase 24: Keyboard Accelerators
+**Goal**: Every existing File menu item responds to its keyboard shortcut without the user touching the mouse
+**Depends on**: Phase 23
+**Requirements**: KBD-01, KBD-02, KBD-03, KBD-04, KBD-05
+**Success Criteria** (what must be TRUE):
+  1. Pressing `Shortcut+O` opens the "Open Project..." file chooser, identical to clicking File > Open Project...
+  2. Pressing `Shortcut+N` opens the "New File..." dialog, identical to clicking File > New File...
+  3. Pressing `Shortcut+Q` triggers the application exit flow (with close-confirmation dialog if there are unsaved changes), identical to clicking File > Exit
+  4. Pressing `Shortcut+Shift+E` invokes Set Entrypoint on the currently selected file, identical to clicking File > Set Entrypoint
+  5. Pressing `Shortcut+Shift+I` invokes Set XML Input on the currently selected file, identical to clicking File > Set XML Input
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 25: Edit Menu Clipboard Commands
+**Goal**: The Edit menu provides fully functional Cut, Copy, Paste, and Select All commands that operate on the active code editor tab
+**Depends on**: Phase 24
+**Requirements**: EDIT-10, EDIT-11, EDIT-12, EDIT-13
+**Success Criteria** (what must be TRUE):
+  1. With text selected in the active editor, Edit > Cut (and `Shortcut+X`) removes the selection and places it on the system clipboard; the editor content updates immediately
+  2. With text selected in the active editor, Edit > Copy (and `Shortcut+C`) copies the selection to the system clipboard without modifying the editor content
+  3. Edit > Paste (and `Shortcut+V`) inserts clipboard text at the current cursor position in the active editor
+  4. Edit > Select All (and `Shortcut+A`) selects all text in the active editor tab, from the first to the last character
+**Plans**: TBD
+**UI hint**: yes
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -209,11 +247,13 @@ Plans:
 | 16. Log Panel Layout | v0.3.0 | 1/1 | Complete | 2026-04-23 |
 | 17. Encoding Investigation & Fix | v0.3.0 | 1/1 | Complete | 2026-04-23 |
 | 18. README Rewrite | v0.3.0 | 1/1 | Complete | 2026-04-24 |
-| 19. Launcher Shim & Local Build | v0.4.0 | 0/2 | Not started | - |
-| 20. CI Skeleton — Unsigned Release Pipeline | v0.4.0 | 0/? | Not started | - |
-| 21. macOS Signing | v0.4.0 | 2/2 | Complete    | 2026-04-26 |
-| 22. macOS Notarization | v0.4.0 | 1/1 | Complete    | 2026-04-26 |
-| 23. Signing Documentation | v0.4.0 | 1/1 | Complete    | 2026-04-27 |
+| 19. Launcher Shim & Local Build | v0.4.0 | 0/2 | Complete | - |
+| 20. CI Skeleton — Unsigned Release Pipeline | v0.4.0 | 0/? | Complete | - |
+| 21. macOS Signing | v0.4.0 | 2/2 | Complete | 2026-04-26 |
+| 22. macOS Notarization | v0.4.0 | 1/1 | Complete | 2026-04-26 |
+| 23. Signing Documentation | v0.4.0 | 1/1 | Complete | 2026-04-27 |
+| 24. Keyboard Accelerators | v0.4.1 | 0/? | Not started | - |
+| 25. Edit Menu Clipboard Commands | v0.4.1 | 0/? | Not started | - |
 
 ---
-*Roadmap updated: 2026-04-26*
+*Roadmap updated: 2026-04-27*

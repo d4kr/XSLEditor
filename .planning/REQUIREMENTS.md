@@ -40,21 +40,21 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| KBD-01 | — | Pending |
-| KBD-02 | — | Pending |
-| KBD-03 | — | Pending |
-| KBD-04 | — | Pending |
-| KBD-05 | — | Pending |
-| EDIT-10 | — | Pending |
-| EDIT-11 | — | Pending |
-| EDIT-12 | — | Pending |
-| EDIT-13 | — | Pending |
+| KBD-01 | Phase 24 | Pending |
+| KBD-02 | Phase 24 | Pending |
+| KBD-03 | Phase 24 | Pending |
+| KBD-04 | Phase 24 | Pending |
+| KBD-05 | Phase 24 | Pending |
+| EDIT-10 | Phase 25 | Pending |
+| EDIT-11 | Phase 25 | Pending |
+| EDIT-12 | Phase 25 | Pending |
+| EDIT-13 | Phase 25 | Pending |
 
 **Coverage:**
 - v0.4.1 requirements: 9 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 9 ⚠️
+- Mapped to phases: 9 (100%) ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-04-27*
-*Last updated: 2026-04-27 after initial definition*
+*Last updated: 2026-04-27 — traceability mapped to Phases 24–25*
