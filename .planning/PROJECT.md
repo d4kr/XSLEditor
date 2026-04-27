@@ -40,7 +40,7 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 
 ### Active (v0.4.1)
 
-- [ ] **KBD-01..**: Keyboard accelerators on all existing menu items (File, View, Run, Search, Help)
+- [x] **KBD-01..05**: Keyboard accelerators on File menu items — Validated in Phase 24
 - [ ] **EDIT-10..**: Edit menu — Cut, Copy, Paste, Select All commands wired to active CodeArea
 
 ### Out of Scope
@@ -115,4 +115,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-27 — Milestone v0.4.1 started: keyboard shortcuts & Edit menu*
+*Last updated: 2026-04-27 — Phase 24 complete: keyboard accelerators on File menu (KBD-01..05)*
