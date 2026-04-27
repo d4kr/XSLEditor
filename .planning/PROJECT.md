@@ -44,7 +44,7 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 - [ ] **DIST-01..**: jpackage macOS bundle — signed with Apple Developer ID, JRE embedded
 - [ ] **DIST-02..**: jpackage Windows bundle — exe/msi, JRE embedded
 - [ ] **REL-01..**: GitHub Releases auto-publish — assets attached, release notes from git log
-- [ ] **SIGN-01..**: Signing guide — macOS Developer ID secrets setup for repo contributors
+- ✓ **SIGN-01**: Signing guide — macOS Developer ID secrets setup for repo contributors — Validated in Phase 23: signing-documentation
 
 ### Out of Scope
 
@@ -118,4 +118,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-26 — Phase 22 complete: macOS notarization + stapling live in CI; Gatekeeper accepts downloads offline*
+*Last updated: 2026-04-27 — Phase 23 complete: docs/SIGNING.md created — self-contained maintainer guide for all 7 macOS signing + notarization secrets*
