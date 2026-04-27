@@ -39,6 +39,7 @@
 #   Generate: appleid.apple.com → Sign-In and Security → App-Specific Passwords
 #
 # =============================================================================
+# Full setup guide: docs/SIGNING.md
 
 name: Release
 
