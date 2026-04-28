@@ -73,7 +73,7 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
 **Milestone Goal:** Add keyboard accelerators to all existing File menu items and wire the Edit menu with standard clipboard commands (Cut, Copy, Paste, Select All) delegated to the active CodeArea.
 
 - [x] **Phase 24: Keyboard Accelerators** — Wire `Shortcut+` accelerators to all five File menu items via FXML `accelerator` attributes (completed 2026-04-27)
-- [ ] **Phase 25: Edit Menu Clipboard Commands** — Add Cut, Copy, Paste, Select All to the Edit menu and delegate each to the focused CodeArea in MainController
+- [x] **Phase 25: Edit Menu Clipboard Commands** — Add Cut, Copy, Paste, Select All to the Edit menu and delegate each to the focused CodeArea in MainController (completed 2026-04-28)
 
 ## Phase Details
 
@@ -238,7 +238,7 @@ Plans:
   4. Edit > Select All (and `Shortcut+A`) selects all text in the active editor tab, from the first to the last character
 **Plans**: 1 plan
 Plans:
-- [ ] 25-01-PLAN.md — Add getActiveCodeArea() to EditorController; populate Edit menu in main.fxml; wire four @FXML clipboard handlers in MainController
+- [x] 25-01-PLAN.md — Add getActiveCodeArea() to EditorController; populate Edit menu in main.fxml; wire four @FXML clipboard handlers in MainController
 **UI hint**: yes
 
 ## Progress
@@ -257,7 +257,7 @@ Plans:
 | 22. macOS Notarization | v0.4.0 | 1/1 | Complete | 2026-04-26 |
 | 23. Signing Documentation | v0.4.0 | 1/1 | Complete | 2026-04-27 |
 | 24. Keyboard Accelerators | v0.4.1 | 1/1 | Complete    | 2026-04-27 |
-| 25. Edit Menu Clipboard Commands | v0.4.1 | 0/1 | Planned | - |
+| 25. Edit Menu Clipboard Commands | v0.4.1 | 1/1 | Complete | 2026-04-28 |
 
 ---
 *Roadmap updated: 2026-04-27*

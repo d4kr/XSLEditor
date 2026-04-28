@@ -1,16 +1,11 @@
 # XSLEditor
 
-## Current Milestone: v0.4.1 Keyboard Shortcuts & Edit Menu
+## Current Milestone: v0.4.1 Keyboard Shortcuts & Edit Menu — COMPLETE (2026-04-28)
 
-**Goal:** Aggiungere acceleratori tastiera a tutte le voci di menu esistenti e completare il menu Edit con i comandi clipboard standard (Cut, Copy, Paste, Select All).
-
-**Target features:**
-- Acceleratori tastiera (Cmd/Ctrl+key) su tutti i menu item esistenti (File, View, Run, Search, Help)
-- Menu Edit — comandi clipboard: Cut, Copy, Paste, Select All sul CodeArea attivo
+**Delivered:**
+- Acceleratori tastiera (Shortcut+key) su tutti i 5 item del menu File — Phase 24
+- Menu Edit — Cut, Copy, Paste, Select All sul CodeArea attivo via `EditorController.getActiveCodeArea()` — Phase 25
 - Undo/Redo: deferred — UndoManager usato solo per dirty tracking, non ancora esposto
-- Build fat JAR (shadowJar) incluso nella release
-- Release notes auto-generate da git log (tag-to-tag diff)
-- Guida per configurare i secrets di firma macOS nel repo (certificato p12 + password)
 
 ## What This Is
 
@@ -38,10 +33,10 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 - ✓ ABOUT-01..05: About dialog — version, runtime stack, author, license — v0.2.0
 - ✓ ERR-06: ChatGPT button per error log row — opens pre-filled query in browser — v0.2.0
 
-### Active (v0.4.1)
+### Validated (v0.4.1)
 
-- [x] **KBD-01..05**: Keyboard accelerators on File menu items — Validated in Phase 24
-- [ ] **EDIT-10..**: Edit menu — Cut, Copy, Paste, Select All commands wired to active CodeArea
+- ✓ **KBD-01..05**: Keyboard accelerators on File menu items — Validated in Phase 24
+- ✓ **EDIT-10..13**: Edit menu — Cut, Copy, Paste, Select All commands wired to active CodeArea — Validated in Phase 25
 
 ### Out of Scope
 

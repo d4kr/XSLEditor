@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v0.4.1
 milestone_name: Keyboard Shortcuts & Edit Menu
-status: executing
-last_updated: "2026-04-28T05:10:49.084Z"
-last_activity: 2026-04-28 -- Phase 25 planning complete
+status: complete
+last_updated: "2026-04-28T14:55:00.000Z"
+last_activity: 2026-04-28 -- Phase 25 complete (Edit menu clipboard commands)
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 6
-  completed_plans: 5
-  percent: 83
+  completed_plans: 6
+  percent: 100
 ---
 
 # Project State: XSLEditor
@@ -20,18 +20,17 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-27)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** Phase 24 — keyboard-accelerators
+**Current focus:** Milestone v0.4.1 complete — all phases done
 
 ---
 
 ## Current Position
 
-Phase: 25
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-04-28 -- Phase 25 planning complete
+Phase: 25 (complete)
+Status: Milestone complete
+Last activity: 2026-04-28 -- Phase 25 complete (Edit menu clipboard commands)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [██████████] 100%
 
 ## Completed Phases
 
@@ -46,6 +45,8 @@ Progress: [░░░░░░░░░░] 0%
 - Phase 17 — Encoding Investigation & Fix — 2026-04-23
 - Phase 18 — README Rewrite — 2026-04-24
 - Phases 19–23 — v0.4.0 GitHub Releases & Distribution — shipped 2026-04-27
+- Phase 24 — Keyboard Accelerators — 2026-04-27
+- Phase 25 — Edit Menu Clipboard Commands — 2026-04-28
 
 ---
 
