@@ -166,6 +166,25 @@ public final class EditorController {
         }
     }
 
+    /**
+     * Returns the CodeArea of the currently selected editor tab,
+     * or {@link Optional#empty()} if no tab is open.
+     *
+     * <p>Called from MainController Edit menu action handlers
+     * (EDIT-10..13: Cut, Copy, Paste, Select All).</p>
+     *
+     * <p>Uses the established {@code getUserData() instanceof EditorTab}
+     * pattern (see {@link #navigateTo}) so callers do not need to know
+     * about the EditorTab/Tab wrapping convention.</p>
+     */
+    public Optional<CodeArea> getActiveCodeArea() {
+        Tab selected = tabPane.getSelectionModel().getSelectedItem();
+        if (selected != null && selected.getUserData() instanceof EditorTab et) {
+            return Optional.of(et.codeArea);
+        }
+        return Optional.empty();
+    }
+
     private Tab buildTab(Path key, EditorTab editorTab) {
         VirtualizedScrollPane<CodeArea> scrollPane = new VirtualizedScrollPane<>(editorTab.codeArea);
         String baseName = editorTab.path.getFileName().toString();

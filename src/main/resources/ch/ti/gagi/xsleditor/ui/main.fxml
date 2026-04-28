@@ -38,7 +38,21 @@
                               accelerator="Shortcut+Q"
                               onAction="#handleExit"/>
                 </Menu>
-                <Menu text="Edit"/>
+                <Menu text="Edit">
+                    <MenuItem text="Cut"
+                              accelerator="Shortcut+X"
+                              onAction="#handleEditCut"/>
+                    <MenuItem text="Copy"
+                              accelerator="Shortcut+C"
+                              onAction="#handleEditCopy"/>
+                    <MenuItem text="Paste"
+                              accelerator="Shortcut+V"
+                              onAction="#handleEditPaste"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Select All"
+                              accelerator="Shortcut+A"
+                              onAction="#handleEditSelectAll"/>
+                </Menu>
                 <Menu text="View"/>
                 <Menu text="Run">
                     <MenuItem fx:id="menuItemRender"

@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.util.Optional;
+import org.fxmisc.richtext.CodeArea;
 
 /**
  * Controller for main.fxml.
@@ -313,6 +314,28 @@ public class MainController {
     private void handleAbout() {
         AboutDialog dialog = new AboutDialog(primaryStage, XSLEditorApp.hostServices());
         dialog.showAndWait();
+    }
+
+    // --- Phase 25 action handlers (Edit menu clipboard commands) ---
+
+    @FXML
+    private void handleEditCut() {
+        editorController.getActiveCodeArea().ifPresent(CodeArea::cut);
+    }
+
+    @FXML
+    private void handleEditCopy() {
+        editorController.getActiveCodeArea().ifPresent(CodeArea::copy);
+    }
+
+    @FXML
+    private void handleEditPaste() {
+        editorController.getActiveCodeArea().ifPresent(CodeArea::paste);
+    }
+
+    @FXML
+    private void handleEditSelectAll() {
+        editorController.getActiveCodeArea().ifPresent(CodeArea::selectAll);
     }
 
     // --- Private helpers ---
