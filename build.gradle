@@ -10,7 +10,7 @@ application {
 }
 
 group = 'ch.ti.gagi'
-version = project.findProperty('version') ?: '0.3.0'
+version = project.findProperty('version') ?: '0.4.1'
 
 java {
     toolchain {
