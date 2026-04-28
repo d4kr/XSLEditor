@@ -436,7 +436,7 @@ private void handleEditSelectAll() {
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Should the MenuItem for Cut/Copy be disabled when no text is selected?**
    - What we know: The existing context menu example from RichTextFX docs shows conditional
