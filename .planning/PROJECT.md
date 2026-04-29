@@ -1,6 +1,17 @@
 # XSLEditor
 
-## Current Milestone: v0.4.1 Keyboard Shortcuts & Edit Menu — COMPLETE (2026-04-28)
+## Current Milestone: v0.5.0 Undo, Fix & Licenza
+
+**Goal:** Undo/redo funzionante nell'editor, fix link ChatGPT nel log, shortcut completi nel menu Edit, licenza MIT corretta con file LICENSE, logo README ridimensionato.
+
+**Target features:**
+- Fix bug ChatGPT link nel log (URL param cambiato)
+- Undo/Redo completo — esporre UndoManager in Edit menu (Ctrl+Z / Ctrl+Shift+Z)
+- Shortcut keyboard Undo/Redo nel menu Edit
+- Licenza MIT — aggiungere file LICENSE, aggiornare AboutDialog e README
+- README: logo più piccolo via tag HTML `<img width="…">`
+
+## Previous Milestone: v0.4.1 Keyboard Shortcuts & Edit Menu — COMPLETE (2026-04-28)
 
 **Delivered:**
 - Acceleratori tastiera (Shortcut+key) su tutti i 5 item del menu File — Phase 24
@@ -37,6 +48,15 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 
 - ✓ **KBD-01..05**: Keyboard accelerators on File menu items — Validated in Phase 24
 - ✓ **EDIT-10..13**: Edit menu — Cut, Copy, Paste, Select All commands wired to active CodeArea — Validated in Phase 25
+
+### Active (v0.5.0)
+
+- [ ] **ERR-07**: Fix ChatGPT link URL in error log button
+- [ ] **EDIT-14**: Undo command in Edit menu with Ctrl+Z shortcut
+- [ ] **EDIT-15**: Redo command in Edit menu with Ctrl+Shift+Z shortcut
+- [ ] **DOC-01**: Add MIT LICENSE file to repository
+- [ ] **DOC-02**: Update AboutDialog license label and link to MIT
+- [ ] **DOC-03**: README logo smaller via HTML `<img>` tag
 
 ### Out of Scope
 
@@ -110,4 +130,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-27 — Phase 24 complete: keyboard accelerators on File menu (KBD-01..05)*
+*Last updated: 2026-04-29 — Milestone v0.5.0 started: Undo, Fix & Licenza*

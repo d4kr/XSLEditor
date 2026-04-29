@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v0.4.1
-milestone_name: Keyboard Shortcuts & Edit Menu
-status: complete
-last_updated: "2026-04-28T14:55:00.000Z"
-last_activity: 2026-04-28 -- Phase 25 complete (Edit menu clipboard commands)
+milestone: v0.5.0
+milestone_name: Undo, Fix & Licenza
+status: planning
+last_updated: "2026-04-29T21:41:46.789Z"
+last_activity: 2026-04-29
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 6
-  completed_plans: 6
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State: XSLEditor
@@ -26,11 +26,10 @@ See: .planning/PROJECT.md (updated 2026-04-27)
 
 ## Current Position
 
-Phase: 25 (complete)
-Status: Milestone complete
-Last activity: 2026-04-28 -- Phase 25 complete (Edit menu clipboard commands)
-
-Progress: [██████████] 100%
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-04-29 — Milestone v0.5.0 started
 
 ## Completed Phases
 
