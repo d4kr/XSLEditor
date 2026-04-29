@@ -49,21 +49,21 @@ All v0.4.1 requirements (KBD-01..05, EDIT-10..13) validated and shipped. See `.p
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ERR-07 | — | Pending |
-| EDIT-14 | — | Pending |
-| EDIT-15 | — | Pending |
-| TOOL-01 | — | Pending |
-| TOOL-02 | — | Pending |
-| TOOL-03 | — | Pending |
-| DOC-01 | — | Pending |
-| DOC-02 | — | Pending |
-| DOC-03 | — | Pending |
+| ERR-07 | Phase 27 | Pending |
+| EDIT-14 | Phase 26 | Pending |
+| EDIT-15 | Phase 26 | Pending |
+| TOOL-01 | Phase 26 | Pending |
+| TOOL-02 | Phase 26 | Pending |
+| TOOL-03 | Phase 27 | Pending |
+| DOC-01 | Phase 28 | Pending |
+| DOC-02 | Phase 28 | Pending |
+| DOC-03 | Phase 28 | Pending |
 
 **Coverage:**
 - v0.5.0 requirements: 9 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 9
+- Mapped to phases: 9
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-04-29*
-*Last updated: 2026-04-29 — milestone v0.5.0 initial definition*
+*Last updated: 2026-04-29 — roadmap created, all 9 requirements mapped*

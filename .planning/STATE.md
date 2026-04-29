@@ -2,11 +2,11 @@
 gsd_state_version: 1.0
 milestone: v0.5.0
 milestone_name: Undo, Fix & Licenza
-status: planning
-last_updated: "2026-04-29T21:41:46.789Z"
+status: roadmap_ready
+last_updated: "2026-04-29T00:00:00.000Z"
 last_activity: 2026-04-29
 progress:
-  total_phases: 0
+  total_phases: 3
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -17,19 +17,19 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-27)
+See: .planning/PROJECT.md (updated 2026-04-29)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** Milestone v0.4.1 complete — all phases done
+**Current focus:** Milestone v0.5.0 — roadmap defined, ready to plan Phase 26
 
 ---
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 26 (not started)
 Plan: —
-Status: Defining requirements
-Last activity: 2026-04-29 — Milestone v0.5.0 started
+Status: Roadmap defined — ready for `/gsd-plan-phase 26`
+Last activity: 2026-04-29 — Roadmap created for v0.5.0
 
 ## Completed Phases
 
@@ -49,21 +49,23 @@ Last activity: 2026-04-29 — Milestone v0.5.0 started
 
 ---
 
-## v0.4.1 Phase Map
+## v0.5.0 Phase Map
 
 | Phase | Name | Requirements | Status |
 |-------|------|--------------|--------|
-| 24 | Keyboard Accelerators | KBD-01, KBD-02, KBD-03, KBD-04, KBD-05 | Not started |
-| 25 | Edit Menu Clipboard Commands | EDIT-10, EDIT-11, EDIT-12, EDIT-13 | Not started |
+| 26 | Undo/Redo System | EDIT-14, EDIT-15, TOOL-01, TOOL-02 | Not started |
+| 27 | Toolbar Save & ChatGPT Fix | TOOL-03, ERR-07 | Not started |
+| 28 | License & README | DOC-01, DOC-02, DOC-03 | Not started |
 
 ---
 
 ## Key Decisions
 
-- v0.4.1 goal: keyboard accelerators on File menu items + Edit menu clipboard commands wired to active CodeArea
-- Phase 24 is FXML-only work (accelerator attributes in main.fxml); no Java logic changes required
-- Phase 25 adds new FXML menu items and Java delegation in MainController; must resolve active CodeArea at action time
-- Undo/Redo (EDIT-14, EDIT-15) deferred — UndoManager used only for dirty tracking in v0.4.1
+- v0.5.0 goal: expose UndoManager as full Undo/Redo in Edit menu + toolbar, add toolbar Save button, fix ChatGPT URL, update licensing to MIT
+- Phase 26 wires UndoManager (already instantiated per CodeArea) to Edit > Undo/Redo and two new toolbar buttons; disable bindings must update on tab switch
+- Phase 27 adds toolbar Save button (delegates to existing Ctrl+S handler) and fixes the chatgpt.com URL — `?q=` param no longer works, likely needs `?=` or direct input submission URL
+- Phase 28 is pure documentation/metadata — no Java changes; LICENSE file, AboutDialog text update, README img tag change
+- Undo/Redo toolbar buttons need to bind to the active tab's UndoManager.undoAvailableProperty() / redoAvailableProperty(); switching tabs must rebind
 
 See .planning/PROJECT.md Key Decisions table for full log.
 
@@ -71,9 +73,12 @@ See .planning/PROJECT.md Key Decisions table for full log.
 
 ## Accumulated Context
 
-- v0.4.0 shipped 2026-04-27: phases 19–23, CI/CD pipeline, signing, notarization, signing docs
+- v0.4.1 shipped 2026-04-28: phases 24–25, keyboard accelerators + Edit menu clipboard commands
+- UndoManager is already instantiated in each CodeArea and used for dirty tracking via atMarkedPositionProperty() — Phase 26 simply exposes its undo()/redo() methods and availability properties
+- Toolbar currently has a single Render button (fx:id="renderButton") in main.fxml — three new buttons (Undo, Redo, Save) must be added to the same ToolBar node
+- AboutDialog.java ~line 104: Label("License: Apache 2.0") pointing to apache.org — must update to MIT
+- README.md line 6: bare Markdown image link for app icon — replace with `<img width="96">` HTML tag
 - Tech debt carried: EDIT-06 partial, EDIT-07 unverified, no automated tests for About dialog
-- Per-CodeArea Ctrl+S uses WellBehavedFX Nodes.addInputMap (scene-level handler causes focus bugs) — clipboard commands should follow same pattern or delegate via MenuBar action handlers to avoid focus issues
 
 ---
 

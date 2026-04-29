@@ -7,7 +7,8 @@
 - ✅ **v0.2.1 XSLEditor Full Rename** — Phase 13 (shipped 2026-04-22)
 - ✅ **v0.3.0 Polish & Usability** — Phases 14–18 (shipped 2026-04-24)
 - ✅ **v0.4.0 GitHub Releases & Distribution** — Phases 19–23 (shipped 2026-04-27)
-- 🚧 **v0.4.1 Keyboard Shortcuts & Edit Menu** — Phases 24–25 (in progress)
+- ✅ **v0.4.1 Keyboard Shortcuts & Edit Menu** — Phases 24–25 (shipped 2026-04-28)
+- 🚧 **v0.5.0 Undo, Fix & Licenza** — Phases 26–28 (in progress)
 
 ## Phases
 
@@ -68,12 +69,21 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
 
 </details>
 
-### 🚧 v0.4.1 Keyboard Shortcuts & Edit Menu (In Progress)
+<details>
+<summary>✅ v0.4.1 Keyboard Shortcuts & Edit Menu (Phases 24–25) — SHIPPED 2026-04-28</summary>
 
-**Milestone Goal:** Add keyboard accelerators to all existing File menu items and wire the Edit menu with standard clipboard commands (Cut, Copy, Paste, Select All) delegated to the active CodeArea.
+- [x] **Phase 24: Keyboard Accelerators** — completed 2026-04-27
+- [x] **Phase 25: Edit Menu Clipboard Commands** — completed 2026-04-28
 
-- [x] **Phase 24: Keyboard Accelerators** — Wire `Shortcut+` accelerators to all five File menu items via FXML `accelerator` attributes (completed 2026-04-27)
-- [x] **Phase 25: Edit Menu Clipboard Commands** — Add Cut, Copy, Paste, Select All to the Edit menu and delegate each to the focused CodeArea in MainController (completed 2026-04-28)
+</details>
+
+### 🚧 v0.5.0 Undo, Fix & Licenza (In Progress)
+
+**Milestone Goal:** Expose UndoManager as full Undo/Redo in the Edit menu and toolbar, add toolbar Save button, fix the broken ChatGPT URL in the error log, and update licensing to MIT throughout the repository.
+
+- [ ] **Phase 26: Undo/Redo System** — Expose UndoManager as Edit > Undo/Redo and toolbar Undo/Redo buttons with correct disable bindings
+- [ ] **Phase 27: Toolbar Save & ChatGPT Fix** — Add toolbar Save button with dirty-state disable binding; fix broken ChatGPT URL parameter
+- [ ] **Phase 28: License & README** — Add MIT LICENSE file, update AboutDialog to MIT, resize README logo via HTML img tag
 
 ## Phase Details
 
@@ -241,6 +251,44 @@ Plans:
 - [x] 25-01-PLAN.md — Add getActiveCodeArea() to EditorController; populate Edit menu in main.fxml; wire four @FXML clipboard handlers in MainController
 **UI hint**: yes
 
+---
+
+## v0.5.0 Phase Details
+
+### Phase 26: Undo/Redo System
+**Goal**: The developer can undo and redo edits in the active editor tab via both the Edit menu and dedicated toolbar buttons, with buttons disabled when there is no history to act on
+**Depends on**: Phase 25
+**Requirements**: EDIT-14, EDIT-15, TOOL-01, TOOL-02
+**Success Criteria** (what must be TRUE):
+  1. After making one or more edits, Edit > Undo (Ctrl+Z) reverses the last edit in the active editor tab; repeated invocations continue reversing earlier edits
+  2. After undoing, Edit > Redo (Ctrl+Shift+Z) re-applies the undone edit; the redo stack empties when a new edit is made
+  3. The toolbar Undo button is enabled only when undo history is available for the active tab, and disabled otherwise (including when no tab is open)
+  4. The toolbar Redo button is enabled only when redo history is available for the active tab, and disabled otherwise
+  5. Switching between editor tabs updates the Undo/Redo button disable states immediately to reflect the history of the newly focused tab
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 27: Toolbar Save & ChatGPT Fix
+**Goal**: The developer can save the active tab from the toolbar with a single click, and clicking the ChatGPT button in the error log opens a correctly pre-filled ChatGPT query in the browser
+**Depends on**: Phase 26
+**Requirements**: TOOL-03, ERR-07
+**Success Criteria** (what must be TRUE):
+  1. The toolbar Save button is enabled only when the active tab has unsaved changes (is dirty), and disabled when the tab is clean or no tab is open
+  2. Clicking the toolbar Save button saves the active tab's content to disk and clears the dirty indicator (the `*` disappears from the tab title)
+  3. Clicking the "chat" button on any error log row opens the default browser with a ChatGPT URL that pre-fills the error message as a prompt — the query arrives in the ChatGPT input field correctly (no broken `?q=` parameter)
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 28: License & README
+**Goal**: The repository declares MIT as its license in a standard LICENSE file, the About dialog reflects MIT, and the README logo renders at a reduced display size
+**Depends on**: Phase 27
+**Requirements**: DOC-01, DOC-02, DOC-03
+**Success Criteria** (what must be TRUE):
+  1. A `LICENSE` file exists in the project root containing the standard MIT License text with year 2026 and the author name
+  2. Opening the About dialog shows "License: MIT" (not "Apache 2.0") with a clickable link that opens the MIT license text in the browser
+  3. The README logo (app icon image) renders at a visually smaller size in GitHub's Markdown renderer — achieved via an HTML `<img width="96">` tag replacing the bare Markdown image syntax
+**Plans**: TBD
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -256,8 +304,11 @@ Plans:
 | 21. macOS Signing | v0.4.0 | 2/2 | Complete | 2026-04-26 |
 | 22. macOS Notarization | v0.4.0 | 1/1 | Complete | 2026-04-26 |
 | 23. Signing Documentation | v0.4.0 | 1/1 | Complete | 2026-04-27 |
-| 24. Keyboard Accelerators | v0.4.1 | 1/1 | Complete    | 2026-04-27 |
+| 24. Keyboard Accelerators | v0.4.1 | 1/1 | Complete | 2026-04-27 |
 | 25. Edit Menu Clipboard Commands | v0.4.1 | 1/1 | Complete | 2026-04-28 |
+| 26. Undo/Redo System | v0.5.0 | 0/? | Not started | - |
+| 27. Toolbar Save & ChatGPT Fix | v0.5.0 | 0/? | Not started | - |
+| 28. License & README | v0.5.0 | 0/? | Not started | - |
 
 ---
-*Roadmap updated: 2026-04-27*
+*Roadmap updated: 2026-04-29*
