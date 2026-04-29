@@ -1,60 +1,69 @@
-# Requirements: XSLEditor v0.4.1 — Keyboard Shortcuts & Edit Menu
+# Requirements: XSLEditor v0.5.0 — Undo, Fix & Licenza
 
-**Defined:** 2026-04-27
+**Defined:** 2026-04-29
+**Milestone:** v0.5.0
 **Core Value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
 
-## v0.4.1 Requirements
+## v0.5.0 Requirements
 
-### Keyboard Shortcuts
+### Bug Fix
 
-- [ ] **KBD-01**: User can open a project via keyboard with `Shortcut+O` (File > Open Project...)
-- [ ] **KBD-02**: User can create a new file via keyboard with `Shortcut+N` (File > New File...)
-- [ ] **KBD-03**: User can exit the application via keyboard with `Shortcut+Q` (File > Exit)
-- [ ] **KBD-04**: User can set XSLT entrypoint via keyboard with `Shortcut+Shift+E` (File > Set Entrypoint)
-- [ ] **KBD-05**: User can set XML input via keyboard with `Shortcut+Shift+I` (File > Set XML Input)
+- [ ] **ERR-07**: Developer can click "💬" in the error log and the browser opens ChatGPT with the pre-filled prompt correctly (fix broken chatgpt.com/?q= URL param)
 
-### Edit Menu
+### Editor — Undo / Redo
 
-- [ ] **EDIT-10**: User can cut selected text in active editor via Edit > Cut (`Shortcut+X`)
-- [ ] **EDIT-11**: User can copy selected text in active editor via Edit > Copy (`Shortcut+C`)
-- [ ] **EDIT-12**: User can paste clipboard text into active editor via Edit > Paste (`Shortcut+V`)
-- [ ] **EDIT-13**: User can select all text in active editor via Edit > Select All (`Shortcut+A`)
+- [ ] **EDIT-14**: Developer can undo the last edit via Edit > Undo (Ctrl+Z) in the active editor tab
+- [ ] **EDIT-15**: Developer can redo an undone edit via Edit > Redo (Ctrl+Shift+Z) in the active editor tab
+
+### Toolbar
+
+- [ ] **TOOL-01**: Developer can click Undo button in the toolbar (disabled when no undo history available)
+- [ ] **TOOL-02**: Developer can click Redo button in the toolbar (disabled when no redo history available)
+- [ ] **TOOL-03**: Developer can click Save button in the toolbar (saves the active tab; disabled when tab is clean/not dirty)
+
+### Documentation & Licensing
+
+- [ ] **DOC-01**: Repository contains a LICENSE file (MIT, 2026) in the project root
+- [ ] **DOC-02**: About dialog shows "License: MIT" with a link to the MIT license text
+- [ ] **DOC-03**: README logo is rendered at reduced size via HTML `<img width="96">` tag instead of bare Markdown image link
+
+## Previous Milestone Requirements (v0.4.1) — Archived
+
+All v0.4.1 requirements (KBD-01..05, EDIT-10..13) validated and shipped. See `.planning/milestones/v0.4.1-REQUIREMENTS.md` for archive.
 
 ## Future Requirements
 
-### Edit Menu Extensions
-
-- **EDIT-14**: User can undo last edit via Edit > Undo (`Shortcut+Z`) — deferred until UndoManager actions are fully wired beyond dirty-state tracking
-- **EDIT-15**: User can redo last undone edit via Edit > Redo (`Shortcut+Shift+Z`) — deferred with Undo
+*(none defined)*
 
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
+| Undo history persistence across sessions | Not needed for local dev tool |
+| Undo/Redo per-file history panel | Standard editor behavior is sufficient |
+| Global undo across files | Per-CodeArea undo only; matches user expectation |
 | Delete Line / Duplicate Line | Not requested for this milestone |
-| Undo / Redo in Edit menu | UndoManager used for dirty tracking only; expose in a dedicated milestone |
-| View menu items | View menu empty; no features defined |
-| Help menu shortcut | About has no standard keyboard shortcut |
+| View menu items | No features defined |
 
 ## Traceability
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| KBD-01 | Phase 24 | Pending |
-| KBD-02 | Phase 24 | Pending |
-| KBD-03 | Phase 24 | Pending |
-| KBD-04 | Phase 24 | Pending |
-| KBD-05 | Phase 24 | Pending |
-| EDIT-10 | Phase 25 | Pending |
-| EDIT-11 | Phase 25 | Pending |
-| EDIT-12 | Phase 25 | Pending |
-| EDIT-13 | Phase 25 | Pending |
+| ERR-07 | — | Pending |
+| EDIT-14 | — | Pending |
+| EDIT-15 | — | Pending |
+| TOOL-01 | — | Pending |
+| TOOL-02 | — | Pending |
+| TOOL-03 | — | Pending |
+| DOC-01 | — | Pending |
+| DOC-02 | — | Pending |
+| DOC-03 | — | Pending |
 
 **Coverage:**
-- v0.4.1 requirements: 9 total
-- Mapped to phases: 9 (100%) ✓
-- Unmapped: 0
+- v0.5.0 requirements: 9 total
+- Mapped to phases: 0 (pending roadmap)
+- Unmapped: 9
 
 ---
-*Requirements defined: 2026-04-27*
-*Last updated: 2026-04-27 — traceability mapped to Phases 24–25*
+*Requirements defined: 2026-04-29*
+*Last updated: 2026-04-29 — milestone v0.5.0 initial definition*
