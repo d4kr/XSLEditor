@@ -308,10 +308,13 @@ public final class EditorController {
         // EDIT-06: occurrence highlighting on text selection
         // Strip outer XML punctuation (<, >, /, whitespace) so selecting a full tag
         // like "<xsl:template>" matches the same name in closing tags and other occurrences.
-        editorTab.codeArea.selectedTextProperty().addListener((obs, oldSel, newSel) -> {
+        // Listener is captured so it can be removed on tab close to prevent the codeArea
+        // from being kept alive by the selectedTextProperty's strong listener reference.
+        ChangeListener<String> selectionListener = (obs, oldSel, newSel) -> {
             String token = (newSel == null) ? "" : newSel.strip().replaceAll("^[<>/\"'=]+|[<>/\"'=]+$", "");
             OccurrenceHighlighter.applyTo(editorTab.codeArea, token);
-        });
+        };
+        editorTab.codeArea.selectedTextProperty().addListener(selectionListener);
 
         // EDIT-07: go-to-definition via Ctrl+Click on xsl:include/import href
         // Pitfall 3: use event.getX()/getY() (CodeArea-local coords, not screen coords)
@@ -347,9 +350,10 @@ public final class EditorController {
         tab.setOnClosed(e -> {
             if (highlightSub != null) highlightSub.unsubscribe(); // Pitfall 2: release CodeArea ref
             if (hlExecutor != null)   hlExecutor.shutdownNow();   // Pitfall 2: release thread
-            editorTab.dirty.removeListener(dirtyListener);         // existing — keep
-            registry.remove(key);                                  // existing — keep
-            updateAppDirtyState();                                 // existing — keep
+            editorTab.dirty.removeListener(dirtyListener);                      // existing — keep
+            editorTab.codeArea.selectedTextProperty().removeListener(selectionListener); // WR-03
+            registry.remove(key);                                               // existing — keep
+            updateAppDirtyState();                                              // existing — keep
         });
 
         return tab;
