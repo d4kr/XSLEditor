@@ -265,7 +265,9 @@ Plans:
   3. The toolbar Undo button is enabled only when undo history is available for the active tab, and disabled otherwise (including when no tab is open)
   4. The toolbar Redo button is enabled only when redo history is available for the active tab, and disabled otherwise
   5. Switching between editor tabs updates the Undo/Redo button disable states immediately to reflect the history of the newly focused tab
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 26-01-PLAN.md — Add Edit menu Undo/Redo + toolbar ↺/↻ buttons + tab-switch rebinding hook in EditorController and MainController
 **UI hint**: yes
 
 ### Phase 27: Toolbar Save & ChatGPT Fix
@@ -306,9 +308,9 @@ Plans:
 | 23. Signing Documentation | v0.4.0 | 1/1 | Complete | 2026-04-27 |
 | 24. Keyboard Accelerators | v0.4.1 | 1/1 | Complete | 2026-04-27 |
 | 25. Edit Menu Clipboard Commands | v0.4.1 | 1/1 | Complete | 2026-04-28 |
-| 26. Undo/Redo System | v0.5.0 | 0/? | Not started | - |
+| 26. Undo/Redo System | v0.5.0 | 0/1 | Planned | - |
 | 27. Toolbar Save & ChatGPT Fix | v0.5.0 | 0/? | Not started | - |
 | 28. License & README | v0.5.0 | 0/? | Not started | - |
 
 ---
-*Roadmap updated: 2026-04-29*
+*Roadmap updated: 2026-04-30*
