@@ -185,6 +185,37 @@ public final class EditorController {
         return Optional.empty();
     }
 
+    /**
+     * Registers a listener that fires whenever the selected editor tab changes,
+     * receiving the new active CodeArea (or {@link Optional#empty()} if no tab is selected).
+     *
+     * <p>Used by MainController to rebind Undo/Redo disable properties to the
+     * UndoManager of the newly focused tab (TOOL-01, TOOL-02, EDIT-14, EDIT-15).</p>
+     *
+     * <p>Idempotent in spirit: only one listener is supported; calling this method twice
+     * replaces the previous listener. Phase 26 needs only one consumer (MainController).</p>
+     *
+     * <p>The callback is invoked once immediately with the current selection so the
+     * caller's bindings are correct at startup (when typically no tab is open yet).</p>
+     */
+    public void setOnActiveTabChanged(Consumer<Optional<CodeArea>> callback) {
+        Objects.requireNonNull(callback, "callback");
+        // Replace any prior listener by re-registering. Since we hold no reference to
+        // the prior ChangeListener, we accept a one-shot semantics: caller invokes once.
+        tabPane.getSelectionModel().selectedItemProperty().addListener(
+            (obs, oldTab, newTab) -> callback.accept(extractCodeArea(newTab))
+        );
+        // Fire once with the current selection so initial disable state is correct.
+        callback.accept(extractCodeArea(tabPane.getSelectionModel().getSelectedItem()));
+    }
+
+    private Optional<CodeArea> extractCodeArea(Tab tab) {
+        if (tab != null && tab.getUserData() instanceof EditorTab et) {
+            return Optional.of(et.codeArea);
+        }
+        return Optional.empty();
+    }
+
     private Tab buildTab(Path key, EditorTab editorTab) {
         VirtualizedScrollPane<CodeArea> scrollPane = new VirtualizedScrollPane<>(editorTab.codeArea);
         String baseName = editorTab.path.getFileName().toString();

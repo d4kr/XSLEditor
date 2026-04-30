@@ -5,6 +5,7 @@ import ch.ti.gagi.xsleditor.log.LogEntry;
 import ch.ti.gagi.xsleditor.ui.AboutDialog;
 import ch.ti.gagi.xsleditor.model.Project;
 import javafx.animation.PauseTransition;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
@@ -73,6 +74,12 @@ public class MainController {
     @FXML private Button renderButton;
     @FXML private MenuItem menuItemRender;
 
+    // Phase 26 additions
+    @FXML private MenuItem undoMenuItem;
+    @FXML private MenuItem redoMenuItem;
+    @FXML private Button undoButton;
+    @FXML private Button redoButton;
+
     // --- State ---
 
     private Stage primaryStage;
@@ -107,6 +114,8 @@ public class MainController {
             () -> primaryStage,
             this::setDirty
         );
+        // Phase 26 — Undo/Redo bindings rebind on tab switch (EDIT-14, EDIT-15, TOOL-01, TOOL-02)
+        editorController.setOnActiveTabChanged(this::rebindUndoRedo);
         // Wire Phase 3 integration seam (FileTreeController.java line 117, D-05)
         fileTreeController.setOnFileOpenRequest(editorController::openOrFocusTab);
         // Phase 5 — Find in Files (EDIT-08)
@@ -336,6 +345,81 @@ public class MainController {
     @FXML
     private void handleEditSelectAll() {
         editorController.getActiveCodeArea().ifPresent(CodeArea::selectAll);
+    }
+
+    // --- Phase 26 action handlers (Undo/Redo) ---
+
+    @FXML
+    private void handleEditUndo() {
+        editorController.getActiveCodeArea().ifPresent(CodeArea::undo);
+    }
+
+    @FXML
+    private void handleEditRedo() {
+        editorController.getActiveCodeArea().ifPresent(CodeArea::redo);
+    }
+
+    @FXML
+    private void handleToolbarUndo() {
+        editorController.getActiveCodeArea().ifPresent(CodeArea::undo);
+    }
+
+    @FXML
+    private void handleToolbarRedo() {
+        editorController.getActiveCodeArea().ifPresent(CodeArea::redo);
+    }
+
+    /**
+     * Rebinds the disable properties of the four Undo/Redo controls
+     * (Edit menu items + toolbar buttons) to the UndoManager of the
+     * newly active CodeArea. Called from EditorController whenever
+     * the selected tab changes.
+     *
+     * <p>When no tab is open, all four controls are disabled.
+     * When a tab is open, each control is disabled exactly when
+     * its corresponding UndoManager availability property is false.</p>
+     *
+     * <p>Unbinds any previous bindings before binding new ones to avoid
+     * leaking listeners on closed tabs (RichTextFX UndoManager exposes
+     * properties tied to the CodeArea instance, which is GC-eligible
+     * once the tab is closed and unbound).</p>
+     */
+    private void rebindUndoRedo(Optional<CodeArea> activeCodeArea) {
+        // Unbind first — safe whether or not a binding currently exists.
+        undoMenuItem.disableProperty().unbind();
+        redoMenuItem.disableProperty().unbind();
+        undoButton.disableProperty().unbind();
+        redoButton.disableProperty().unbind();
+
+        if (activeCodeArea.isEmpty()) {
+            // No tab open — all four controls disabled.
+            undoMenuItem.setDisable(true);
+            redoMenuItem.setDisable(true);
+            undoButton.setDisable(true);
+            redoButton.setDisable(true);
+            return;
+        }
+
+        CodeArea ca = activeCodeArea.get();
+        // disable == NOT available.
+        // UndoManager.undoAvailableProperty() returns Val<Boolean> (ReactFX), not ObservableBooleanValue,
+        // so we use Bindings.createBooleanBinding with the Val as invalidation source.
+        undoMenuItem.disableProperty().bind(
+            Bindings.createBooleanBinding(
+                () -> !ca.getUndoManager().isUndoAvailable(),
+                ca.getUndoManager().undoAvailableProperty()));
+        redoMenuItem.disableProperty().bind(
+            Bindings.createBooleanBinding(
+                () -> !ca.getUndoManager().isRedoAvailable(),
+                ca.getUndoManager().redoAvailableProperty()));
+        undoButton.disableProperty().bind(
+            Bindings.createBooleanBinding(
+                () -> !ca.getUndoManager().isUndoAvailable(),
+                ca.getUndoManager().undoAvailableProperty()));
+        redoButton.disableProperty().bind(
+            Bindings.createBooleanBinding(
+                () -> !ca.getUndoManager().isRedoAvailable(),
+                ca.getUndoManager().redoAvailableProperty()));
     }
 
     // --- Private helpers ---
