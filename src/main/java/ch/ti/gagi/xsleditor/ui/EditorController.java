@@ -61,6 +61,7 @@ public final class EditorController {
     private TabPane tabPane;
     private final Map<Path, Tab> registry = new LinkedHashMap<>();
     private ChangeListener<Tab> activeTabListener;
+    private Runnable tabClosedCallback;
 
     // --- Public API ---
 
@@ -215,6 +216,21 @@ public final class EditorController {
         callback.accept(extractCodeArea(tabPane.getSelectionModel().getSelectedItem()));
     }
 
+    /**
+     * Registers a callback that fires whenever a tab is closed (after cleanup).
+     * Used by MainController to immediately unbind Undo/Redo controls from the
+     * UndoManager of the closing tab, so the controls are disabled before the
+     * next selection-change event propagates (WR-04).
+     *
+     * <p>Only one callback is supported; calling this method again replaces
+     * the previous one.</p>
+     *
+     * @param callback called on the JavaFX Application Thread when any tab is closed
+     */
+    public void setOnTabClosed(Runnable callback) {
+        this.tabClosedCallback = callback;
+    }
+
     private Optional<CodeArea> extractCodeArea(Tab tab) {
         if (tab != null && tab.getUserData() instanceof EditorTab et) {
             return Optional.of(et.codeArea);
@@ -354,6 +370,9 @@ public final class EditorController {
             editorTab.codeArea.selectedTextProperty().removeListener(selectionListener); // WR-03
             registry.remove(key);                                               // existing — keep
             updateAppDirtyState();                                              // existing — keep
+            // WR-04: notify MainController immediately so it unbinds Undo/Redo before
+            // the selection-change event propagates (avoids stale UndoManager reference window).
+            if (tabClosedCallback != null) tabClosedCallback.run();
         });
 
         return tab;

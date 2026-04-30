@@ -116,6 +116,9 @@ public class MainController {
         );
         // Phase 26 — Undo/Redo bindings rebind on tab switch (EDIT-14, EDIT-15, TOOL-01, TOOL-02)
         editorController.setOnActiveTabChanged(this::rebindUndoRedo);
+        // Phase 26 / WR-04 — immediately unbind Undo/Redo when a tab closes so controls
+        // are disabled before the selection-change event propagates (avoids stale UndoManager window).
+        editorController.setOnTabClosed(() -> rebindUndoRedo(Optional.empty()));
         // Wire Phase 3 integration seam (FileTreeController.java line 117, D-05)
         fileTreeController.setOnFileOpenRequest(editorController::openOrFocusTab);
         // Phase 5 — Find in Files (EDIT-08)
