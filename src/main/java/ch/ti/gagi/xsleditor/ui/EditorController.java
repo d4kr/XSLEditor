@@ -60,6 +60,7 @@ public final class EditorController {
 
     private TabPane tabPane;
     private final Map<Path, Tab> registry = new LinkedHashMap<>();
+    private ChangeListener<Tab> activeTabListener;
 
     // --- Public API ---
 
@@ -192,19 +193,24 @@ public final class EditorController {
      * <p>Used by MainController to rebind Undo/Redo disable properties to the
      * UndoManager of the newly focused tab (TOOL-01, TOOL-02, EDIT-14, EDIT-15).</p>
      *
-     * <p>Idempotent in spirit: only one listener is supported; calling this method twice
-     * replaces the previous listener. Phase 26 needs only one consumer (MainController).</p>
+     * <p>Safe to call multiple times: any previously registered listener is removed
+     * before the new one is added, so only one listener is ever active at a time.</p>
      *
      * <p>The callback is invoked once immediately with the current selection so the
      * caller's bindings are correct at startup (when typically no tab is open yet).</p>
      */
     public void setOnActiveTabChanged(Consumer<Optional<CodeArea>> callback) {
         Objects.requireNonNull(callback, "callback");
-        // Replace any prior listener by re-registering. Since we hold no reference to
-        // the prior ChangeListener, we accept a one-shot semantics: caller invokes once.
-        tabPane.getSelectionModel().selectedItemProperty().addListener(
-            (obs, oldTab, newTab) -> callback.accept(extractCodeArea(newTab))
-        );
+        // Remove the prior listener (if any) before registering a new one,
+        // so repeated calls never accumulate listeners on the selection property.
+        if (activeTabListener != null) {
+            tabPane.getSelectionModel().selectedItemProperty()
+                   .removeListener(activeTabListener);
+        }
+        activeTabListener = (obs, oldTab, newTab) ->
+            callback.accept(extractCodeArea(newTab));
+        tabPane.getSelectionModel().selectedItemProperty()
+               .addListener(activeTabListener);
         // Fire once with the current selection so initial disable state is correct.
         callback.accept(extractCodeArea(tabPane.getSelectionModel().getSelectedItem()));
     }
