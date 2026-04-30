@@ -39,6 +39,15 @@
                               onAction="#handleExit"/>
                 </Menu>
                 <Menu text="Edit">
+                    <MenuItem fx:id="undoMenuItem"
+                              text="Undo"
+                              accelerator="Shortcut+Z"
+                              onAction="#handleEditUndo"/>
+                    <MenuItem fx:id="redoMenuItem"
+                              text="Redo"
+                              accelerator="Shortcut+Shift+Z"
+                              onAction="#handleEditRedo"/>
+                    <SeparatorMenuItem/>
                     <MenuItem text="Cut"
                               accelerator="Shortcut+X"
                               onAction="#handleEditCut"/>
@@ -69,6 +78,9 @@
                 </Menu>
             </MenuBar>
             <ToolBar>
+                <Button fx:id="undoButton" text="↺" onAction="#handleToolbarUndo"/>
+                <Button fx:id="redoButton" text="↻" onAction="#handleToolbarRedo"/>
+                <Separator/>
                 <Button fx:id="renderButton" text="Render" onAction="#handleRender"/>
             </ToolBar>
         </VBox>
