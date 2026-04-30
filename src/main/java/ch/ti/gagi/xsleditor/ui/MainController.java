@@ -350,24 +350,19 @@ public class MainController {
     // --- Phase 26 action handlers (Undo/Redo) ---
 
     @FXML
-    private void handleEditUndo() {
-        editorController.getActiveCodeArea().ifPresent(CodeArea::undo);
-    }
+    private void handleEditUndo()    { performUndo(); }
 
     @FXML
-    private void handleEditRedo() {
-        editorController.getActiveCodeArea().ifPresent(CodeArea::redo);
-    }
+    private void handleEditRedo()    { performRedo(); }
 
     @FXML
-    private void handleToolbarUndo() {
-        editorController.getActiveCodeArea().ifPresent(CodeArea::undo);
-    }
+    private void handleToolbarUndo() { performUndo(); }
 
     @FXML
-    private void handleToolbarRedo() {
-        editorController.getActiveCodeArea().ifPresent(CodeArea::redo);
-    }
+    private void handleToolbarRedo() { performRedo(); }
+
+    private void performUndo() { editorController.getActiveCodeArea().ifPresent(CodeArea::undo); }
+    private void performRedo() { editorController.getActiveCodeArea().ifPresent(CodeArea::redo); }
 
     /**
      * Rebinds the disable properties of the four Undo/Redo controls
