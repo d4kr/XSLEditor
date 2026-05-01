@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v0.5.0
 milestone_name: Undo, Fix & Licenza
-status: milestone_complete
-last_updated: "2026-05-01T19:07:24.398Z"
-last_activity: 2026-05-01 -- Phase 28 execution started
+status: completed
+last_updated: "2026-05-01T19:24:08.861Z"
+last_activity: 2026-05-01
 progress:
   total_phases: 5
-  completed_phases: 5
+  completed_phases: 4
   total_plans: 6
   completed_plans: 5
-  percent: 100
+  percent: 83
 ---
 
 # Project State: XSLEditor
@@ -85,3 +85,11 @@ See .planning/PROJECT.md Key Decisions table for full log.
 ## Blockers / Concerns
 
 None.
+
+## Deferred Items
+
+Items acknowledged and deferred at milestone close on 2026-05-01:
+
+| Category | Item | Status |
+|----------|------|--------|
+| uat_gaps | Phase 24: 24-HUMAN-UAT.md — Runtime smoke test for File menu keyboard accelerators (Cmd+O/N/Q/Shift+E/Shift+I) | partial (1 pending scenario, never run manually) |

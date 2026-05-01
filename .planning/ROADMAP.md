@@ -8,7 +8,7 @@
 - ✅ **v0.3.0 Polish & Usability** — Phases 14–18 (shipped 2026-04-24)
 - ✅ **v0.4.0 GitHub Releases & Distribution** — Phases 19–23 (shipped 2026-04-27)
 - ✅ **v0.4.1 Keyboard Shortcuts & Edit Menu** — Phases 24–25 (shipped 2026-04-28)
-- 🚧 **v0.5.0 Undo, Fix & Licenza** — Phases 26–28 (in progress)
+- ✅ **v0.5.0 Undo, Fix & Licenza** — Phases 26–28 (shipped 2026-05-01)
 
 ## Phases
 
@@ -50,270 +50,55 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
 <details>
 <summary>✅ v0.3.0 Polish & Usability (Phases 14–18) — SHIPPED 2026-04-24</summary>
 
-- [x] **Phase 14: Version & Icon Housekeeping** — completed 2026-04-23
-- [x] **Phase 15: Dark Theme CSS Fixes** — completed 2026-04-23
-- [x] **Phase 16: Log Panel Layout** — completed 2026-04-23
-- [x] **Phase 17: Encoding Investigation & Fix** — completed 2026-04-23
-- [x] **Phase 18: README Rewrite** — completed 2026-04-24
+- [x] Phase 14: Version & Icon Housekeeping (2/2 plans) — completed 2026-04-23
+- [x] Phase 15: Dark Theme CSS Fixes (1/1 plans) — completed 2026-04-23
+- [x] Phase 16: Log Panel Layout (1/1 plans) — completed 2026-04-23
+- [x] Phase 17: Encoding Investigation & Fix (1/1 plans) — completed 2026-04-23
+- [x] Phase 18: README Rewrite (1/1 plans) — completed 2026-04-24
 
 </details>
 
 <details>
 <summary>✅ v0.4.0 GitHub Releases & Distribution (Phases 19–23) — SHIPPED 2026-04-27</summary>
 
-- [x] **Phase 19: Launcher Shim & Local Build** — completed
-- [x] **Phase 20: CI Skeleton — Unsigned Release Pipeline** — completed
-- [x] **Phase 21: macOS Signing** — completed 2026-04-26
-- [x] **Phase 22: macOS Notarization** — completed 2026-04-26
-- [x] **Phase 23: Signing Documentation** — completed 2026-04-27
+- [x] Phase 19: Launcher Shim & Local Build — completed
+- [x] Phase 20: CI Skeleton — Unsigned Release Pipeline — completed
+- [x] Phase 21: macOS Signing (2/2 plans) — completed 2026-04-26
+- [x] Phase 22: macOS Notarization (1/1 plans) — completed 2026-04-26
+- [x] Phase 23: Signing Documentation (1/1 plans) — completed 2026-04-27
 
 </details>
 
 <details>
 <summary>✅ v0.4.1 Keyboard Shortcuts & Edit Menu (Phases 24–25) — SHIPPED 2026-04-28</summary>
 
-- [x] **Phase 24: Keyboard Accelerators** — completed 2026-04-27
-- [x] **Phase 25: Edit Menu Clipboard Commands** — completed 2026-04-28
+- [x] Phase 24: Keyboard Accelerators (1/1 plans) — completed 2026-04-27
+- [x] Phase 25: Edit Menu Clipboard Commands (1/1 plans) — completed 2026-04-28
 
 </details>
 
-### 🚧 v0.5.0 Undo, Fix & Licenza (In Progress)
+<details>
+<summary>✅ v0.5.0 Undo, Fix & Licenza (Phases 26–28) — SHIPPED 2026-05-01</summary>
 
-**Milestone Goal:** Expose UndoManager as full Undo/Redo in the Edit menu and toolbar, add toolbar Save button, fix the broken ChatGPT URL in the error log, and update licensing to MIT throughout the repository.
+- [x] Phase 26: Undo/Redo System (1/1 plans) — completed 2026-04-30
+- [x] Phase 27: Toolbar Save & ChatGPT Fix (2/2 plans) — completed 2026-05-01
+- [x] Phase 28: License & README (1/1 plans) — completed 2026-05-01
 
-- [x] **Phase 26: Undo/Redo System** — Expose UndoManager as Edit > Undo/Redo and toolbar Undo/Redo buttons with correct disable bindings (completed 2026-04-30)
-- [x] **Phase 27: Toolbar Save & ChatGPT Fix** — Add toolbar Save button with dirty-state disable binding; fix broken ChatGPT URL parameter (completed 2026-05-01)
-- [x] **Phase 28: License & README** — Add MIT LICENSE file, update AboutDialog to MIT, resize README logo via HTML img tag (completed 2026-05-01)
+Full archive: `.planning/milestones/v0.5.0-ROADMAP.md`
 
-## Phase Details
-
-### Phase 14: Version & Icon Housekeeping
-**Goal**: The app reports the correct version (0.3.0) automatically from the build, and the app icon is visible in the window title bar and About dialog
-**Depends on**: Phase 13
-**Requirements**: VER-01, VER-02, ICON-01, ICON-02
-**Success Criteria** (what must be TRUE):
-  1. About dialog displays "0.3.0" — not hardcoded, not a literal placeholder like `${version}`
-  2. App icon is visible in the macOS window title bar (wired before `primaryStage.show()`)
-  3. About dialog shows the app icon alongside the version information
-  4. Icon file lives at `src/main/resources/` (not project root), and a missing/misplaced icon logs a warning rather than crashing silently
-**Plans**: 2 plans
-Plans:
-- [x] 14-01-PLAN.md — Bump version to 0.3.0 and move icon.png to resources tree
-- [x] 14-02-PLAN.md — Wire icon in XSLEditorApp stage and About dialog ImageView
-**UI hint**: yes
-
-### Phase 15: Dark Theme CSS Fixes
-**Goal**: All text in the UI is readable against the dark background — in the code editor, file tree, and log panel — including selected and focused states
-**Depends on**: Phase 14
-**Requirements**: UI-01, UI-02, UI-03, UI-04
-**Success Criteria** (what must be TRUE):
-  1. Code editor shows light text on a dark background; syntax colors are distinguishable; caret and selection highlight are visible
-  2. File tree cells show readable text in default, hover, and selected states — no dark-on-dark inversion
-  3. Log panel rows show readable text for all severity levels (INFO, WARNING, ERROR) in default and selected states
-  4. Selected rows in both TreeView and TableView show a visible highlight with readable (not invisible) text
-**Plans**: 1 plan
-Plans:
-- [x] 15-01-PLAN.md — Append Phase 15 CSS block: CodeArea dark bg, TreeView/TableView selected state fixes
-**UI hint**: yes
-
-### Phase 16: Log Panel Layout
-**Goal**: The log panel TableView fills the full container width with no phantom filler column, and no column compresses to an unreadable width at narrow window sizes
-**Depends on**: Phase 15
-**Requirements**: LOG-01, LOG-02, LOG-03
-**Success Criteria** (what must be TRUE):
-  1. Log panel TableView expands horizontally to fill 100% of its container width — no empty space at the right edge
-  2. No phantom empty column appears at the right side of the log table
-  3. Time, Level, and Action columns retain a readable minimum width even when the window is at its minimum size; Message column absorbs remaining width
-**Plans**: 1 plan
-Plans:
-- [x] 16-01-PLAN.md — Set CONSTRAINED_RESIZE_POLICY + minWidth/maxWidth on all five log table columns
-**UI hint**: yes
-
-### Phase 17: Encoding Investigation & Fix
-**Goal**: Non-ASCII and special characters (including accented Italian characters) display correctly in the code editor, log panel, and PDF output, with the root cause identified and fixed at the correct pipeline layer
-**Depends on**: Phase 16
-**Requirements**: ENC-01, ENC-02, ENC-03
-**Success Criteria** (what must be TRUE):
-  1. The root cause of the encoding issue is documented (BOM artifact, Saxon `xsl:output` declaration mismatch, or FOP font substitution for PDF glyphs)
-  2. Opening a UTF-8 file with non-ASCII characters in the editor shows those characters correctly — no BOM character prepended, no replacement glyphs
-  3. Log panel messages containing non-ASCII characters (e.g., error messages referencing Italian filenames or XSLT values) display correctly
-**Plans**: 1 plan
-Plans:
-- [x] 17-01-PLAN.md — New XmlCharsetDetector utility; fix EditorTab/EditorController read+write, RenderOrchestrator, LibraryPreprocessor to respect declared XML encoding
-
-### Phase 18: README Rewrite
-**Goal**: The README accurately describes XSLEditor as it exists after v0.3.0 — with correct version, build instructions, visible app icon, and a screenshot of the working UI
-**Depends on**: Phase 17
-**Requirements**: DOC-01, DOC-02, DOC-03
-**Success Criteria** (what must be TRUE):
-  1. README includes project overview, prerequisites (Java 21), build command, and run command — sufficient for a developer to build and run without prior context
-  2. README includes the app icon image and a screenshot of the main window showing the editor, file tree, and PDF preview
-  3. README states the correct version (0.3.0) and lists the current tech stack (Java 21, Saxon-HE 12.4, Apache FOP 2.9, JavaFX, RichTextFX)
-**Plans**: 1 plan
-Plans:
-- [x] 18-01-PLAN.md — Write complete README.md, build shadow JAR, capture screenshot via human checkpoint
-
----
-
-## v0.4.0 Phase Details
-
-### Phase 19: Launcher Shim & Local Build
-**Goal**: The fat JAR launches cleanly via `java -jar` and jpackage can wrap it into a native bundle locally — the mandatory prerequisite for all CI packaging work
-**Depends on**: Phase 18
-**Requirements**: BUILD-01, BUILD-02, BUILD-03, BUILD-04
-**Success Criteria** (what must be TRUE):
-  1. Running `java -jar build/libs/XSLEditor-*.jar` on the developer machine launches the full app without "JavaFX runtime components are missing" errors
-  2. The fat JAR manifest points to `ch.ti.gagi.xsleditor.Launcher` and `META-INF/services/javax.xml.transform.TransformerFactory` is present in the JAR (Saxon/FOP service registration intact after `mergeServiceFiles()`)
-  3. Passing `-Pversion=0.4.0` to `./gradlew shadowJar` produces a JAR whose `version.properties` reports `0.4.0`
-  4. Running jpackage locally with the fat JAR and an `icon.png` produces a native bundle (`.app` on macOS or `.exe` on Windows) where the app icon is visible in the Dock/taskbar
-**Plans**: TBD
-
-### Phase 20: CI Skeleton — Unsigned Release Pipeline
-**Goal**: Pushing a `v*` tag triggers a GitHub Actions workflow that builds all platform artifacts and publishes a complete GitHub Release — unsigned, but end-to-end verified
-**Depends on**: Phase 19
-**Requirements**: CI-01, CI-02, CI-03, MACOS-01, MACOS-02, WIN-01, WIN-02, REL-01, REL-02, REL-03
-**Success Criteria** (what must be TRUE):
-  1. Pushing a `v0.4.0-test1` tag triggers the workflow and all 5 jobs complete green on GitHub Actions; the fat JAR is built once on `ubuntu-latest` and downloaded by all platform packaging jobs without re-running Gradle
-  2. The macOS arm64 job (`macos-15`) and macOS x64 job (`macos-15-intel`) each produce a DMG artifact using Liberica JDK+FX 21; both DMGs mount and the app launches
-  3. The Windows job (`windows-latest`) produces a signed-off MSI installer (unsigned at this phase) and a portable ZIP; the MSI installs without errors and the app launches; the ZIP runs without installation
-  4. A GitHub Release is created automatically with all 5 assets attached (arm64 DMG, x64 DMG, MSI, Windows portable ZIP, fat JAR); release notes are populated from the git log between the previous tag and the new tag
-  5. Tags containing `-` (e.g. `v0.4.0-beta1`) are automatically marked as pre-release on GitHub; clean tags (e.g. `v0.4.0`) are marked as full release
-**Plans**: TBD
-
-### Phase 21: macOS Signing
-**Goal**: Both macOS DMGs (arm64 and x64) are signed with a Developer ID Application certificate so Gatekeeper accepts them as coming from an identified developer
-**Depends on**: Phase 20
-**Requirements**: MACOS-03
-**Success Criteria** (what must be TRUE):
-  1. `codesign --verify --deep --strict` passes on both the arm64 and x64 DMG artifacts produced by the CI workflow
-  2. The CI signing sequence (import cert to keychain, `security set-key-partition-list`, jpackage with `--mac-sign --mac-entitlements`) runs without interactive prompts and does not hang on a headless runner
-  3. The `entitlements.plist` file (with `com.apple.security.cs.allow-jit` and `com.apple.security.cs.disable-library-validation`) is committed to the repository and referenced in the jpackage invocation
-  4. The 7 required GitHub Actions secrets (`MACOS_CERTIFICATE`, `MACOS_CERTIFICATE_PASSWORD`, `MACOS_SIGNING_IDENTITY`, `MACOS_KEYCHAIN_PASSWORD`, `APPLE_ID`, `APPLE_TEAM_ID`, `APPLE_APP_SPECIFIC_PASSWORD`) are documented and the workflow reads them correctly
-**Plans**: 2 plans
-Plans:
-- [x] 21-01-PLAN.md — entitlements.plist + CI signing sequence in both macOS jobs
-- [x] 21-02-PLAN.md — Secrets documentation comment in release.yml
-
-### Phase 22: macOS Notarization
-**Goal**: Both macOS DMGs are notarized by Apple and stapled so that Gatekeeper accepts them on any macOS machine without a quarantine dialog — even offline
-**Depends on**: Phase 21
-**Requirements**: MACOS-04
-**Success Criteria** (what must be TRUE):
-  1. `xcrun notarytool submit --wait` completes with status `Accepted` for both the arm64 and x64 DMGs in the CI workflow
-  2. `xcrun stapler staple` runs successfully on both DMGs after notarization; the staple ticket is embedded in the DMG
-  3. Downloading the stapled arm64 DMG on a macOS machine and opening the app does not show a Gatekeeper quarantine dialog ("Apple cannot verify that this app is free of malware")
-**Plans**: 1 plan
-Plans:
-- [x] 22-01-PLAN.md — Notarize + staple + Gatekeeper-check steps in both macOS CI jobs
-
-### Phase 23: Signing Documentation
-**Goal**: A developer who is new to the repository can configure all macOS signing secrets and have the full signing + notarization pipeline working by following `docs/SIGNING.md` alone
-**Depends on**: Phase 22
-**Requirements**: SIGN-01
-**Success Criteria** (what must be TRUE):
-  1. `docs/SIGNING.md` exists in the repository and documents the end-to-end process: exporting the Developer ID Application certificate as `.p12` from Keychain Access, base64-encoding it, and setting all 7 required GitHub Actions secrets
-  2. The document names each secret (`MACOS_CERTIFICATE`, `MACOS_CERTIFICATE_PASSWORD`, `MACOS_SIGNING_IDENTITY`, `MACOS_KEYCHAIN_PASSWORD`, `APPLE_ID`, `APPLE_TEAM_ID`, `APPLE_APP_SPECIFIC_PASSWORD`) and explains what value each expects
-  3. The document notes the Apple Developer Program membership requirement ($99/yr) for notarization and explains the SmartScreen warning that appears on Windows due to unsigned MSI
-**Plans**: 1 plan
-Plans:
-- [x] 23-01-PLAN.md — Create docs/SIGNING.md, link from README, add pointer comment in release.yml
-
----
-
-## v0.4.1 Phase Details
-
-### Phase 24: Keyboard Accelerators
-**Goal**: Every existing File menu item responds to its keyboard shortcut without the user touching the mouse
-**Depends on**: Phase 23
-**Requirements**: KBD-01, KBD-02, KBD-03, KBD-04, KBD-05
-**Success Criteria** (what must be TRUE):
-  1. Pressing `Shortcut+O` opens the "Open Project..." file chooser, identical to clicking File > Open Project...
-  2. Pressing `Shortcut+N` opens the "New File..." dialog, identical to clicking File > New File...
-  3. Pressing `Shortcut+Q` triggers the application exit flow (with close-confirmation dialog if there are unsaved changes), identical to clicking File > Exit
-  4. Pressing `Shortcut+Shift+E` invokes Set Entrypoint on the currently selected file, identical to clicking File > Set Entrypoint
-  5. Pressing `Shortcut+Shift+I` invokes Set XML Input on the currently selected file, identical to clicking File > Set XML Input
-**Plans**: 1 plan
-Plans:
-- [x] 24-01-PLAN.md — Add Shortcut+ accelerators to five File menu items in main.fxml (FXML-only)
-**UI hint**: yes
-
-### Phase 25: Edit Menu Clipboard Commands
-**Goal**: The Edit menu provides fully functional Cut, Copy, Paste, and Select All commands that operate on the active code editor tab
-**Depends on**: Phase 24
-**Requirements**: EDIT-10, EDIT-11, EDIT-12, EDIT-13
-**Success Criteria** (what must be TRUE):
-  1. With text selected in the active editor, Edit > Cut (and `Shortcut+X`) removes the selection and places it on the system clipboard; the editor content updates immediately
-  2. With text selected in the active editor, Edit > Copy (and `Shortcut+C`) copies the selection to the system clipboard without modifying the editor content
-  3. Edit > Paste (and `Shortcut+V`) inserts clipboard text at the current cursor position in the active editor
-  4. Edit > Select All (and `Shortcut+A`) selects all text in the active editor tab, from the first to the last character
-**Plans**: 1 plan
-Plans:
-- [x] 25-01-PLAN.md — Add getActiveCodeArea() to EditorController; populate Edit menu in main.fxml; wire four @FXML clipboard handlers in MainController
-**UI hint**: yes
-
----
-
-## v0.5.0 Phase Details
-
-### Phase 26: Undo/Redo System
-**Goal**: The developer can undo and redo edits in the active editor tab via both the Edit menu and dedicated toolbar buttons, with buttons disabled when there is no history to act on
-**Depends on**: Phase 25
-**Requirements**: EDIT-14, EDIT-15, TOOL-01, TOOL-02
-**Success Criteria** (what must be TRUE):
-  1. After making one or more edits, Edit > Undo (Ctrl+Z) reverses the last edit in the active editor tab; repeated invocations continue reversing earlier edits
-  2. After undoing, Edit > Redo (Ctrl+Shift+Z) re-applies the undone edit; the redo stack empties when a new edit is made
-  3. The toolbar Undo button is enabled only when undo history is available for the active tab, and disabled otherwise (including when no tab is open)
-  4. The toolbar Redo button is enabled only when redo history is available for the active tab, and disabled otherwise
-  5. Switching between editor tabs updates the Undo/Redo button disable states immediately to reflect the history of the newly focused tab
-**Plans**: 1 plan
-Plans:
-- [x] 26-01-PLAN.md — Add Edit menu Undo/Redo + toolbar ↺/↻ buttons + tab-switch rebinding hook in EditorController and MainController
-**UI hint**: yes
-
-### Phase 27: Toolbar Save & ChatGPT Fix
-**Goal**: The developer can save the active tab from the toolbar with a single click, and clicking the ChatGPT button in the error log opens a correctly pre-filled ChatGPT query in the browser
-**Depends on**: Phase 26
-**Requirements**: TOOL-03, ERR-07
-**Success Criteria** (what must be TRUE):
-  1. The toolbar Save button is enabled only when the active tab has unsaved changes (is dirty), and disabled when the tab is clean or no tab is open
-  2. Clicking the toolbar Save button saves the active tab's content to disk and clears the dirty indicator (the `*` disappears from the tab title)
-  3. Clicking the "chat" button on any error log row opens the default browser with a ChatGPT URL that pre-fills the error message as a prompt — the query arrives in the ChatGPT input field correctly (no broken `?q=` parameter)
-**Plans**: 2 plans
-Plans:
-- [x] 27-01-PLAN.md — Add toolbar saveButton + tooltips (FXML), wire saveActiveTab() in EditorController, extend MainController rebind to include saveButton.disable
-- [x] 27-02-PLAN.md — Fix ChatGPT button: addEventFilter -> addEventHandler in LogController.createAiButton (one-token fix, ERR-07)
-**UI hint**: yes
-
-### Phase 28: License & README
-**Goal**: The repository declares MIT as its license in a standard LICENSE file, the About dialog reflects MIT, and the README logo renders at a reduced display size
-**Depends on**: Phase 27
-**Requirements**: DOC-01, DOC-02, DOC-03
-**Success Criteria** (what must be TRUE):
-  1. A `LICENSE` file exists in the project root containing the standard MIT License text with year 2026 and the author name
-  2. Opening the About dialog shows "License: MIT" (not "Apache 2.0") with a clickable link that opens the MIT license text in the browser
-  3. The README logo (app icon image) renders at a visually smaller size in GitHub's Markdown renderer — achieved via an HTML `<img width="96">` tag replacing the bare Markdown image syntax
-**Plans**: TBD
+</details>
 
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 1–13 | v0.1.0–v0.2.1 | 32/32 | Complete | 2026-04-22 |
-| 14. Version & Icon Housekeeping | v0.3.0 | 2/2 | Complete | 2026-04-23 |
-| 15. Dark Theme CSS Fixes | v0.3.0 | 1/1 | Complete | 2026-04-23 |
-| 16. Log Panel Layout | v0.3.0 | 1/1 | Complete | 2026-04-23 |
-| 17. Encoding Investigation & Fix | v0.3.0 | 1/1 | Complete | 2026-04-23 |
-| 18. README Rewrite | v0.3.0 | 1/1 | Complete | 2026-04-24 |
-| 19. Launcher Shim & Local Build | v0.4.0 | 0/2 | Complete | - |
-| 20. CI Skeleton — Unsigned Release Pipeline | v0.4.0 | 0/? | Complete | - |
-| 21. macOS Signing | v0.4.0 | 2/2 | Complete | 2026-04-26 |
-| 22. macOS Notarization | v0.4.0 | 1/1 | Complete | 2026-04-26 |
-| 23. Signing Documentation | v0.4.0 | 1/1 | Complete | 2026-04-27 |
-| 24. Keyboard Accelerators | v0.4.1 | 1/1 | Complete | 2026-04-27 |
-| 25. Edit Menu Clipboard Commands | v0.4.1 | 1/1 | Complete | 2026-04-28 |
-| 26. Undo/Redo System | v0.5.0 | 1/1 | Complete   | 2026-04-30 |
-| 27. Toolbar Save & ChatGPT Fix | v0.5.0 | 2/2 | Complete    | 2026-05-01 |
-| 28. License & README | v0.5.0 | 1/1 | Complete    | 2026-05-01 |
+| 14–18 | v0.3.0 | 6/6 | Complete | 2026-04-24 |
+| 19–23 | v0.4.0 | 5/5 | Complete | 2026-04-27 |
+| 24–25 | v0.4.1 | 2/2 | Complete | 2026-04-28 |
+| 26. Undo/Redo System | v0.5.0 | 1/1 | Complete | 2026-04-30 |
+| 27. Toolbar Save & ChatGPT Fix | v0.5.0 | 2/2 | Complete | 2026-05-01 |
+| 28. License & README | v0.5.0 | 1/1 | Complete | 2026-05-01 |
 
 ---
-*Roadmap updated: 2026-04-30*
+*Roadmap updated: 2026-05-01 — v0.5.0 shipped*

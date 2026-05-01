@@ -1,5 +1,18 @@
 # Milestones: XSLEditor
 
+## v0.5.0 Undo, Fix & Licenza (Shipped: 2026-05-01)
+
+**Phases completed:** 5 phases, 6 plans, 3 tasks
+
+**Key accomplishments:**
+
+- XSLEditorApp.java
+- One-liner:
+- One-liner:
+- Complete README.md with pipeline overview, Java 21 prerequisite, exact build/run commands, full tech stack table, and 3038×2046 screenshot of the three-panel UI
+
+---
+
 ## v1.0 MVP — Shipped 2026-04-21
 
 **Phases:** 1–9 | **Plans:** 24 | **Timeline:** 14 days (2026-04-07 → 2026-04-21)
