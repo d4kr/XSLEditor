@@ -82,7 +82,7 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
 **Milestone Goal:** Expose UndoManager as full Undo/Redo in the Edit menu and toolbar, add toolbar Save button, fix the broken ChatGPT URL in the error log, and update licensing to MIT throughout the repository.
 
 - [x] **Phase 26: Undo/Redo System** — Expose UndoManager as Edit > Undo/Redo and toolbar Undo/Redo buttons with correct disable bindings (completed 2026-04-30)
-- [ ] **Phase 27: Toolbar Save & ChatGPT Fix** — Add toolbar Save button with dirty-state disable binding; fix broken ChatGPT URL parameter
+- [x] **Phase 27: Toolbar Save & ChatGPT Fix** — Add toolbar Save button with dirty-state disable binding; fix broken ChatGPT URL parameter (completed 2026-05-01)
 - [ ] **Phase 28: License & README** — Add MIT LICENSE file, update AboutDialog to MIT, resize README logo via HTML img tag
 
 ## Phase Details
@@ -280,8 +280,8 @@ Plans:
   3. Clicking the "chat" button on any error log row opens the default browser with a ChatGPT URL that pre-fills the error message as a prompt — the query arrives in the ChatGPT input field correctly (no broken `?q=` parameter)
 **Plans**: 2 plans
 Plans:
-- [ ] 27-01-PLAN.md — Add toolbar saveButton + tooltips (FXML), wire saveActiveTab() in EditorController, extend MainController rebind to include saveButton.disable
-- [ ] 27-02-PLAN.md — Fix ChatGPT button: addEventFilter -> addEventHandler in LogController.createAiButton (one-token fix, ERR-07)
+- [x] 27-01-PLAN.md — Add toolbar saveButton + tooltips (FXML), wire saveActiveTab() in EditorController, extend MainController rebind to include saveButton.disable
+- [x] 27-02-PLAN.md — Fix ChatGPT button: addEventFilter -> addEventHandler in LogController.createAiButton (one-token fix, ERR-07)
 **UI hint**: yes
 
 ### Phase 28: License & README
@@ -312,7 +312,7 @@ Plans:
 | 24. Keyboard Accelerators | v0.4.1 | 1/1 | Complete | 2026-04-27 |
 | 25. Edit Menu Clipboard Commands | v0.4.1 | 1/1 | Complete | 2026-04-28 |
 | 26. Undo/Redo System | v0.5.0 | 1/1 | Complete   | 2026-04-30 |
-| 27. Toolbar Save & ChatGPT Fix | v0.5.0 | 0/2 | Planned    |  |
+| 27. Toolbar Save & ChatGPT Fix | v0.5.0 | 2/2 | Complete    | 2026-05-01 |
 | 28. License & README | v0.5.0 | 0/? | Not started | - |
 
 ---
