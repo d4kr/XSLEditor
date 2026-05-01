@@ -1,10 +1,10 @@
+<img src="src/main/resources/ch/ti/gagi/xsleditor/icon.png" width="96">
+
 # XSLEditor
 
 > Local desktop tool for developers to edit multi-file XSLT/XSL-FO templates, generate PDFs on demand, and debug the full pipeline — all in one window.
 
-![App icon](src/main/resources/ch/ti/gagi/xsleditor/icon.png)
-
-**Version:** 0.3.0
+**Version:** 0.5.0
 
 ## Overview
 
@@ -34,18 +34,18 @@ Core goals:
 ./gradlew shadowJar
 ```
 
-Output: `build/libs/XSLEditor-0.3.0.jar`
+Output: `build/libs/XSLEditor-0.5.0.jar`
 
 ## Run
 
 ```bash
-java -jar build/libs/XSLEditor-0.3.0.jar
+java -jar build/libs/XSLEditor-0.5.0.jar
 ```
 
 macOS note: if you see a Gatekeeper warning, right-click the JAR and choose Open, or run:
 
 ```bash
-xattr -d com.apple.quarantine build/libs/XSLEditor-0.3.0.jar
+xattr -d com.apple.quarantine build/libs/XSLEditor-0.5.0.jar
 ```
 
 ## Tech Stack
@@ -91,4 +91,4 @@ To configure macOS signing and notarization secrets for CI releases, see [`docs/
 
 ## License
 
-Internal developer tool — not distributed publicly.
+MIT — see [LICENSE](LICENSE).

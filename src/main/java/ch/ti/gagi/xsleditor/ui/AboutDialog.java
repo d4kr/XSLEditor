@@ -101,14 +101,14 @@ public class AboutDialog extends Dialog<Void> {
         authorLabel.setStyle("-fx-text-fill: #cccccc;");
 
         // 9. License HBox with label and hyperlink (D-05)
-        Label licenseLabel = new Label("License: Apache 2.0");
+        Label licenseLabel = new Label("License: MIT");
         licenseLabel.setFont(Font.font("System", 13));
         licenseLabel.setStyle("-fx-text-fill: #cccccc;");
 
         Hyperlink viewLink = new Hyperlink("View license");
         viewLink.setStyle("-fx-text-fill: #007acc;");
         viewLink.setOnAction(e ->
-            hostServices.showDocument("https://www.apache.org/licenses/LICENSE-2.0"));
+            hostServices.showDocument("https://opensource.org/licenses/MIT"));
 
         HBox licenseBox = new HBox(8, licenseLabel, viewLink);
         licenseBox.setAlignment(Pos.CENTER_LEFT);
