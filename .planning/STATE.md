@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v0.5.0
 milestone_name: Undo, Fix & Licenza
-status: planning
-last_updated: "2026-05-01T15:31:32.390Z"
-last_activity: 2026-05-01
+status: executing
+last_updated: "2026-05-01T19:07:24.398Z"
+last_activity: 2026-05-01 -- Phase 28 execution started
 progress:
   total_phases: 5
   completed_phases: 4
@@ -20,16 +20,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-29)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** Phase 27 — toolbar-save-chatgpt-fix
+**Current focus:** Phase 28 — license-readme
 
 ---
 
 ## Current Position
 
-Phase: 28
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-05-01
+Phase: 28 (license-readme) — EXECUTING
+Plan: 1 of 1
+Status: Executing Phase 28
+Last activity: 2026-05-01 -- Phase 28 execution started
 
 ## Completed Phases
 

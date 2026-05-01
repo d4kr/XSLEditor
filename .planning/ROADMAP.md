@@ -83,7 +83,7 @@ Full archive: `.planning/milestones/v0.2.0-ROADMAP.md`
 
 - [x] **Phase 26: Undo/Redo System** — Expose UndoManager as Edit > Undo/Redo and toolbar Undo/Redo buttons with correct disable bindings (completed 2026-04-30)
 - [x] **Phase 27: Toolbar Save & ChatGPT Fix** — Add toolbar Save button with dirty-state disable binding; fix broken ChatGPT URL parameter (completed 2026-05-01)
-- [ ] **Phase 28: License & README** — Add MIT LICENSE file, update AboutDialog to MIT, resize README logo via HTML img tag
+- [x] **Phase 28: License & README** — Add MIT LICENSE file, update AboutDialog to MIT, resize README logo via HTML img tag (completed 2026-05-01)
 
 ## Phase Details
 
@@ -313,7 +313,7 @@ Plans:
 | 25. Edit Menu Clipboard Commands | v0.4.1 | 1/1 | Complete | 2026-04-28 |
 | 26. Undo/Redo System | v0.5.0 | 1/1 | Complete   | 2026-04-30 |
 | 27. Toolbar Save & ChatGPT Fix | v0.5.0 | 2/2 | Complete    | 2026-05-01 |
-| 28. License & README | v0.5.0 | 0/? | Not started | - |
+| 28. License & README | v0.5.0 | 1/1 | Complete   | 2026-05-01 |
 
 ---
 *Roadmap updated: 2026-04-30*
