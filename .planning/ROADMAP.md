@@ -313,7 +313,7 @@ Plans:
 | 25. Edit Menu Clipboard Commands | v0.4.1 | 1/1 | Complete | 2026-04-28 |
 | 26. Undo/Redo System | v0.5.0 | 1/1 | Complete   | 2026-04-30 |
 | 27. Toolbar Save & ChatGPT Fix | v0.5.0 | 2/2 | Complete    | 2026-05-01 |
-| 28. License & README | v0.5.0 | 1/1 | Complete   | 2026-05-01 |
+| 28. License & README | v0.5.0 | 1/1 | Complete    | 2026-05-01 |
 
 ---
 *Roadmap updated: 2026-04-30*
