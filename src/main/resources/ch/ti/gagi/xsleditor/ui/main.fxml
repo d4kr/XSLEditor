@@ -78,10 +78,20 @@
                 </Menu>
             </MenuBar>
             <ToolBar>
-                <Button fx:id="undoButton" text="↺" onAction="#handleToolbarUndo"/>
-                <Button fx:id="redoButton" text="↻" onAction="#handleToolbarRedo"/>
+                <Button fx:id="undoButton" text="↺" onAction="#handleToolbarUndo">
+                    <tooltip><Tooltip text="Undo"/></tooltip>
+                </Button>
+                <Button fx:id="redoButton" text="↻" onAction="#handleToolbarRedo">
+                    <tooltip><Tooltip text="Redo"/></tooltip>
+                </Button>
                 <Separator/>
-                <Button fx:id="renderButton" text="Render" onAction="#handleRender"/>
+                <Button fx:id="saveButton" text="💾" onAction="#handleToolbarSave">
+                    <tooltip><Tooltip text="Save"/></tooltip>
+                </Button>
+                <Separator/>
+                <Button fx:id="renderButton" text="Render" onAction="#handleRender">
+                    <tooltip><Tooltip text="Render"/></tooltip>
+                </Button>
             </ToolBar>
         </VBox>
     </top>

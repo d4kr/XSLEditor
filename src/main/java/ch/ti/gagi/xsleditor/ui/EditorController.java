@@ -1,6 +1,7 @@
 package ch.ti.gagi.xsleditor.ui;
 
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.scene.control.Alert;
@@ -183,6 +184,37 @@ public final class EditorController {
         Tab selected = tabPane.getSelectionModel().getSelectedItem();
         if (selected != null && selected.getUserData() instanceof EditorTab et) {
             return Optional.of(et.codeArea);
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Saves the currently active editor tab to disk (TOOL-03, Phase 27 D-06).
+     *
+     * Mirrors the Phase 25 clipboard pattern — resolves the selected Tab
+     * via tabPane.getSelectionModel().getSelectedItem(), unwraps the
+     * EditorTab via getUserData() instanceof EditorTab, and delegates to
+     * the existing private saveTab(EditorTab) (which handles disk write,
+     * UndoManager.mark(), updateAppDirtyState(), and IOException dialog).
+     *
+     * No-op when no tab is selected.
+     */
+    public void saveActiveTab() {
+        Tab selected = tabPane.getSelectionModel().getSelectedItem();
+        if (selected != null && selected.getUserData() instanceof EditorTab et) {
+            saveTab(et);
+        }
+    }
+
+    /**
+     * Returns the dirty BooleanBinding of the currently active EditorTab,
+     * or Optional.empty() when no tab is selected. Used by MainController
+     * to bind saveButton.disableProperty() to !dirty (Phase 27 D-07).
+     */
+    public Optional<ObservableValue<Boolean>> getActiveDirtyProperty() {
+        Tab selected = tabPane.getSelectionModel().getSelectedItem();
+        if (selected != null && selected.getUserData() instanceof EditorTab et) {
+            return Optional.of(et.dirty);
         }
         return Optional.empty();
     }

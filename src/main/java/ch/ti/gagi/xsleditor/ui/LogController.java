@@ -158,8 +158,11 @@ public final class LogController {
                 b.setTooltip(new Tooltip("Ask ChatGPT about this error"));
                 b.setStyle("-fx-padding: 1 4 1 4; -fx-font-size: 11;");
                 b.setFocusTraversable(false);
-                // D-05: consume MOUSE_PRESSED before it bubbles to the TableView row handler
-                b.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_PRESSED,
+                // Phase 27 ERR-07: addEventHandler (NOT addEventFilter) so ButtonBase arms first
+                // on MOUSE_PRESSED, then this handler runs and consume() prevents the event from
+                // bubbling to the TableView row selector. addEventFilter would consume during the
+                // capturing phase, blocking ButtonBase from arming, which is the bug being fixed.
+                b.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_PRESSED,
                         mouseEvt -> mouseEvt.consume());
                 b.setOnAction(evt -> {
                     LogEntry entry = getTableRow().getItem();

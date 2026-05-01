@@ -80,6 +80,9 @@ public class MainController {
     @FXML private Button undoButton;
     @FXML private Button redoButton;
 
+    // Phase 27 additions
+    @FXML private Button saveButton;
+
     // --- State ---
 
     private Stage primaryStage;
@@ -114,11 +117,11 @@ public class MainController {
             () -> primaryStage,
             this::setDirty
         );
-        // Phase 26 — Undo/Redo bindings rebind on tab switch (EDIT-14, EDIT-15, TOOL-01, TOOL-02)
-        editorController.setOnActiveTabChanged(this::rebindUndoRedo);
-        // Phase 26 / WR-04 — immediately unbind Undo/Redo when a tab closes so controls
+        // Phase 26/27 — toolbar button bindings rebind on tab switch (EDIT-14, EDIT-15, TOOL-01..03)
+        editorController.setOnActiveTabChanged(this::rebindToolbarButtons);
+        // Phase 26/27 / WR-04 — immediately unbind toolbar controls when a tab closes so controls
         // are disabled before the selection-change event propagates (avoids stale UndoManager window).
-        editorController.setOnTabClosed(() -> rebindUndoRedo(Optional.empty()));
+        editorController.setOnTabClosed(() -> rebindToolbarButtons(Optional.empty()));
         // Wire Phase 3 integration seam (FileTreeController.java line 117, D-05)
         fileTreeController.setOnFileOpenRequest(editorController::openOrFocusTab);
         // Phase 5 — Find in Files (EDIT-08)
@@ -364,37 +367,41 @@ public class MainController {
     @FXML
     private void handleToolbarRedo() { performRedo(); }
 
+    @FXML
+    private void handleToolbarSave() { editorController.saveActiveTab(); }
+
     private void performUndo() { editorController.getActiveCodeArea().ifPresent(CodeArea::undo); }
     private void performRedo() { editorController.getActiveCodeArea().ifPresent(CodeArea::redo); }
 
     /**
-     * Rebinds the disable properties of the four Undo/Redo controls
-     * (Edit menu items + toolbar buttons) to the UndoManager of the
-     * newly active CodeArea. Called from EditorController whenever
-     * the selected tab changes.
+     * Rebinds the disable properties of the toolbar/menu controls
+     * (Edit menu Undo/Redo items, toolbar ↺ ↻ 💾 buttons) to the
+     * UndoManager / dirty property of the newly active tab.
+     * Called from EditorController whenever the selected tab changes.
      *
-     * <p>When no tab is open, all four controls are disabled.
-     * When a tab is open, each control is disabled exactly when
-     * its corresponding UndoManager availability property is false.</p>
+     * <p>When no tab is open, all controls are disabled. When a tab
+     * is open, undo/redo controls disable iff their UndoManager
+     * availability property is false, and the saveButton disables
+     * iff the active EditorTab's dirty binding is false.</p>
      *
-     * <p>Unbinds any previous bindings before binding new ones to avoid
-     * leaking listeners on closed tabs (RichTextFX UndoManager exposes
-     * properties tied to the CodeArea instance, which is GC-eligible
-     * once the tab is closed and unbound).</p>
+     * <p>Unbinds any previous bindings before binding new ones to
+     * avoid leaking listeners on closed tabs.</p>
      */
-    private void rebindUndoRedo(Optional<CodeArea> activeCodeArea) {
+    private void rebindToolbarButtons(Optional<CodeArea> activeCodeArea) {
         // Unbind first — safe whether or not a binding currently exists.
         undoMenuItem.disableProperty().unbind();
         redoMenuItem.disableProperty().unbind();
         undoButton.disableProperty().unbind();
         redoButton.disableProperty().unbind();
+        saveButton.disableProperty().unbind();
 
         if (activeCodeArea.isEmpty()) {
-            // No tab open — all four controls disabled.
+            // No tab open — all toolbar controls disabled (Phase 27 D-07 null-tab path).
             undoMenuItem.setDisable(true);
             redoMenuItem.setDisable(true);
             undoButton.setDisable(true);
             redoButton.setDisable(true);
+            saveButton.setDisable(true);
             return;
         }
 
@@ -418,6 +425,15 @@ public class MainController {
             Bindings.createBooleanBinding(
                 () -> !ca.getUndoManager().isRedoAvailable(),
                 ca.getUndoManager().redoAvailableProperty()));
+
+        // Phase 27 D-07: saveButton.disable == !activeTab.dirty
+        editorController.getActiveDirtyProperty().ifPresentOrElse(
+            dirtyProp -> saveButton.disableProperty().bind(
+                Bindings.createBooleanBinding(
+                    () -> !Boolean.TRUE.equals(dirtyProp.getValue()),
+                    dirtyProp)),
+            () -> saveButton.setDisable(true)
+        );
     }
 
     // --- Private helpers ---
