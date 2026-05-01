@@ -54,9 +54,9 @@ A developer can open a project, edit XSLT templates, trigger a render, and see t
 - [ ] **ERR-07**: Fix ChatGPT link URL in error log button
 - [ ] **EDIT-14**: Undo command in Edit menu with Ctrl+Z shortcut
 - [ ] **EDIT-15**: Redo command in Edit menu with Ctrl+Shift+Z shortcut
-- [ ] **DOC-01**: Add MIT LICENSE file to repository
-- [ ] **DOC-02**: Update AboutDialog license label and link to MIT
-- [ ] **DOC-03**: README logo smaller via HTML `<img>` tag
+- ✓ **DOC-01**: Add MIT LICENSE file to repository — Validated in Phase 28
+- ✓ **DOC-02**: Update AboutDialog license label and link to MIT — Validated in Phase 28
+- ✓ **DOC-03**: README logo smaller via HTML `<img>` tag — Validated in Phase 28
 
 ### Out of Scope
 
@@ -130,4 +130,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-29 — Milestone v0.5.0 started: Undo, Fix & Licenza*
+*Last updated: 2026-05-01 — Phase 28 complete: MIT license, README logo, v0.5.0 version string*
