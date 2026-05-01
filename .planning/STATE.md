@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v0.5.0
 milestone_name: Undo, Fix & Licenza
 status: executing
-last_updated: "2026-05-01T07:04:50.756Z"
-last_activity: 2026-05-01 -- Phase 27 planning complete
+last_updated: "2026-05-01T07:06:11.850Z"
+last_activity: 2026-05-01 -- Phase 27 execution started
 progress:
   total_phases: 5
   completed_phases: 4
@@ -20,16 +20,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-29)
 
 **Core value:** A developer can open a project, edit XSLT templates, trigger a render, and see the PDF — all in one window without context switching.
-**Current focus:** Phase 26 — undo-redo-system
+**Current focus:** Phase 27 — toolbar-save-chatgpt-fix
 
 ---
 
 ## Current Position
 
-Phase: 26 (undo-redo-system) — EXECUTING
-Plan: 1 of 1
-Status: Ready to execute
-Last activity: 2026-05-01 -- Phase 27 planning complete
+Phase: 27 (toolbar-save-chatgpt-fix) — EXECUTING
+Plan: 1 of 2
+Status: Executing Phase 27
+Last activity: 2026-05-01 -- Phase 27 execution started
 
 ## Completed Phases
 

@@ -312,7 +312,7 @@ Plans:
 | 24. Keyboard Accelerators | v0.4.1 | 1/1 | Complete | 2026-04-27 |
 | 25. Edit Menu Clipboard Commands | v0.4.1 | 1/1 | Complete | 2026-04-28 |
 | 26. Undo/Redo System | v0.5.0 | 1/1 | Complete   | 2026-04-30 |
-| 27. Toolbar Save & ChatGPT Fix | v0.5.0 | 0/? | Not started | - |
+| 27. Toolbar Save & ChatGPT Fix | v0.5.0 | 0/2 | Planned    |  |
 | 28. License & README | v0.5.0 | 0/? | Not started | - |
 
 ---
