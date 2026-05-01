@@ -96,7 +96,7 @@ public class AboutDialog extends Dialog<Void> {
         VBox.setMargin(sep2, new Insets(4, 0, 4, 0));
 
         // 8. Author line
-        Label authorLabel = new Label("Author: Davide Krähenbühl & Claude Code");
+        Label authorLabel = new Label("Author: d4kr & Claude Code");
         authorLabel.setFont(Font.font("System", 13));
         authorLabel.setStyle("-fx-text-fill: #cccccc;");
 
