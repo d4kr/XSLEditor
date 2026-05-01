@@ -6,6 +6,7 @@ import ch.ti.gagi.xsleditor.ui.AboutDialog;
 import ch.ti.gagi.xsleditor.model.Project;
 import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
@@ -65,6 +66,8 @@ public class MainController {
     @FXML private MenuItem menuItemSetEntrypoint;
     @FXML private MenuItem menuItemSetXmlInput;
     @FXML private MenuItem menuItemNewFile;
+    @FXML private MenuItem menuItemSave;
+    @FXML private MenuItem menuItemSaveAll;
     @FXML private Label statusLabel;
 
     // Phase 5 additions
@@ -101,6 +104,8 @@ public class MainController {
     public void initialize() {
         // D-10: New File enabled only when a project is loaded
         menuItemNewFile.disableProperty().bind(projectContext.projectLoadedProperty().not());
+        // Save All enabled whenever a project is loaded (saveAll() handles the nothing-to-save case)
+        menuItemSaveAll.disableProperty().bind(projectContext.projectLoadedProperty().not());
         // D-04 (Phase 3): compound selection-and-loaded binding delegated to FileTreeController.
         // Also wires tree population, cell factory, and Set Entrypoint / Set XML Input handlers.
         fileTreeController.initialize(
@@ -370,6 +375,22 @@ public class MainController {
     @FXML
     private void handleToolbarSave() { editorController.saveActiveTab(); }
 
+    @FXML
+    private void handleMenuSave() { editorController.saveActiveTab(); }
+
+    @FXML
+    private void handleMenuSaveAll() {
+        try {
+            editorController.saveAll();
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Save All");
+            alert.setHeaderText("Save All failed");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
     private void performUndo() { editorController.getActiveCodeArea().ifPresent(CodeArea::undo); }
     private void performRedo() { editorController.getActiveCodeArea().ifPresent(CodeArea::redo); }
 
@@ -394,6 +415,7 @@ public class MainController {
         undoButton.disableProperty().unbind();
         redoButton.disableProperty().unbind();
         saveButton.disableProperty().unbind();
+        menuItemSave.disableProperty().unbind();
 
         if (activeCodeArea.isEmpty()) {
             // No tab open — all toolbar controls disabled (Phase 27 D-07 null-tab path).
@@ -402,6 +424,7 @@ public class MainController {
             undoButton.setDisable(true);
             redoButton.setDisable(true);
             saveButton.setDisable(true);
+            menuItemSave.setDisable(true);
             return;
         }
 
@@ -426,13 +449,18 @@ public class MainController {
                 () -> !ca.getUndoManager().isRedoAvailable(),
                 ca.getUndoManager().redoAvailableProperty()));
 
-        // Phase 27 D-07: saveButton.disable == !activeTab.dirty
+        // Phase 27 D-07: saveButton and menuItemSave disable == !activeTab.dirty
         editorController.getActiveDirtyProperty().ifPresentOrElse(
-            dirtyProp -> saveButton.disableProperty().bind(
-                Bindings.createBooleanBinding(
-                    () -> !Boolean.TRUE.equals(dirtyProp.getValue()),
-                    dirtyProp)),
-            () -> saveButton.setDisable(true)
+            dirtyProp -> {
+                BooleanBinding notDirty = Bindings.createBooleanBinding(
+                    () -> !Boolean.TRUE.equals(dirtyProp.getValue()), dirtyProp);
+                saveButton.disableProperty().bind(notDirty);
+                menuItemSave.disableProperty().bind(notDirty);
+            },
+            () -> {
+                saveButton.setDisable(true);
+                menuItemSave.setDisable(true);
+            }
         );
     }
 

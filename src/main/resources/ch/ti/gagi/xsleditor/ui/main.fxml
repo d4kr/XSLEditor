@@ -34,6 +34,15 @@
                               accelerator="Shortcut+N"
                               onAction="#handleNewFile"/>
                     <SeparatorMenuItem/>
+                    <MenuItem fx:id="menuItemSave"
+                              text="Save"
+                              accelerator="Shortcut+S"
+                              onAction="#handleMenuSave"/>
+                    <MenuItem fx:id="menuItemSaveAll"
+                              text="Save All"
+                              accelerator="Shortcut+Shift+S"
+                              onAction="#handleMenuSaveAll"/>
+                    <SeparatorMenuItem/>
                     <MenuItem text="Exit"
                               accelerator="Shortcut+Q"
                               onAction="#handleExit"/>
