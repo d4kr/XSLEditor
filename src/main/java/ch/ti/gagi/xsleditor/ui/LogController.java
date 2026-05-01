@@ -143,6 +143,17 @@ public final class LogController {
         colAi.setCellFactory(col -> new TableCell<LogEntry, Void>() {
             private final Button btn = createAiButton();
 
+            {
+                // ERR-07: consume MOUSE_PRESSED during the bubbling phase on the parent TableCell.
+                // The event reaches the Button first (at-target), ButtonBase arms normally, then the
+                // event bubbles up here where we consume it — stopping TableRow from selecting the row.
+                // Consuming on the Button itself would fire before ButtonBase's InputMap.handle()
+                // which checks isConsumed() and bails, preventing the button from ever arming.
+                addEventHandler(javafx.scene.input.MouseEvent.MOUSE_PRESSED, e -> {
+                    if (e.getTarget() == btn) e.consume();
+                });
+            }
+
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -158,18 +169,8 @@ public final class LogController {
                 b.setTooltip(new Tooltip("Ask ChatGPT about this error"));
                 b.setStyle("-fx-padding: 1 4 1 4; -fx-font-size: 11;");
                 b.setFocusTraversable(false);
-                // Phase 27 ERR-07: addEventHandler (NOT addEventFilter) so ButtonBase arms first
-                // on MOUSE_PRESSED, then this handler runs and consume() prevents the event from
-                // bubbling to the TableView row selector. addEventFilter would consume during the
-                // capturing phase, blocking ButtonBase from arming, which is the bug being fixed.
-                b.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_PRESSED, mouseEvt -> {
-                    // Capture entry now — virtual-cell pooling may rebind getTableRow() before ActionEvent fires
-                    LogEntry captured = getTableRow() != null ? getTableRow().getItem() : null;
-                    b.setUserData(captured);
-                    mouseEvt.consume();
-                });
                 b.setOnAction(evt -> {
-                    LogEntry entry = (LogEntry) b.getUserData();
+                    LogEntry entry = getTableRow() != null ? getTableRow().getItem() : null;
                     if (entry == null || entry.message() == null) return;
                     // D-02: Italian preamble + raw message
                     String prompt = "Ho questo errore nel mio progetto XSLT/XSL-FO, puoi aiutarmi?\n\n"
