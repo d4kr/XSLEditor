@@ -278,7 +278,10 @@ Plans:
   1. The toolbar Save button is enabled only when the active tab has unsaved changes (is dirty), and disabled when the tab is clean or no tab is open
   2. Clicking the toolbar Save button saves the active tab's content to disk and clears the dirty indicator (the `*` disappears from the tab title)
   3. Clicking the "chat" button on any error log row opens the default browser with a ChatGPT URL that pre-fills the error message as a prompt — the query arrives in the ChatGPT input field correctly (no broken `?q=` parameter)
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 27-01-PLAN.md — Add toolbar saveButton + tooltips (FXML), wire saveActiveTab() in EditorController, extend MainController rebind to include saveButton.disable
+- [ ] 27-02-PLAN.md — Fix ChatGPT button: addEventFilter -> addEventHandler in LogController.createAiButton (one-token fix, ERR-07)
 **UI hint**: yes
 
 ### Phase 28: License & README
