@@ -162,10 +162,14 @@ public final class LogController {
                 // on MOUSE_PRESSED, then this handler runs and consume() prevents the event from
                 // bubbling to the TableView row selector. addEventFilter would consume during the
                 // capturing phase, blocking ButtonBase from arming, which is the bug being fixed.
-                b.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_PRESSED,
-                        mouseEvt -> mouseEvt.consume());
+                b.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_PRESSED, mouseEvt -> {
+                    // Capture entry now — virtual-cell pooling may rebind getTableRow() before ActionEvent fires
+                    LogEntry captured = getTableRow() != null ? getTableRow().getItem() : null;
+                    b.setUserData(captured);
+                    mouseEvt.consume();
+                });
                 b.setOnAction(evt -> {
-                    LogEntry entry = getTableRow().getItem();
+                    LogEntry entry = (LogEntry) b.getUserData();
                     if (entry == null || entry.message() == null) return;
                     // D-02: Italian preamble + raw message
                     String prompt = "Ho questo errore nel mio progetto XSLT/XSL-FO, puoi aiutarmi?\n\n"
